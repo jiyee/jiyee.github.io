@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Jiyee&#39;&#39;s GitHub Pages</title>
+    <description>Write some pages about iOS development, while self-learning iOS App Develop.
+</description>
+    <link>http://jiyee.github.io/blog//</link>
+    <atom:link href="http://jiyee.github.io/blog//feed.xml" rel="self" type="application/rss+xml"/>
+    <pubDate>Sun, 04 Jan 2015 19:34:45 +0800</pubDate>
+    <lastBuildDate>Sun, 04 Jan 2015 19:34:45 +0800</lastBuildDate>
+    <generator>Jekyll v2.5.3</generator>
+    
+      <item>
+        <title>NSJSONSerialization</title>
+        <description>&lt;h1 id=&quot;nsjsonserializationiosjsonapi&quot;&gt;NSJSONSerialization，iOS自带JSON数据解析API&lt;/h1&gt;
+&lt;hr /&gt;
+
+&lt;p&gt;JSON和Foundation objects之间相互转换的API, 支持ARC, iOS 5+&lt;/p&gt;
+
+&lt;p&gt;JSON文档的要求：所有的key都是双引号，不能使用单引号或没有引号&lt;/p&gt;
+
+&lt;p&gt;object的要求：&lt;/p&gt;
+
+&lt;ol&gt;
+  &lt;li&gt;顶级节点的数据类型必须是__NSArray__或者__NSDictionary__&lt;/li&gt;
+  &lt;li&gt;所有节点必须是以下实例：&lt;strong&gt;NSString&lt;/strong&gt;, &lt;strong&gt;NSNumber&lt;/strong&gt;, &lt;strong&gt;NSArray&lt;/strong&gt;, &lt;strong&gt;NSDictionary&lt;/strong&gt;, or &lt;strong&gt;NSNull&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;所有节点的key必须是__NSString__&lt;/li&gt;
+  &lt;li&gt;&lt;strong&gt;Numbers__不能是__NaN__或者__infinity&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+
+&lt;p&gt;&lt;code&gt;isValidJSONObject:&lt;/code&gt;，判断是否可以正确转换&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;JSONObjectWithData:options:error:&lt;/code&gt;，A Foundation object from the JSON data in data, or &lt;strong&gt;nil&lt;/strong&gt; if an error occurs.
+JSON文档的字符编码只能是UTF系&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;NSJSONReadingOptions&lt;/code&gt;包含三种类型：&lt;/p&gt;
+
+&lt;ul&gt;
+  &lt;li&gt;NSJSONReadingMutableContainers，返回可变容器，&lt;strong&gt;NSMutableDictionary__或__NSMutableArray&lt;/strong&gt;&lt;/li&gt;
+  &lt;li&gt;NSJSONReadingMutableLeaves，叶节点都转成__NSMutableString__，目前在iOS 7上测试不好用，应该是个bug，参见：- &lt;a href=&quot;http://stackoverflow.com/questions/19345864/nsjsonreadingmutableleaves-option-is-not-working%20&quot;&gt;http://stackoverflow.com/questions/19345864/nsjsonreadingmutableleaves-option-is-not-working &lt;/a&gt;&lt;/li&gt;
+  &lt;li&gt;NSJSONReadingAllowFragments，允许顶层节点不是__NSArray__或者__NSDictionary__，但必须是有效的JSON Fragment，如解析&lt;code&gt;@&quot;123&quot;&lt;/code&gt;这样的字符串。
+  &amp;gt; That’s because 32 is a valid JSON fragment (a number), but abcd is not a valid JSON fragment since all strings must be quoted.
+  &amp;gt; &lt;code&gt;NSString *num=@&quot;32&quot;;&lt;/code&gt;
+  &amp;gt; &lt;code&gt;NSString *num=@&quot;\&quot;abcd\&quot;&quot;;&lt;/code&gt;&lt;/li&gt;
+&lt;/ul&gt;
+
+&lt;p&gt;&lt;code&gt;JSONObjectWithStream:options:error:&lt;/code&gt;，通过数据流解析
+__NSInputStream__数据流必须是可被打开和配置。&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;dataWithJSONObject:options:error:&lt;/code&gt;，创建JSON data
+如果对象不能正确生成JSON data，将抛出一个programming error，并非internal error，This exception is thrown prior to parsing and represents a programming error。&lt;/p&gt;
+
+&lt;p&gt;而API里设定的__error__，If an internal error occurs, upon return contains an NSError object that describes the problem.&lt;/p&gt;
+
+&lt;p&gt;所以，在生成JSON data之前，需要检查是否能够正确&lt;code&gt;isValidJSONObject:&lt;/code&gt;&lt;/p&gt;
+
+&lt;p&gt;&lt;code&gt;NSJSONWritingOptions&lt;/code&gt;，
+- NSJSONWritingPrettyPrinted，指定输出JSON data是否执行pretty print.&lt;/p&gt;
+
+</description>
+        <pubDate>Sun, 04 Jan 2015 00:00:00 +0800</pubDate>
+        <link>http://jiyee.github.io/blog//2015/01/04/NSJSONSerialization.html</link>
+        <guid isPermaLink="true">http://jiyee.github.io/blog//2015/01/04/NSJSONSerialization.html</guid>
+        
+        
+      </item>
+    
+  </channel>
+</rss>
