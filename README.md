@@ -1,4 +1,3 @@
-jiyee.github.io
+Jiyee's GitHub Pages
 ===============
 
-Jiyee's GitHub Pages
