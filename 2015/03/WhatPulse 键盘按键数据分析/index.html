@@ -1,0 +1,218 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Jiyee Sheng">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="WhatPulse键盘按键数据分析"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Jiyee&#39;s I/O"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>WhatPulse键盘按键数据分析 - Jiyee&#39;s I/O</title>
+
+
+  <link rel="shortcut icon" href="https://hexo.io/icon/favicon-96x96.png">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="https://hexo.io/logo.svg" alt="Jiyee's I/O" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  home
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  archive
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            WhatPulse键盘按键数据分析
+            
+          </h1>
+          <p class="posted-on">
+          2015-03-09
+          </p>
+          <div class="tags-links">
+            
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <p>键盘：Filco Ninja（87键）</p>
+<p>分析周期：2014-10-11 ~ 2015-03-09 (138天)</p>
+<p>总按键次数：2,863,205</p>
+<p>平均每天：20,749</p>
+<p><img src="/images/what-pulse.png" alt=""></p>
+<p><img src="/images/keys-heatmap.png" alt=""></p>
+<p>总结看出，Backspace、Space、Enter、Tab 按键高居前列，总体写代码和 Shell 操作相符。 Backspace 数量明显高于其他，说明输入表达的准确性和稳定性不够，内容出现修改的情况突出（就包括现在打这段文字的时候，有意识地意识到自己不停地在按 Backspace ）。当然， Backspace 跟 Escape 之间的比例也没有 rio 说的 10：1 那么悬殊，可能 Shell 老让我等待退出，不停地按 Esc。</p>
+<p> Capslock 键换成了 Hyper 键，但是按键次数上明显少于其他 Ctrl、Alt、Shift 键，WhatPulse 不能统计 Command 键，估计按键次数同样不会少，有点可惜。</p>
+<p>相比于左侧的功能键，右侧除了 Shift 之外，Alt 和 Ctrl 几乎少有触及，Shift 键得益于 Karabiner ，强制左侧 ASDF 之类的大写字母必须搭配按右侧的 Shift 键，右侧的 Command 键发挥切换输入法的作用，但是按键次数明显也不及其他功能键，可能切回英文输入法已经集成到 Esc 退出 Vim 插入模式的造成的。右侧的 Ctrl 键就可怜了，我几乎想不到使用的场景，可惜了。</p>
+<p>F1 到 F12 功能键按键频率同样不高，可能跟之前没有做 iOS 开发，缺乏 IDE 调试有关。（ F11 和 F12 属于异常数据， Vim 退出插入模式的时候会触发切换输入法的动作，动作的快捷键映射了 Command+Alt+Ctrl+Shift+F11/F12 ）</p>
+<p>数字键 1 到 4 用于输入法选择和 Tab 切换， 5 到 9 的使用频率就相对少很多。</p>
+<p>总结下来感受是，我的按键频率相对合理，但是仍然有可优化的空间。下一步考虑如何好好开发右侧功能键、 F1 到 F12 键，以及 5-9 之间的数字键的习惯使用。</p>
+<p>我很满意我的 Ninja 键盘。</p>
+<p><img src="/images/filco-ninja.jpg" alt=""></p>
+<p>相关参考：<br><a href="http://daily.zhihu.com/story/4213946" title="历经 199 天得到的数据，退格使用次数高达 13 万次" target="_blank" rel="external">历经 199 天得到的数据，退格使用次数高达 13 万次</a></p>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">Comments</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2015/03/NSJSONSerialization/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> Older Posts</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2015/01/为ASUS-AC68U-Merlin固件交叉编译shadowsocks-libev/" rel="prev">Newer Posts <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-3-3">
+      <aside>
+        <h1 class="widget-title">Contact</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/jiyee" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="mailto:jiyee.sheng@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Jiyee's I/O &copy; 2016</span>
+    
+      <span class="split">|</span><span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="//cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>
