@@ -1,0 +1,228 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Jiyee Sheng">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="NSJSONSerialization"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Jiyee&#39;s I/O"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>NSJSONSerialization - Jiyee&#39;s I/O</title>
+
+
+  <link rel="shortcut icon" href="https://hexo.io/icon/favicon-96x96.png">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="https://hexo.io/logo.svg" alt="Jiyee's I/O" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  home
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  archive
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            NSJSONSerialization
+            
+          </h1>
+          <p class="posted-on">
+          2015-03-10
+          </p>
+          <div class="tags-links">
+            
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <h1 id="NSJSONSerialization，JSON数据解析API"><a href="#NSJSONSerialization，JSON数据解析API" class="headerlink" title="NSJSONSerialization，JSON数据解析API"></a>NSJSONSerialization，JSON数据解析API</h1><hr>
+<p>JSON和Foundation objects之间相互转换的API, 支持ARC, iOS 5+</p>
+<p>JSON文档的要求：所有的key都是双引号，不能使用单引号或没有引号</p>
+<p>object的要求：</p>
+<ol>
+<li>顶级节点的数据类型必须是 __NSArray__ 或者 __NSDictionary__</li>
+<li>所有节点必须是以下实例： __NSString<strong>, </strong>NSNumber<strong>, </strong>NSArray<strong>, </strong>NSDictionary<strong>, or </strong>NSNull__</li>
+<li>所有节点的key必须是 __NSString__</li>
+<li><strong>Numbers</strong> 不能是 <strong>NaN</strong> 或者 <strong>infinity</strong></li>
+</ol>
+<p><code>isValidJSONObject:</code>，判断是否可以正确转换</p>
+<p><code>JSONObjectWithData:options:error:</code>，A Foundation object from the JSON data in data, or <strong>nil</strong> if an error occurs.<br>JSON 文档的字符编码只能是 UTF 系</p>
+<p><code>NSJSONReadingOptions</code> 包含三种类型：</p>
+<ul>
+<li>NSJSONReadingMutableContainers，返回可变容器，__NSMutableDictionary__ 或 __NSMutableArray__</li>
+<li>NSJSONReadingMutableLeaves，叶节点都转成 __NSMutableString__，目前在 iOS 7 上测试不好用，应该是个 bug，参见：- <a href="http://stackoverflow.com/questions/19345864/nsjsonreadingmutableleaves-option-is-not-working%20" target="_blank" rel="external">http://stackoverflow.com/questions/19345864/nsjsonreadingmutableleaves-option-is-not-working </a></li>
+<li>NSJSONReadingAllowFragments，允许顶层节点不是 __NSArray__ 或者 __NSDictionary__，但必须是有效的 JSON Fragment，如解析 <code>@&quot;123&quot;</code> 这样的字符串。<blockquote>
+<p>That’s because 32 is a valid JSON fragment (a number), but abcd is not a valid JSON fragment since all strings must be quoted.<br><code>NSString *num=@&quot;32&quot;;</code><br><code>NSString *num=@&quot;\&quot;abcd\&quot;&quot;;</code></p>
+</blockquote>
+</li>
+</ul>
+<p><code>JSONObjectWithStream:options:error:</code>，通过数据流解析<br>__NSInputStream__ 数据流必须是可被打开和配置。</p>
+<p><code>dataWithJSONObject:options:error:</code>，创建 JSON data<br>如果对象不能正确生成 JSON data，将抛出一个 programming error，并非 internal error，This exception is thrown prior to parsing and represents a programming error。</p>
+<p>而 API 里设定的 __error__，If an internal error occurs, upon return contains an NSError object that describes the problem.</p>
+<p>所以，在生成 JSON data 之前，需要检查是否能够正确 <code>isValidJSONObject:</code></p>
+<p><code>NSJSONWritingOptions</code>，</p>
+<ul>
+<li>NSJSONWritingPrettyPrinted，指定输出 JSON data 是否执行 pretty print.</li>
+</ul>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">Comments</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+      
+        <div class="nav-next">
+          <a href="/2015/03/WhatPulse 键盘按键数据分析/" rel="prev">Newer Posts <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-3-3">
+      <aside>
+        <h1 class="widget-title">Contact</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/jiyee" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="mailto:jiyee.sheng@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Jiyee's I/O &copy; 2016</span>
+    
+      <span class="split">|</span><span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="//cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>

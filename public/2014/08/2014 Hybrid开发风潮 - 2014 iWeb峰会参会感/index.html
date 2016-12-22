@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+
+<!-- Head tag -->
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+  <!--Description-->
+  
+
+  <!--Author-->
+  
+  <meta name="author" content="Jiyee Sheng">
+  
+
+  <!--Open Graph Title-->
+  
+      <meta property="og:title" content="2014 Hybrid开发风潮 - 2014 iWeb峰会参会感"/>
+  
+  <!--Open Graph Description-->
+  
+  <!--Open Graph Site Name-->
+  <meta property="og:site_name" content="Jiyee&#39;s I/O"/>
+  <!--Type page-->
+  
+      <meta property="og:type" content="article" />
+  
+  <!--Page Cover-->
+  
+
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+
+  <!-- Title -->
+  
+  <title>2014 Hybrid开发风潮 - 2014 iWeb峰会参会感 - Jiyee&#39;s I/O</title>
+
+
+  <link rel="shortcut icon" href="https://hexo.io/icon/favicon-96x96.png">
+
+  <!-- Custom CSS/Sass -->
+  <link rel="stylesheet" href="/css/style.css">
+
+  <!----------------------------
+  https://github.com/GallenHu/hexo-theme-Daily
+
+ _____            _   _
+|  __ \          (_) | |
+| |  | |   __ _   _  | |  _   _
+| |  | |  / _` | | | | | | | | |
+| |__| | | (_| | | | | | | |_| |
+|_____/   \__,_| |_| |_|  \__, |
+                          __/ |
+                         |___/
+
+    --------------------------->
+
+</head>
+
+
+<body>
+
+  <!-- Nav -->
+  <header class="site-header">
+  <div class="header-inside">
+    <div class="logo">
+      <a href="/" rel="home">
+        
+        <img src="https://hexo.io/logo.svg" alt="Jiyee's I/O" height="60">
+        
+      </a>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+      <!-- Collect the nav links, forms, and other content for toggling -->
+      <div class="collapse">
+        <ul class="navbar-nav">
+          
+          
+            <li>
+              <a href="/.">
+                
+                  home
+                
+              </a>
+            </li>
+          
+            <li>
+              <a href="/archives">
+                
+                  archive
+                
+              </a>
+            </li>
+          
+        </ul>
+      </div>
+      <!-- /.navbar-collapse -->
+    </nav>
+    <div class="button-wrap">
+      <button class="menu-toggle">Primary Menu</button>
+    </div>
+  </div>
+</header>
+
+
+  <!-- Main Content -->
+  <div class="content-area">
+  <div class="post">
+    <!-- Post Content -->
+    <div class="container">
+      <article>
+        <!-- Title date & tags -->
+        <div class="post-header">
+          <h1 class="entry-title">
+            2014 Hybrid开发风潮 - 2014 iWeb峰会参会感
+            
+          </h1>
+          <p class="posted-on">
+          2014-08-19
+          </p>
+          <div class="tags-links">
+            
+              
+            
+          </div>
+        </div>
+        <!-- Post Main Content -->
+        <div class="entry-content">
+          <p>上周末参加了 2014 年度的 iWeb 峰会，那叫一个人山人海啊。不过跟前几年有点不一样的是，今年似乎正刮一阵 Hybrid 开发风，主会场和工具专场连着介绍了三款不同的 Hybrid 开发框架，<a href="https://github.com/dcloudio" target="_blank" rel="external">Native.js</a>，<a href="http://www.appcan.cn" target="_blank" rel="external">AppCan</a>，<a href="https://software.intel.com/en-us/html5/tools" target="_blank" rel="external">Intel XDK</a>，各自有不同的思路和实现，给 Web 开发者们提供了不同的 App 开发平台和能力，那就一个个分别说说。</p>
+<h3 id="Native-js"><a href="#Native-js" class="headerlink" title="Native.js"></a>Native.js</h3><p>实质上属于 <a href="http://www.html5plus.org/" target="_blank" rel="external">HTML5+</a> 规范和 HBuilder 的结合实现， HTML5+ 就没什么好说的，据说是国内组织搞的（不太清楚，感觉就是 DCloud 牵头搞的），应用上跟 PhoneGap 类似。 Native.js 属于 HTML5+ 规范未实现的原生 API 部分的 Proxy ，是不是可以理解为那些规范里的实现都是通过 Native.js 实现的，就是暴露了原生 API 封装实现给了开发者，看难度好像有点大，需要根据不同平台调用原生 API 。那就要求开发者理解那些原生 API ，思路上跟 Titanium 的 Widget 类似，但是实现上选择了 JS Bridge 方式，我认为不是很好的一个方向，有点噱头的意思。那在它的平台上就只能希望 HTML5+ 规范的部分能实现的更加完整和全面。</p>
+<p>关于 Native.js 的实现，我的猜测是大量的使用了反射来将 JS 转为 Java 或者 Objective-C ，性能上是很大的考验。</p>
+<p>另外， HBuilder 是基于 Aptana 开发的，更加倾向于小清新，会场上也真的已经有了不少实际用户，让我大吃一惊。</p>
+<p>关于 HBuilder 的介绍参看：<a href="http://www.csdn.net/article/2014-04-11/2819266-jinjiang-with-hbuilder" target="_blank" rel="external">《近匠》HBuilder：如何用JS调用几十万原生API？</a></p>
+<p>Dcloud.io 官网上有关于 Native.js 的<a href="http://download.dcloud.net.cn/HTML5+%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91-Native.js.pdf" target="_blank" rel="external">PDF文档</a></p>
+<h3 id="AppCan"><a href="#AppCan" class="headerlink" title="AppCan"></a>AppCan</h3><p>国内比较成熟的 Hybrid 开发平台，开发框架涵盖了丰富的自定义 API ，商业模式也比较清晰，但是，相对来说比较封闭，更加适合政府部门，我猜的。</p>
+<p>具体的就不予置评了，请参看<a href="http://www.appcan.cn" target="_blank" rel="external">AppCan官网</a></p>
+<h3 id="Intel-XDK"><a href="#Intel-XDK" class="headerlink" title="Intel XDK"></a>Intel XDK</h3><p>Intel XDK 框架真是第一次听说，之前孤陋寡闻了。 Intel 居然也加入了 Hybrid 开发阵营，可能真的是像他们的老大张海立所说的这款产品之前一直是国外团队在开发，国外团队也刚开始接手不久。</p>
+<p>张海立的演讲很精彩，搜了一下，复旦毕业，言语真的很像上海人，还真有点想投奔他的感觉，哈哈。</p>
+<p>至于 Intel XDK 这款产品，那就是站在开源产品之上集大成，相较于前两位更加开放、新潮，集成了包括<a href="http://cordova.apache.org" target="_blank" rel="external">Cordova</a>，<a href="http://ripple.incubator.apache.org" target="_blank" rel="external">Ripple</a>，<a href="http://brackets.io" target="_blank" rel="external">Brackets</a>， V8 ，还有一些开源的 UI 框架和开放的 Service 服务，将设计、开发、测试、编译、分发集成设计出一套完整的开发方案， IDE 级别。</p>
+<p>出彩的 <a href="https://crosswalk-project.org" target="_blank" rel="external">Crosswalk</a>，看了下官网介绍，似乎是 Cordova 升级版，以至于每次出现 XDK 必出现 Crosswalk ，躲都躲不过。</p>
+<p><a href="http://slides.com/zhanghaili/intelxdk#/" target="_blank" rel="external">XDK Slide</a>，瞧人家多潮，都用上 slides 了。。。</p>
+<p><img src="/images/iweb.jpg" alt="iWeb 峰会主会场"></p>
+
+        </div>
+      </article>
+    </div>
+    <!-- Comments -->
+    <div class="container">
+      
+<section id="comment">
+  <!-- <h1 class="title">Comments</h1> -->
+
+  
+</section>
+
+
+    </div>
+    <!-- Pre or Next -->
+    <div class="nav-links">
+      
+        <div class="nav-previous">
+          <a href="/2015/01/为ASUS-AC68U-Merlin固件交叉编译shadowsocks-libev/" rel="prev"><span class="meta-arraw meta-arraw-left"></span> Older Posts</a>
+        </div>
+      
+      
+        <div class="nav-next">
+          <a href="/2014/08/HTML5、Web引擎与跨平台移动App开发/" rel="prev">Newer Posts <span class="meta-arraw meta-arraw-right"></span></a>
+        </div>
+      
+    </div>
+
+  </div>
+</div>
+
+
+  <!-- Footer -->
+  <!-- Footer-widgets -->
+<div class="footer-widgets">
+  <div class="row inside-wrapper">
+    <div class="col-3-3">
+      <aside>
+        <h1 class="widget-title">Contact</h1>
+        <div class="widget-text">
+          
+            
+              <a href="https://github.com/jiyee" class="icon icon-github" target="_blank">github</a>
+            
+              <a href="mailto:jiyee.sheng@gmail.com" class="icon icon-mail" target="_blank">mail</a>
+            
+          
+        </div>
+      </aside>
+    </div>
+  </div>
+</div>
+<!-- Footer -->
+<footer class="site-info">
+  <p>
+    <span>Jiyee's I/O &copy; 2016</span>
+    
+      <span class="split">|</span><span>Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> with Theme <a href="https://github.com/GallenHu/hexo-theme-Daily" target="_blank">Daily</a></span>
+    
+  </p>
+</footer>
+
+
+  <!-- After footer scripts -->
+  <!-- scripts -->
+<script src="//cdn.bootcss.com/zepto/1.2.0/zepto.min.js"></script>
+<script src="/js/app.js"></script>
+
+
+
+</body>
+
+</html>
