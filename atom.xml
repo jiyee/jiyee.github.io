@@ -100,11 +100,11 @@
   </entry>
   
   <entry>
-    <title>为ASUS-AC68U-Merlin固件交叉编译shadowsocks-libev</title>
-    <link href="http://jiyee.io/2015/01/%E4%B8%BAASUS-AC68U-Merlin%E5%9B%BA%E4%BB%B6%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91shadowsocks-libev/"/>
-    <id>http://jiyee.io/2015/01/为ASUS-AC68U-Merlin固件交叉编译shadowsocks-libev/</id>
+    <title>为 ASUS-AC68U-Merlin 固件交叉编译 shadowsocks-libev</title>
+    <link href="http://jiyee.io/2015/01/%E4%B8%BA%20ASUS-AC68U-Merlin%20%E5%9B%BA%E4%BB%B6%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%20shadowsocks-libev/"/>
+    <id>http://jiyee.io/2015/01/为 ASUS-AC68U-Merlin 固件交叉编译 shadowsocks-libev/</id>
     <published>2015-01-23T16:00:00.000Z</published>
-    <updated>2016-12-22T09:33:13.000Z</updated>
+    <updated>2016-12-23T01:09:19.000Z</updated>
     
     <content type="html"><![CDATA[<p>开篇向 <a href="https://github.com/RMerl/asuswrt-merlin" title="ASUS-AC68U-Merlin Firewarm" target="_blank" rel="external">Merlin固件</a>及<a href="https://github.com/RMerl/asuswrt-merlin/wiki" title="Merlin Firewarm Wiki" target="_blank" rel="external">Wiki</a> 致敬，向 tengattack 写下的 《<a href="https://bless.moe/blog/po/1027" title="为R6300v2新固件交叉编译shadowsocks-libev" target="_blank" rel="external">为R6300v2新固件交叉编译shadowsocks-libev</a>》 一文致敬。</p>
 <h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>本文基本参照了以上两篇文章，经过两个漫漫长夜，终于鼓捣出能够在 ASUS-AC68U Merlin 固件上运行的 shadowsocks-libev。</p>
