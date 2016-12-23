@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jiyee.io/"/>
-  <updated>2016-12-23T01:24:23.000Z</updated>
+  <updated>2016-12-23T02:40:53.000Z</updated>
   <id>http://jiyee.io/</id>
   
   <author>
@@ -16,36 +16,26 @@
   <generator uri="http://hexo.io/">Hexo</generator>
   
   <entry>
-    <title>WhatPulse键盘按键数据分析</title>
-    <link href="http://jiyee.io/2015/03/WhatPulse%20%E9%94%AE%E7%9B%98%E6%8C%89%E9%94%AE%E6%95%B0%E6%8D%AE%E5%88%86%E6%9E%90/"/>
-    <id>http://jiyee.io/2015/03/WhatPulse 键盘按键数据分析/</id>
-    <published>2015-03-10T16:00:00.000Z</published>
-    <updated>2016-12-23T01:24:23.000Z</updated>
+    <title>Git 仓库精简记录</title>
+    <link href="http://jiyee.io/2016/12/Git%20%E4%BB%93%E5%BA%93%E7%B2%BE%E7%AE%80%E8%AE%B0%E5%BD%95/"/>
+    <id>http://jiyee.io/2016/12/Git 仓库精简记录/</id>
+    <published>2016-12-11T16:00:00.000Z</published>
+    <updated>2016-12-23T02:40:53.000Z</updated>
     
-    <content type="html"><![CDATA[<p>键盘：Filco Ninja（87键）</p>
-<p>分析周期：2014-10-11 ~ 2015-03-09 (138天)</p>
-<p>总按键次数：2,863,205</p>
-<p>平均每天：20,749</p>
-<p><img src="/images/what-pulse.png" alt=""></p>
-<p><img src="/images/keys-heatmap.png" alt=""></p>
-<p>总结看出，Backspace、Space、Enter、Tab 按键高居前列，总体写代码和 Shell 操作相符。 Backspace 数量明显高于其他，说明输入表达的准确性和稳定性不够，内容出现修改的情况突出（就包括现在打这段文字的时候，有意识地意识到自己不停地在按 Backspace ）。当然， Backspace 跟 Escape 之间的比例也没有 rio 说的 10：1 那么悬殊，可能 Shell 老让我等待退出，不停地按 Esc。</p>
-<p> Capslock 键换成了 Hyper 键，但是按键次数上明显少于其他 Ctrl、Alt、Shift 键，WhatPulse 不能统计 Command 键，估计按键次数同样不会少，有点可惜。</p>
-<p>相比于左侧的功能键，右侧除了 Shift 之外，Alt 和 Ctrl 几乎少有触及，Shift 键得益于 Karabiner ，强制左侧 ASDF 之类的大写字母必须搭配按右侧的 Shift 键，右侧的 Command 键发挥切换输入法的作用，但是按键次数明显也不及其他功能键，可能切回英文输入法已经集成到 Esc 退出 Vim 插入模式造成的。右侧的 Ctrl 键就可怜了，我几乎想不到使用的场景，可惜了。</p>
-<p>F1 到 F12 功能键按键频率同样不高，可能跟之前没有做 iOS 开发，缺乏 IDE 调试有关。（F11 和 F12 属于异常数据，Vim 退出插入模式的时候会触发切换输入法的动作，动作的快捷键映射了 Command+Alt+Ctrl+Shift+F11/F12）</p>
-<p>数字键 1 到 4 用于输入法选择和 Tab 切换，5 到 9 的使用频率就相对少很多。</p>
-<p>总结下来感受是，我的按键频率相对合理，但是仍然有可优化的空间。下一步考虑如何好好开发右侧功能键、F1 到 F12 键，以及 5-9 之间的数字键的习惯使用。</p>
-<p>我很满意我的 Ninja 键盘。</p>
-<p><img src="/images/filco-ninja-87.jpg" alt=""></p>
-<p>相关参考：<br><a href="http://daily.zhihu.com/story/4213946" title="历经 199 天得到的数据，退格使用次数高达 13 万次" target="_blank" rel="external">历经 199 天得到的数据，退格使用次数高达 13 万次</a></p>
+    <content type="html"><![CDATA[<p>目前，iOS 仓库体积越来越大，导致 Jenkins 重新拉取代码时经常超时，研究了如何删除 Git 仓库历史记录，达到精简仓库体积的目的。</p>
+<p>参考文档：<br><a href="http://harttle.com/2016/03/22/purge-large-files-in-gitrepo.html" target="_blank" rel="external">http://harttle.com/2016/03/22/purge-large-files-in-gitrepo.html</a></p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git rev-list --objects --all | grep &quot;$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -20 | awk &apos;&#123;print$1&#125;&apos;)&quot;</div></pre></td></tr></table></figure>
+<p>这个命令通过两个 Git 命令结合实现仓库历史文件大小排序，找出待删除目录或文件。</p>
+<p>后续找到一个更高效的工具 bfg，<a href="https://rtyley.github.io/bfg-repo-cleaner，支持更快速的实现" target="_blank" rel="external">https://rtyley.github.io/bfg-repo-cleaner，支持更快速的实现</a> git-filter-branch 命令一样的彻底删除历史记录的功能。</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">bfg --delete-folders fastlane ./</div><div class="line">bfg --delete-folders UMengFeedback_SDK_2.1.1 ./</div><div class="line">bfg --delete-folders UMSocial_Sdk_4.2.2 ./</div><div class="line">bfg --delete-folders AdhocSDK.framework ./</div><div class="line">bfg --delete-folders node_modules ./</div></pre></td></tr></table></figure>
+<p>最后执行以下命令完成清理工作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git reflog expire --expire=now --all &amp;&amp; git gc --prune=now --aggressive</div></pre></td></tr></table></figure></p>
+<p>效果对比，左边是精简之前，右边是精简之后的体积。</p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;键盘：Filco Ninja（87键）&lt;/p&gt;
-&lt;p&gt;分析周期：2014-10-11 ~ 2015-03-09 (138天)&lt;/p&gt;
-&lt;p&gt;总按键次数：2,863,205&lt;/p&gt;
-&lt;p&gt;平均每天：20,749&lt;/p&gt;
-&lt;p&gt;&lt;img src=&quot;/images/what-pu
+      &lt;p&gt;目前，iOS 仓库体积越来越大，导致 Jenkins 重新拉取代码时经常超时，研究了如何删除 Git 仓库历史记录，达到精简仓库体积的目的。&lt;/p&gt;
+&lt;p&gt;参考文档：&lt;br&gt;&lt;a href=&quot;http://harttle.com/2016/03/22/purge-large
     
     </summary>
     
@@ -53,46 +43,391 @@
   </entry>
   
   <entry>
-    <title>NSJSONSerialization</title>
-    <link href="http://jiyee.io/2015/03/NSJSONSerialization/"/>
-    <id>http://jiyee.io/2015/03/NSJSONSerialization/</id>
-    <published>2015-03-09T16:00:00.000Z</published>
-    <updated>2016-12-22T09:51:21.000Z</updated>
+    <title>GONMarkupParser 源码解析</title>
+    <link href="http://jiyee.io/2016/10/GONMarkupParser%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90/"/>
+    <id>http://jiyee.io/2016/10/GONMarkupParser 源码解析/</id>
+    <published>2016-10-23T16:00:00.000Z</published>
+    <updated>2016-12-23T02:44:14.000Z</updated>
     
-    <content type="html"><![CDATA[<h1 id="NSJSONSerialization，JSON数据解析API"><a href="#NSJSONSerialization，JSON数据解析API" class="headerlink" title="NSJSONSerialization，JSON数据解析API"></a>NSJSONSerialization，JSON数据解析API</h1><hr>
-<p>JSON和Foundation objects之间相互转换的API, 支持ARC, iOS 5+</p>
-<p>JSON文档的要求：所有的key都是双引号，不能使用单引号或没有引号</p>
-<p>object的要求：</p>
-<ol>
-<li>顶级节点的数据类型必须是 __NSArray__ 或者 __NSDictionary__</li>
-<li>所有节点必须是以下实例： __NSString<strong>, </strong>NSNumber<strong>, </strong>NSArray<strong>, </strong>NSDictionary<strong>, or </strong>NSNull__</li>
-<li>所有节点的key必须是 __NSString__</li>
-<li><strong>Numbers</strong> 不能是 <strong>NaN</strong> 或者 <strong>infinity</strong></li>
-</ol>
-<p><code>isValidJSONObject:</code>，判断是否可以正确转换</p>
-<p><code>JSONObjectWithData:options:error:</code>，A Foundation object from the JSON data in data, or <strong>nil</strong> if an error occurs.<br>JSON 文档的字符编码只能是 UTF 系</p>
-<p><code>NSJSONReadingOptions</code> 包含三种类型：</p>
+    <content type="html"><![CDATA[<p><a href="https://github.com/nicolasgoutaland/GONMarkupParser" target="_blank" rel="external">https://github.com/nicolasgoutaland/GONMarkupParser</a><br>这个项目源代码质量不错，代码结构简洁，思路清晰。</p>
+<p>目前，支持的标签和属性列表，《HTML标签支持规范》。</p>
+<h2 id="HTML-解析流程草稿"><a href="#HTML-解析流程草稿" class="headerlink" title="HTML 解析流程草稿"></a>HTML 解析流程草稿</h2><p><img src="/images/gon-markup-parser-1.jpg" alt=""><br><img src="/images/gon-markup-parser-2.jpg" alt=""><br><img src="/images/gon-markup-parser-3.jpg" alt=""></p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><p>很好的区分了 defaultConfiguration，defaultAttributes，stringAttributes 等概念，使用注册方式来实现标签扩展，规范了自定义 Markup 注册和解析流程，与正则解析流程较好融合，通过 context 实现栈内数据共享。<br>GONMarkup 标签解析分为三个步骤，前置文本替换，标签内文本更新，后置文本替换。</p>
+<h2 id="使用方式"><a href="#使用方式" class="headerlink" title="使用方式"></a>使用方式</h2><p>如果有 Link 且想点击，使用 UITextView 或 TTTAttributedLabel。<br>如果想自定义标签，继承 GONMarkup 类，按需求实现不同阶段的文本替换函数。<br>如果采用 HTML 标签形式替代现有的样式写法，一是可以统一样式实现，二是实现服务端可配，三是简化客户端样式布局代码。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;&lt;a href=&quot;https://github.com/nicolasgoutaland/GONMarkupParser&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;https://github.com/nicolasgoutaland/GONMarku
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>如何有效收集资料（iOS）</title>
+    <link href="http://jiyee.io/2016/10/%E5%A6%82%E4%BD%95%E6%9C%89%E6%95%88%E6%94%B6%E9%9B%86%E8%B5%84%E6%96%99%EF%BC%88iOS%EF%BC%89/"/>
+    <id>http://jiyee.io/2016/10/如何有效收集资料（iOS）/</id>
+    <published>2016-10-07T16:00:00.000Z</published>
+    <updated>2016-12-23T01:37:46.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>一直想写一篇文章或者做一个分享，介绍自己日常如何收集、阅读和消化网络上浩瀚的资料。最近，碰巧阅读到 <a href="http://www.playpcesor.com/2016/05/blog-post.html" target="_blank" rel="external">《如何有效收集資料？給知識工作與學習者的建議流程》</a> 这篇文章，跟作者的想法比较契合，索性花点时间写一篇文章介绍在 iOS 开发领域如何收集资料。</p>
+<p>谈到有效收集资料，我认为在如今浩如烟海的互联网环境下，最重要的是<strong>快速判断你眼前看到的资料是否有价值，或者对于当下的你是否有价值</strong>。判断是否有价值的标准是，<strong>是否能激发起你的想法</strong>。有些资料看似很有用，你甚至看不懂或者略微看得懂，你觉得如果你收集起来知识就是你的了，有一天拿出来再看看或许就看得懂了。其实，然并卵。根本不是这样的，这样只会造成你的知识库的累赘。</p>
+<p>这里其实有两个前提条件，一是你至少脑子里要有一些想法，不然看了也不容易激发出来，这些想法可能是清晰的，也可能是模糊的。二是想要快速判断，就需要长期训练，形成一种适合自我的收集资料的方式和判断。</p>
+<h2 id="方法论"><a href="#方法论" class="headerlink" title="方法论"></a>方法论</h2><p>这个我觉得我看到的这篇文章已经写的很好了，建议认真阅读一番。</p>
+<p>我就写一句话，<strong>“记住，要长期持续地养成收集资料的习惯，让自己参与到资料当中。”</strong></p>
+<h2 id="收集资料渠道"><a href="#收集资料渠道" class="headerlink" title="收集资料渠道"></a>收集资料渠道</h2><h3 id="RSS"><a href="#RSS" class="headerlink" title="RSS"></a>RSS</h3><p>RSS 是我收集资料的主要渠道。RSS 上都是我觉得写的比较好的人。所以，一般情况下，文章质量都比较高。我会花半天时间来重点看，一般每周看 1，2 次。实际情况是，在其他渠道看到的文章基本上都会在订阅列表里会出现，尤其是国内的 iOS 开发人员写的。</p>
+<p>欢迎订阅我在 Inoreader 的 RSS Bundle：<a href="http://www.inoreader.com/reader/api/0/bundle/opml/0014cd638ac0" target="_blank" rel="external">iOS Development Digest</a></p>
+<h3 id="Weekly-Email-Subscriptions"><a href="#Weekly-Email-Subscriptions" class="headerlink" title="Weekly Email Subscriptions"></a>Weekly Email Subscriptions</h3><p>Weekly 邮件订阅列表，每周都能收到最新、最热的资讯，基本用于了解行业动态。Google 搜索 “<a href="https://www.google.com.hk/search?newwindow=1&amp;safe=strict&amp;q=iOS+weekly&amp;oq=iOS+weekly&amp;gs_l=serp.3..0l3j0i22i30l7.19459.22610.0.22994.13.10.1.0.0.0.569.1641.2-2j5-2.4.0....0...1c.1j4.64.serp..8.5.1640...0i10.obwAkhLX5ag" target="_blank" rel="external">iOS Weekly</a>” 即可找到不少 Weekly 订阅列表。这里推荐 <a href="http://ios-goodies.com/" target="_blank" rel="external">《iOS Goodies》</a>，总体感觉推荐文章或者项目很少在其他地方看过，而且质量很高。</p>
+<h3 id="Video"><a href="#Video" class="headerlink" title="Video"></a>Video</h3><p><a href="https://www.youtube.com/" target="_blank" rel="external">Youtube</a> 和 <a href="https://vimeo.com/" target="_blank" rel="external">Vimeo</a> 上有很多会议分享的视频，我基本用来重点研究某个方向时，看看上面有没有相关分享视频。</p>
+<h3 id="PPT"><a href="#PPT" class="headerlink" title="PPT"></a>PPT</h3><p><a href="www.slideshare.net/">SlideShare</a> 和 <a href="https://speakerdeck.com/" target="_blank" rel="external">Speaker Deck</a> 上有很多 PPT 分享，主要用途跟 Video 类似。视频和 PPT 这里一类资料的价值很容易被人忽略。</p>
+<h3 id="GitHub"><a href="#GitHub" class="headerlink" title="GitHub"></a>GitHub</h3><p>GitHub 上很多优秀的开源本身就是很好的学习素材。我会 Watch 几个规模适中的项目，每天收到 Issue 和 PR 邮件，像看故事一样看看别人会遇到什么问题，怎么解决问题。如果看到感兴趣的 Issue 或者能协助解决的 Issue，就上去回复一句。</p>
+<h3 id="WWDC"><a href="#WWDC" class="headerlink" title="WWDC"></a>WWDC</h3><p>WWDC 上每年的 Session 都是很值得跟进的话题，尤其是对于想深入研究某一个话题时。</p>
+<h2 id="工具与服务"><a href="#工具与服务" class="headerlink" title="工具与服务"></a>工具与服务</h2><p>插一句题外话，优秀的工具都是要花钱的，在知识投资上不要不舍得花钱。</p>
+<h3 id="RSS-1"><a href="#RSS-1" class="headerlink" title="RSS"></a>RSS</h3><p>RSS 没有死，它活地好好的。<br>RSS 阅读器，iOS 和 macOS 上值得推荐的都是 <a href="http://reederapp.com/" target="_blank" rel="external">Reeder</a>，RSS 在线服务推荐 <a href="http://www.inoreader.com/" target="_blank" rel="external">Inoreader</a>，具备很好的聚合和搜索功能。</p>
+<h3 id="Read-It-Later"><a href="#Read-It-Later" class="headerlink" title="Read-It-Later"></a>Read-It-Later</h3><p>Read-It-Later，iOS 上推荐 <a href="https://www.instapaper.com/" target="_blank" rel="external">Instapaper</a>，或者 <a href="https://getpocket.com/" target="_blank" rel="external">Pocket</a>，看不完的文章我都会扔到 Instapaper 里，碎片时间里挑着看，我会用里面的 Highlight 功能，用于挑出重点内容。</p>
+<h3 id="Email"><a href="#Email" class="headerlink" title="Email"></a>Email</h3><p>Email 主要用来查看订阅邮件。iOS 和 macOS 上推荐 <a href="https://cloudmagic.com/" target="_blank" rel="external">CloudMagic</a>。</p>
+<h3 id="Notes"><a href="#Notes" class="headerlink" title="Notes"></a>Notes</h3><p>Notes 主要用来做笔记，主要是用 <a href="www.ulyssesapp.com/">Ulysses</a> 和 <a href="www.devontechnologies.com/products/devonthink/devonthink-pro.html">DEVONThink Pro</a>。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;一直想写一篇文章或者做一个分享，介绍自己日常如何收集、阅读和消化网络上浩瀚的资料。最近，碰巧阅读到 &lt;a href=&quot;http://www.playpcesor.com/2016/05/blog-post.html&quot; target=&quot;_blank&quot; rel=&quot;externa
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>iOS 开发工具推荐列表</title>
+    <link href="http://jiyee.io/2016/09/iOS%20%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90%E5%88%97%E8%A1%A8/"/>
+    <id>http://jiyee.io/2016/09/iOS 开发工具推荐列表/</id>
+    <published>2016-09-29T16:00:00.000Z</published>
+    <updated>2016-12-23T02:33:49.000Z</updated>
+    
+    <content type="html"><![CDATA[<table>
+<thead>
+<tr>
+<th>应用</th>
+<th>描述</th>
+<th>网址</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>fui</td>
+<td>Find unused Objective-C imports.<br>查找未引用的 OC 类</td>
+<td><a href="https://github.com/dblock/fui" target="_blank" rel="external">https://github.com/dblock/fui</a></td>
+</tr>
+<tr>
+<td>Unused</td>
+<td>A Mac app for checking Xcode projects for unused resources<br>查找未引用的图片资源</td>
+<td><a href="https://github.com/jeffhodnett/Unused" target="_blank" rel="external">https://github.com/jeffhodnett/Unused</a></td>
+</tr>
+<tr>
+<td>SimPholders</td>
+<td>在 OS X 上打开模拟器对应应用沙盒的文件夹</td>
+<td><a href="https://simpholders.com/" target="_blank" rel="external">https://simpholders.com/</a></td>
+</tr>
+<tr>
+<td>iPhoneConfigUtility</td>
+<td>预配置描述文件Provisioning管理工具</td>
+<td><a href="http://iphone-configuration-utility.soft32.com" target="_blank" rel="external">http://iphone-configuration-utility.soft32.com</a></td>
+</tr>
+<tr>
+<td>Match</td>
+<td>通过 Git 管理开发者证书和配置文件</td>
+<td><a href="https://github.com/fastlane/fastlane/tree/master/match" target="_blank" rel="external">https://github.com/fastlane/fastlane/tree/master/match</a></td>
+</tr>
+<tr>
+<td>ImageOptim</td>
+<td>图片压缩工具</td>
+<td><a href="https://imageoptim.com/mac" target="_blank" rel="external">https://imageoptim.com/mac</a></td>
+</tr>
+<tr>
+<td>TinyPNG</td>
+<td>Compress PNG images while preserving transparency<br>PNG 在线压缩工具，压缩率非常高</td>
+<td><a href="https://tinypng.com/" target="_blank" rel="external">https://tinypng.com/</a> <br> <a href="https://github.com/kyleduo/TinyPNG4Mac" target="_blank" rel="external">https://github.com/kyleduo/TinyPNG4Mac</a></td>
+</tr>
+<tr>
+<td>Faux Pas</td>
+<td>Objective-C 静态代码分析工具，排查 Warning 和 Error</td>
+<td><a href="http://fauxpasapp.com/" target="_blank" rel="external">http://fauxpasapp.com/</a></td>
+</tr>
+<tr>
+<td>RevealApp</td>
+<td>UI 可视化调试工具</td>
+<td><a href="http://revealapp.com/" target="_blank" rel="external">http://revealapp.com/</a></td>
+</tr>
+<tr>
+<td>Watchdog</td>
+<td>Xcode 缓存自动清理工具</td>
+<td><a href="https://www.cerebralgardens.com/watchdog" target="_blank" rel="external">https://www.cerebralgardens.com/watchdog</a></td>
+</tr>
+<tr>
+<td>Hopper Disassembler</td>
+<td>The OS X and Linux Disassembler<br>反编译工具</td>
+<td><a href="https://www.hopperapp.com/" target="_blank" rel="external">https://www.hopperapp.com/</a></td>
+</tr>
+<tr>
+<td>QuartzCode</td>
+<td>Turn Animation Natively to Objective-C / Swift Code<br>矢量图形和动画代码化</td>
+<td><a href="http://www.quartzcodeapp.com/" target="_blank" rel="external">http://www.quartzcodeapp.com/</a></td>
+</tr>
+<tr>
+<td>NSLogger</td>
+<td>A modern, flexible logging tool<br>OS X 日志客户端，可将 iOS 应用日志通过 Bonjour 传输到 OS X</td>
+<td><a href="https://github.com/fpillet/NSLogger" target="_blank" rel="external">https://github.com/fpillet/NSLogger</a></td>
+</tr>
+<tr>
+<td>AppCode</td>
+<td>Smart IDE for iOS/OS X development<br>Jetbrains 出品的 Objective-C / Swift IDE，好用到哭</td>
+<td><a href="https://www.jetbrains.com/objc/" target="_blank" rel="external">https://www.jetbrains.com/objc/</a></td>
+</tr>
+<tr>
+<td>Charles</td>
+<td>HTTP 调试代理应用</td>
+<td><a href="https://www.charlesproxy.com/" target="_blank" rel="external">https://www.charlesproxy.com/</a></td>
+</tr>
+<tr>
+<td>Wireshark</td>
+<td>Wireshark is the world’s foremost network protocol analyzer.<br>网络协议分析工具</td>
+<td><a href="https://www.wireshark.org/" target="_blank" rel="external">https://www.wireshark.org/</a></td>
+</tr>
+<tr>
+<td>Paw</td>
+<td>The most advanced HTTP client for Mac<br>定制化程度最好的 OS X 的 HTTP 调试客户端</td>
+<td><a href="https://luckymarmot.com/paw/" target="_blank" rel="external">https://luckymarmot.com/paw/</a></td>
+</tr>
+<tr>
+<td>Dash</td>
+<td>API 文档查看和代码管理工具，好用到哭</td>
+<td><a href="https://kapeli.com/dash" target="_blank" rel="external">https://kapeli.com/dash</a></td>
+</tr>
+<tr>
+<td>xScope</td>
+<td>A powerful set of tools that are ideal for measuring, inspecting &amp; testing on-screen graphics and layouts.<br>像素级 UI 开发必备</td>
+<td><a href="http://xscopeapp.com/" target="_blank" rel="external">http://xscopeapp.com/</a></td>
+</tr>
+<tr>
+<td>Duet Display</td>
+<td>Ex-Apple Engineers turn your iPad into an extra display.</td>
+<td><a href="http://www.duetdisplay.com/" target="_blank" rel="external">http://www.duetdisplay.com/</a></td>
+</tr>
+<tr>
+<td>Code Runner</td>
+<td>An advanced, highly flexible, and easy-to-use programming editor for your Mac.</td>
+<td><a href="https://coderunnerapp.com/" target="_blank" rel="external">https://coderunnerapp.com/</a></td>
+</tr>
+<tr>
+<td>JSONExport</td>
+<td>将 JSON 导出成 Model 类</td>
+<td><a href="https://github.com/Ahmed-Ali/JSONExport" target="_blank" rel="external">https://github.com/Ahmed-Ali/JSONExport</a></td>
+</tr>
+<tr>
+<td>ideviceinstaller</td>
+<td>Manage apps of iOS devices</td>
+<td><a href="https://github.com/libimobiledevice/ideviceinstaller" target="_blank" rel="external">https://github.com/libimobiledevice/ideviceinstaller</a></td>
+</tr>
+</tbody>
+</table>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;table&gt;
+&lt;thead&gt;
+&lt;tr&gt;
+&lt;th&gt;应用&lt;/th&gt;
+&lt;th&gt;描述&lt;/th&gt;
+&lt;th&gt;网址&lt;/th&gt;
+&lt;/tr&gt;
+&lt;/thead&gt;
+&lt;tbody&gt;
+&lt;tr&gt;
+&lt;td&gt;fui&lt;/td&gt;
+&lt;td&gt;Find unused Objective-C imports.&lt;br&gt;查找
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>Enemy of the State 阅读摘要</title>
+    <link href="http://jiyee.io/2016/08/Enemy%20of%20the%20State%20%E9%98%85%E8%AF%BB%E6%91%98%E8%A6%81/"/>
+    <id>http://jiyee.io/2016/08/Enemy of the State 阅读摘要/</id>
+    <published>2016-08-07T16:00:00.000Z</published>
+    <updated>2016-12-23T01:40:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>Justin Spahr-Summers<br>2014</p>
+<p>state and mutation</p>
 <ul>
-<li>NSJSONReadingMutableContainers，返回可变容器，__NSMutableDictionary__ 或 __NSMutableArray__</li>
-<li>NSJSONReadingMutableLeaves，叶节点都转成 __NSMutableString__，目前在 iOS 7 上测试不好用，应该是个 bug，参见：- <a href="http://stackoverflow.com/questions/19345864/nsjsonreadingmutableleaves-option-is-not-working%20" target="_blank" rel="external">http://stackoverflow.com/questions/19345864/nsjsonreadingmutableleaves-option-is-not-working </a></li>
-<li>NSJSONReadingAllowFragments，允许顶层节点不是 __NSArray__ 或者 __NSDictionary__，但必须是有效的 JSON Fragment，如解析 <code>@&quot;123&quot;</code> 这样的字符串。<blockquote>
-<p>That’s because 32 is a valid JSON fragment (a number), but abcd is not a valid JSON fragment since all strings must be quoted.<br><code>NSString *num=@&quot;32&quot;;</code><br><code>NSString *num=@&quot;\&quot;abcd\&quot;&quot;;</code></p>
-</blockquote>
+<li>Simple:less concepts and concerns</li>
+<li>Complexity: mixing “complecting” </li>
+</ul>
+<p>All systems have essential complexity.</p>
+<p>State is hard to test.</p>
+<p>State is an implicit input that can change unexpecteble</p>
+<h2 id="Minimize-states"><a href="#Minimize-states" class="headerlink" title="Minimize states."></a>Minimize states.</h2><ul>
+<li>Values</li>
+<li>Purity</li>
+<li>Isolation</li>
+</ul>
+<h3 id="Values"><a href="#Values" class="headerlink" title="Values"></a>Values</h3><p>Structs, Enums, Copied (not shared)</p>
+<p>Value types are immutable in swift.</p>
+<p>Keys:<br><strong>Variables mutate</strong><br><strong>Values never change</strong></p>
+<p>Values are automatically <strong>thread-safe</strong><br>Values are automatically <strong>predicatable</strong></p>
+<h3 id="Pure-functions"><a href="#Pure-functions" class="headerlink" title="Pure functions"></a>Pure functions</h3><p>same inputs always yield the same result.<br>Must not have <em>observable</em> side effects.</p>
+<h3 id="Isolation"><a href="#Isolation" class="headerlink" title="Isolation"></a>Isolation</h3><p>Objects should have only one reason to change<br>isolate unrelatted piece of states<br>Before log in and After log in ViewModel 差异</p>
+<p>stateless core, stateful shell</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;Justin Spahr-Summers&lt;br&gt;2014&lt;/p&gt;
+&lt;p&gt;state and mutation&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Simple:less concepts and concerns&lt;/li&gt;
+&lt;li&gt;Complexity: mixing “comple
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>客户端数据缓存策略</title>
+    <link href="http://jiyee.io/2016/05/%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%95%B0%E6%8D%AE%E7%BC%93%E5%AD%98%E7%AD%96%E7%95%A5/"/>
+    <id>http://jiyee.io/2016/05/客户端数据缓存策略/</id>
+    <published>2016-05-18T16:00:00.000Z</published>
+    <updated>2016-12-23T02:22:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="缓存类型："><a href="#缓存类型：" class="headerlink" title="缓存类型："></a>缓存类型：</h2><p>区分文件缓存和内存缓存。<br>差别在于文件缓存有缓存过期时间，其生命周期依赖于缓存过期时间；内存缓存的生命周期跟 App 生命周期一致。</p>
+<h2 id="缓存策略："><a href="#缓存策略：" class="headerlink" title="缓存策略："></a>缓存策略：</h2><ol>
+<li><p>缓存数据和网络请求二选一</p>
+<ul>
+<li>加载缓存没有过期，就不发起网络请求；</li>
+<li><p>缓存一旦过期，就发起网络请求；</p>
+<p>使用场景：</p>
 </li>
 </ul>
-<p><code>JSONObjectWithStream:options:error:</code>，通过数据流解析<br>__NSInputStream__ 数据流必须是可被打开和配置。</p>
-<p><code>dataWithJSONObject:options:error:</code>，创建 JSON data<br>如果对象不能正确生成 JSON data，将抛出一个 programming error，并非 internal error，This exception is thrown prior to parsing and represents a programming error。</p>
-<p>而 API 里设定的 __error__，If an internal error occurs, upon return contains an NSError object that describes the problem.</p>
-<p>所以，在生成 JSON data 之前，需要检查是否能够正确 <code>isValidJSONObject:</code></p>
-<p><code>NSJSONWritingOptions</code>，</p>
+<ol>
+<li>节省网络请求</li>
+<li>过期失效数据无法使用</li>
+</ol>
+</li>
+<li><p>缓存数据与网络请求数据顺序加载</p>
 <ul>
-<li>NSJSONWritingPrettyPrinted，指定输出 JSON data 是否执行 pretty print.</li>
+<li>无论缓存有没有过期，均发起网络请求；<br>使用场景：</li>
+</ul>
+<ol>
+<li>过期失效数据仍有一定使用价值</li>
+<li>每次又想更新内容</li>
+</ol>
+</li>
+<li><p>只加载请求网络数据</p>
+<ul>
+<li>在不判断缓存的情况下，主动忽略缓存，发起网络请求；  </li>
+<li><p>这个策略比较好的满足方式是，在策略二的基础上，比较缓存数据和网络数据是否相同，如果相同即不重复回调。  </p>
+<p>使用场景：</p>
+</li>
+</ul>
+<ol>
+<li>不想重复回调刷新页面</li>
+</ol>
+</li>
+</ol>
+<h2 id="缓存过期时间："><a href="#缓存过期时间：" class="headerlink" title="缓存过期时间："></a>缓存过期时间：</h2><p>针对缓存策略1（只加载缓存数据）情况，缓存过期时间用于确定缓存是否过期。<br>对于其他两种缓存策略，过期时间无效。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>缓存策略很容易和网络策略混在一起<br><em> 缓存技术问题又很容易跟产品业务问题混在一起
+</em> 缓存问题从根本上来看其实是数据源选择的问题</li>
+</ul>
+<p>如果认同数据源选择的说法，那么上述三个策略可以概括为：</p>
+<ol>
+<li>同步有依赖的多源数据的选择（数据源的获取是同步的，是否获取下一个数据源依赖于上一个数据源是否返回结果）</li>
+<li>同步无依赖的多源数据的选择（数据源的获取是同步的，是否获取不同数据源没有相互依赖）</li>
+<li>单源选择</li>
+</ol>
+<p>那么，目前遇到的问题就可以拆分为两个问题讨论：</p>
+<ol>
+<li>多源选择策略的问题</li>
+<li>单源数据如何保存和获取的问题</li>
+</ol>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;缓存类型：&quot;&gt;&lt;a href=&quot;#缓存类型：&quot; class=&quot;headerlink&quot; title=&quot;缓存类型：&quot;&gt;&lt;/a&gt;缓存类型：&lt;/h2&gt;&lt;p&gt;区分文件缓存和内存缓存。&lt;br&gt;差别在于文件缓存有缓存过期时间，其生命周期依赖于缓存过期时间；内存缓存的生命周期跟 
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>一年打磨五万行代码，人人车 iOS 客户端架构演进之路（上）</title>
+    <link href="http://jiyee.io/2016/05/%E4%B8%80%E5%B9%B4%E6%89%93%E7%A3%A8%E4%BA%94%E4%B8%87%E8%A1%8C%E4%BB%A3%E7%A0%81%EF%BC%8C%E4%BA%BA%E4%BA%BA%E8%BD%A6%20iOS%20%E5%AE%A2%E6%88%B7%E7%AB%AF%E6%9E%B6%E6%9E%84%E6%BC%94%E8%BF%9B%E4%B9%8B%E8%B7%AF%EF%BC%88%E4%B8%8A%EF%BC%89/"/>
+    <id>http://jiyee.io/2016/05/一年打磨五万行代码，人人车 iOS 客户端架构演进之路（上）/</id>
+    <published>2016-04-30T16:00:00.000Z</published>
+    <updated>2016-12-23T01:33:49.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>作为创业公司，我们的资源有限，而我们的业务发展迅速。我们相信技术架构是为了业务服务的，架构要领先于业务发展。只有保证架构领先，才能提升团队开发效率和质量，进而满足业务不断发展的业务需求。</p>
+<p>人人车 iOS 客户端从 2014 年年末启动到现在一年多的时间里，已经经历了 20 多次版本迭代，期间经过大大小小几个阶段的架构升级和改造，每一次版本迭代中都会包含技术驱动的项目，无论是小的代码重构，还是大的架构改造。连我们也很惊讶我们的代码量只有区区五万行。</p>
+<p><img src="/images/cloc.png" alt="" title="一年打磨五万行代码"></p>
+<p>现在，停下来回顾一下曾经走过的路、踩过的坑，将我们在 Storyboard、VIPER、JSONModel、Antenna、JSPatch、React Native 等多个方向的技术选型经历和经验拿出来与大家分享。</p>
+<h2 id="Section-1，Storyboard-vs-手写代码"><a href="#Section-1，Storyboard-vs-手写代码" class="headerlink" title="Section 1，Storyboard vs. 手写代码"></a>Section 1，Storyboard vs. 手写代码</h2><p>当初准备做 iOS 客户端的时候，我们没有正式的 iOS 工程师，就我一个原本从事前端开发的工程师。就想着最大化利用 Apple 提供的基础设施，决定了基于 Storyboard 开发我们的第一个版本的应用。事实证明，基于 Storyboard 确实能直观、快速地开发出业务相对简单的应用。</p>
+<p>但是，随着业务复杂度提升，当时 Storyboard 也显现出一些困扰我们的问题。一是 Xcode 性能问题，随着车辆详情页越来越复杂，每次打开 Storyboard 之后 Xcode 就出现卡顿问题，特别影响开发效率（PS，还真没见过 Xcode 这样脆弱的 IDE，每天恨不得 Crash 5，6 次）。二是 UI 元素复用问题，对于想复用的 UI 元素当时并没有特别好的复用办法，每次都要重新创建和设置。如果 PM 要求全局修改样式就比较痛苦了，只能一个个元素选中之后修改。三是约束冲突的时候不容易解决冲突，页面元素越复杂，只要出现约束冲突，一般情况下，Storyboard 建议你修复冲突的方式都是错的，你只能一个个元素排查，看是多了哪个约束还是少了哪个约束。四是常见的 Storyboard 文件冲突问题，不过当时只有一个人开发，此问题并不是特别严重。</p>
+<p><img src="/images/storyboard.jpg" alt="" title="人人车详情页 Storyboard 实现"></p>
+<p>促成转变的另一个因素是，业界对于 Storyboard 和手写代码之间孰优孰劣一直存在争议，唐巧写过一篇<a href="http://blog.devtang.com/2015/03/22/ios-dev-controversy-2/" target="_blank" rel="external">《iOS 开发中的争议》</a>的文章来解构分析业界对于 Storyboard 的现实态度。这让我联想到 Web 前端对于 Dreamweaver 或者其他可视化工具的态度，相信没有一个资深的前端开发工程师是靠这样的工具来完成工作的。再者 Storyboard 能完成的任何工作，最终落实到代码层面，都是能通过手写代码来完成的。</p>
+<p>最终，这些 Storyboard 存在的问题和不同领域的的借鉴促成了想手写代码的转变。</p>
+<p>有了 Storyboard 使用经验，对 AutoLayout 就并不陌生了。手写代码最主要解决的问题就是约束和布局，Masonry 几乎是当时唯一的 AutoLayout 库，从 Storyboard 迁移到 Masonry，主要遇到的问题就是没有一个业界通用的创建对象、添加约束的最佳实践。因为 UIViewController 添加 subview 的地方可以在 <code>loadView</code> 和 <code>viewDidLoad</code>，添加 Constraints 的地方可以在 <code>viewDidLoad</code> 和 <code>updateViewConstraints</code>。既想保证正确性，也要求代码美观，发现对于这个问题，就找不到没有一个明确的最佳实践，大家讨论的基本都是生命周期问题，却对这个问题没有形成统一。最后，我们就定了一个方案，在 <code>viewDidLoad</code> 里添加 subviews，subview 均采用懒加载方式创建，在 <code>updateViewConstaints</code> 里结合 <code>didSetupConstraints</code> 这个 BOOL 变量来确保创建约束只执行一次，需要动态更新的约束也放在 <code>updateViewContraints</code>。现在看来可能并不是一个最理想的方案，但是，时至今日，对于这个问题仍然没有找到一个权威的意见。使用 AutoLayout 过程中，另一个遇到的问题是 frame 布局的混用。有时候不得不使用 frame 布局，例如，添加复杂的动画，还有 UITableView 的 headerView 和 footerView 设置。对于这样的问题，总结的一个经验是，对于一个 view 想使用 frame 布局，是可以对其 subviews 使用约束布局，但不要对 view 本身添加任何约束，在调用 <code>addSubview:</code> 方法将 view 添加到 superview 之后，要对其调用 <code>setNeedsUpdateConstraints</code> 和 <code>layoutIfNeeded</code> 方法，让 view 内部先完成布局，从而获取 view 的尺寸，再根据这个尺寸对 view 设置合适的 frame。</p>
+<p>手写代码的优势显而易见，使得我们的代码更加可控，定制性和复用性更好，另外，也促使我们直接放弃 Xcode，转向 AppCode，获得更好的开发体验。另一方面，手写代码势必伴随着代码量的增长，我们也采用了一些工具和方法来简化重复性的代码输入工作，例如，Xcode 的 <a href="https://github.com/youweit/DCLazyInstantiate" title="DCLazyInstantiate" target="_blank" rel="external">DCLazyInstantiate</a> 插件（AppCode 自带此功能），以及研究 Masonry 提供的创建约束的简化语法，如 <code>make.edges.equalTo(self)</code> 这样的写法。</p>
+<p>业务发展的技术路径可能有很多种，应选用一种当下最适合你的路径，尤其是团队成员并不是特别有经验的情况下。最适合的路径可能并不是最优的路径，但却能最快的满足业务发展，在创业公司里容许你走弯路，同样要求不断审视曾经走过路，关注那些遗留下来的技术债务。</p>
+<h2 id="Section-2，MVC-vs-VIPER"><a href="#Section-2，MVC-vs-VIPER" class="headerlink" title="Section 2，MVC vs. VIPER"></a>Section 2，MVC vs. VIPER</h2><p>MVC 架构是 Apple 推荐的 iOS 应用架构，但相信所有 iOS 开发者都对 MVC 架构存在的问题了解一二。MVC 最大的问题就是容易导致 Controller 膨胀，演变成 Massive Controller。直接的解决方案就是拆分 Controller，将 DataSource 和 Delegate 等拆分出单独的类。</p>
+<p>而我们在详情页模块刚开始膨胀的时候注意到了 VIPER 架构。经过一番调研之后发现，VIPER 在设计理念上比较符合功能复杂、并且不断迭代的应用。VIPER 遵循关注点分离的设计原则，它将数据请求、数据处理、页面跳转、业务逻辑和 UI 展现都一一分离。每一个职责都有对应的类实现，类的数量和相互间引用关系比起 Massive Controller 会相对复杂一些，好在有 vipergen 这样的工具来自动创建 VIPER 模块。</p>
+<p><img src="/images/viper.png" alt="" title="VIPER 架构图"></p>
+<p>在引入 VIPER 架构的过程中，我们采用逐步按需升级的原则。没有一次性将所有的模块都按照 VIPER 模块重构，而是对重要的、业务复杂的模块按照 VIPER 架构重构。这样既限制了重构范围，方便评估试验结果，也降低了重构风险，减少对其他模块的影响。</p>
+<p>我们在按照 VIPER 架构重构已有的模块时，遇到的最大的挑战是业务代码和 UI 代码分离，两者之间的差别不好把握，尤其是代码耦合较紧的情况下。我们的经验是，将 UI 代码细化到对称的方法在 UserInterface，例如 <code>showXXX</code> 和 <code>hideXXX</code>，或者 <code>reloadXXX:</code>，而调用逻辑条件都抽象成方法在 Presenter，Presenter 负责一切 UI 交互逻辑，更像是粘合剂代码，但是职责更加清晰，不处理数据，不处理 UI，只负责数据请求，逻辑判断和 UI 方法调用。</p>
+<p>另外，在 Interactor 数据处理层面，将 Model 处理成 ViewModel，ViewModel 的数据类型和内容都跟 UI 绑定，这样解耦了数据接口层和 UI 层的耦合关系。而 Interactor 负责处理网络数据、缓存数据、本地数据之间优先级关系，Presenter 业务层面不需要关心数据来源。另外，Interactor 和 DataManager 都可以作为数据接口供其他模块复用。</p>
+<p>另外，除了 UserInterface（即 UIViewController） 每次 push / pop 过程中重复创建之外，整个 VIPER 模块可以保持单例形式存在，这样也有助于提升页面初始化的性能。</p>
+<p>采用 VIPER 架构的好处是代码结构清晰，类职责明确，降低代码阅读难度。如果不熟悉此模块的同学接手，只要结合业务逻辑，读懂 Presenter 代码，这样就容易上手。</p>
+<h2 id="Section-4-JSONModel-JSONValueTransformer-最佳实践"><a href="#Section-4-JSONModel-JSONValueTransformer-最佳实践" class="headerlink" title="Section 4, JSONModel + JSONValueTransformer 最佳实践"></a>Section 4, JSONModel + JSONValueTransformer 最佳实践</h2><p>我们一直使用 JSONModel 作为 JSON 解析库，JSONModel 足够可靠和简单。直到遇到了一次因为 JSON 解析失败导致的线上崩溃事故之后，我们才觉悟到 JSONModel 原来也没有我们想的这么简单。</p>
+<p>复盘一下当时的事故。我们的车辆详情 Model 里有一个属性 <code>sold</code>，标识是否已售，当时属性定义的时候采用了 <code>BOOL</code> 类型，按照接口约定服务端回传 <code>&quot;true&quot;</code> 或者 <code>&quot;false&quot;</code> 字符串，我们只能傻乎乎地通过 <code>isEqualToString:</code> 方法给属性赋值，突然某一天服务端觉得这样接口设计不合理，将回传改成了 <code>true</code> 或者 <code>false</code> 布尔值，这样在方法调用的时候就出现了 <code>unrecognized selector sent to instance</code> 错误，造成点击进入已售车辆详情页的用户都会遭遇应用崩溃。更不巧的是这一天检索服务错误地把某量已售车辆保留在了检索列表的第二条，这样一下子我们的崩溃率就开始飙升。</p>
+<p>当时 CTO 就说，你得做数据兼容啊，怎么的也不能让应用崩溃啊。</p>
+<p>心想，这锅有一半还真得背。</p>
+<p>此事故之后，我们开始深入地研究了 JSONModel 源代码，才理解 JSONModel 的设计理念，发现了很多我们使用上的误区和一些之前没有注意到隐藏特性。</p>
+<blockquote>
+<p>// it’s not a JSON data type, and there’s no transformer for it<br>// if property type is not supported - that’s a programmer mistake -> exception</p>
+</blockquote>
+<p>JSONModel.m 文件里有这么一段注释，作者的意思是如果 JSON 数据类型无法解析，那肯定是程序员的错，我就任性地抛出异常让你知道。</p>
+<p>此意就是，Model 属性类型的定义就是数据接口约定的文档固化，如果数据接口的变动没有同步到 Model 的变化，那出现任何不兼容的解析问题，就通过抛出异常的方式提醒你数据接口出现了问题。这样的设计理念，我觉得是服务端问题显现化，因为接口变化出现的问题能通过服务端快速修复。所以，在客户端将问题暴露出来可能是一种合适的选择，避免因为过度的数据兼容导致业务逻辑上出现问题。</p>
+<p>但是，对应到我们的事故上，可能并不是一种友好的方式。我们也不想通过简单的 try / catch 来解决问题，我们还是遵循 JSONModel 的设计思路，按照推荐的方式来进行数据兼容，总结了以下几条最佳实践：</p>
+<ul>
+<li>属性类型选用 NS 类型，避免选用原始数据类型（Primitive Types）。原始数据类型在解析时直接调用的是 <code>setValue:forKey:</code> 方法，如果传入类型不一致的值，会抛出异常</li>
+<li>属性协议合理选用<ul>
+<li>有条件地设置 <code>&lt;Optional&gt;</code>，尽量避免设置全部属性均为 Optional</li>
+<li>对自定义属性设置 <code>&lt;Ignore&gt;</code>，避免解析覆盖</li>
+<li>对索引属性设置 <code>&lt;Index&gt;</code>，保证值唯一，便于比较</li>
+<li>对解析耗时的 NSArray 或者 NSDictionary 类型属性设置 <code>&lt;convertsOnDemands&gt;</code>，延时解析</li>
+</ul>
+</li>
+<li>设置统一的 KeyMapper，并结合 <code>mapper:withExceptions:</code> 方法添加例外条件</li>
+<li><code>-initWithDictionary:error:</code> 用于设置 <code>&lt;Ignore&gt;</code> 类型属性的初始值，或者设置属性的默认值，或者对经过解析之后的属性值进行值变换（避免类型变换，类型变换通过自定义 setter 方法完成）</li>
+<li><code>-validate</code> 用于检验经过解析之后的 Model 是否在业务逻辑上正常</li>
+<li>对于需要类型转换的属性，如果 JSONValueTransformer.h 里没有定义兼容转型方法，可以在自定义 Model 的 m 文件里添加自定义 setter 方法，格式如 <code>setXXXWithYYY:</code>（ XXX 是属性名称，YYY 是 JSON 类型名）。如果需要从 Model 转回 JSON 的话，需要同时添加自定义 getter 方法，格式如 <code>JSONObjectFromXXX:</code></li>
+<li>全局性类型兼容转型，通过扩展 JSONValueTransformer 类来实现，添加 <code>XXXFromYYY:</code> 方法（ XXX 是 Model 类型名，YYY 是 JSON 类型名）</li>
+<li>空置或者解析失败处理。所有 NSObject 类型的属性如果设置了 Optional，其属性值都可能为 nil，允许直接判断 <code>value == nil</code>。经过 JSONModel 成功解析之后的属性值不可能是 <code>NSNull</code> 类型。如果 JSON 值是 null，则一定为 nil。</li>
+<li>如果是 NSDictionary 类型，则遍历 keys 和 values，将 value 作为协议类型执行解析，如同 NSArray 方式解析</li>
 </ul>
 ]]></content>
     
     <summary type="html">
     
-      &lt;h1 id=&quot;NSJSONSerialization，JSON数据解析API&quot;&gt;&lt;a href=&quot;#NSJSONSerialization，JSON数据解析API&quot; class=&quot;headerlink&quot; title=&quot;NSJSONSerialization，JSON数据解析AP
+      &lt;p&gt;作为创业公司，我们的资源有限，而我们的业务发展迅速。我们相信技术架构是为了业务服务的，架构要领先于业务发展。只有保证架构领先，才能提升团队开发效率和质量，进而满足业务不断发展的业务需求。&lt;/p&gt;
+&lt;p&gt;人人车 iOS 客户端从 2014 年年末启动到现在一年多的时间里，已经
     
     </summary>
     
@@ -100,59 +435,82 @@
   </entry>
   
   <entry>
-    <title>为 ASUS-AC68U-Merlin 固件交叉编译 shadowsocks-libev</title>
-    <link href="http://jiyee.io/2015/01/%E4%B8%BA%20ASUS-AC68U-Merlin%20%E5%9B%BA%E4%BB%B6%E4%BA%A4%E5%8F%89%E7%BC%96%E8%AF%91%20shadowsocks-libev/"/>
-    <id>http://jiyee.io/2015/01/为 ASUS-AC68U-Merlin 固件交叉编译 shadowsocks-libev/</id>
-    <published>2015-01-23T16:00:00.000Z</published>
-    <updated>2016-12-23T01:09:19.000Z</updated>
+    <title>iOS 代码格式化 clang-format 使用说明</title>
+    <link href="http://jiyee.io/2016/04/iOS%20%E4%BB%A3%E7%A0%81%E6%A0%BC%E5%BC%8F%E5%8C%96%20clang-format%20%E4%BD%BF%E7%94%A8%E8%AF%B4%E6%98%8E/"/>
+    <id>http://jiyee.io/2016/04/iOS 代码格式化 clang-format 使用说明/</id>
+    <published>2016-04-09T16:00:00.000Z</published>
+    <updated>2016-12-23T02:17:31.000Z</updated>
     
-    <content type="html"><![CDATA[<p>开篇向 <a href="https://github.com/RMerl/asuswrt-merlin" title="ASUS-AC68U-Merlin Firewarm" target="_blank" rel="external">Merlin固件</a>及<a href="https://github.com/RMerl/asuswrt-merlin/wiki" title="Merlin Firewarm Wiki" target="_blank" rel="external">Wiki</a> 致敬，向 tengattack 写下的 《<a href="https://bless.moe/blog/po/1027" title="为R6300v2新固件交叉编译shadowsocks-libev" target="_blank" rel="external">为R6300v2新固件交叉编译shadowsocks-libev</a>》 一文致敬。</p>
-<h2 id="背景"><a href="#背景" class="headerlink" title="背景"></a>背景</h2><p>本文基本参照了以上两篇文章，经过两个漫漫长夜，终于鼓捣出能够在 ASUS-AC68U Merlin 固件上运行的 shadowsocks-libev。</p>
-<p>上周刚买了华硕 AC68U 路由器，看中的就是强大的配置和能够足够鼓捣的空间。但是，本人是个前端开发工程师，目前正在朝 iOS 开发工程师转行，对于怎么样编译固件，编译固件应用，甚是无知。</p>
-<p>什么交叉编译，ARM 平台，编译器，基本库等等内容，基本处于很无知的阶段，虽然也用 Mac 和 Linux 平台，但是对于 C/C++ 环境里的一切了解甚少。</p>
-<h2 id="曲折的过程"><a href="#曲折的过程" class="headerlink" title="曲折的过程"></a>曲折的过程</h2><p>好吧，那既然闪闪亮的路由器已经到家了，翻越长城的欲望怒不可止。心想一定要搞到一个能够运行在路由器上的 Shadowsocks。一路 Google，发现根本没有人做过这件事，基本没可能直接拿现成的，看来只能自己编译了。之前看到了 Merlin 源代码里有一个<a href="https://github.com/RMerl/asuswrt-merlin/blob/master/README.TXT" target="_blank" rel="external">README.TXT</a>，有写怎么样配置编译环境和怎么编译固件，但是后来发现这个文档是基于 MIPS 平台，而 AC68U 却是 ARM 平台，文档过时了。。。另外，找到 Merlin 固件也能够支持 <a href="https://github.com/RMerl/asuswrt-merlin/wiki/Entware" target="_blank" rel="external">Entware</a>，但是却又说：</p>
-<blockquote>
-<p>Note that Entware is only available on the MIPS-based routers. This means the RT-AC56U and RT-AC68U are not supported.</p>
-</blockquote>
-<p>好吧，那继续 Google 和翻论坛帖子，国内恩山论坛上搜索 AC68U 帖子数还很少，国外 <a href="http://forums.smallnetbuilder.com" target="_blank" rel="external">smallnetbuild</a> 上也不多，估计是 AC68U 的用户基数比较少，而愿意折腾的同学会选择性价比更高的其他型号。</p>
-<p>最后，不知道哪儿看到 <a href="http://wiki.openwrt.org/doc/devel/crosscompile" target="_blank" rel="external">一篇文章</a> 说 OpenWRT 固件里可以把需要编译的应用放到 packages 里，能就基本 SDK 编译了。虽然这段话到现在还不知道怎么理解，但至少提供了一个思路，那就是先编译一个编译 Merlin 固件看看。</p>
-<p>编译固件需要编译平台，看 Merlin 作者推荐 Ubuntu，我就用 Vagrant 搭建了 Ubuntu 环境，下载了 Ubuntu 14.04 64bit 的 box（64bit还是给后面工作埋下了坑），成功加载运行，链接本地 <code>/Users/jiyee/Vagrant</code> 目录到虚拟机的 <code>/vagrant</code> 目录。Merlin 固件源代码之前已经 clone（好大，有4Gb），就放在 <code>/Users/jiyee/Vagrant</code> 目录。这一步走的比较顺利。</p>
-<p>然后，按照 <a href="https://github.com/RMerl/asuswrt-merlin/wiki/Compile-Firmware-from-source-using-Ubuntu" target="_blank" rel="external">Merlin Wiki</a> 里的配置编译环境的步骤，一步步设置，通过 apt-get 安装一堆编译工具，配置 <code>$PATH</code> ，最后执行 <code>make rt-ac68u</code> 。看 <a href="http://see.sl088.com/wiki/%E7%BC%96%E8%AF%91Openwrt%E5%9B%BA%E4%BB%B6" target="_blank" rel="external">一篇文章</a> 说固件编译很慢，就合上电脑睡觉了。第二天醒来一看，有报错，很正常，”编译固件有报错很正常”，心想。但是，错误提示一大堆，基本也看不懂。想到论坛上问问作者，后来一想环境不一样，估计问了也白问，还得注册论坛，写一篇英文帖子去描述，粘贴一堆编译信息，想想就累，遂放弃了。不过，至少我配置好了编译环境，小开心。退一步说，即便能够编译出固件我也不知道下一步该怎么办。</p>
-<p>这一下打击让我歇了两天，两天之后再次兴起想到这件事，翻出原来 Google 来的那些博客文档，看到了 tengattack 写的 《<a href="https://bless.moe/blog/po/1027" title="为R6300v2新固件交叉编译shadowsocks-libev" target="_blank" rel="external">为R6300v2新固件交叉编译shadowsocks-libev</a>》 一文，虽然这篇文章之前也草草看过，没看明白，所以决定这次认真看看。</p>
-<p>在配置环境的过程中，我了解到了 <a href="http://www.uclibc.org/" target="_blank" rel="external">uclibc</a> 编译环境，它是嵌入式平台的编译库，看到这篇文章花很大力气从 uclibc 编译环境迁移到 musl。google 到 <a href="http://www.musl-libc.org/" target="_blank" rel="external">musl</a>，看到主页上有一个链接 <a href="http://www.etalabs.net/compare_libcs.html" target="_blank" rel="external">《See how musl compares to other major libcs.》</a> ，一眼就看到了 glibc，那不是 GNU 的 C Library 么（我还是知道一点的），推测 uclibc，musl，glibc 都是一回事，只是 C Library 在不同平台上的实现或是同一平台上的不同实现。心想，我都不用 uclibc 迁移到 musl，因为 Merlin 固件就是在 uclibc 环境下编译的，省事。</p>
-<p>作者也没提编译固件的事，直接上来就编译程序了，看来有点眉目了。</p>
-<p>那好吧，我明白了交叉编译的最基本概念，就是在一个平台编译另一个平台能运行的程序。就写了一个最基本的C代码，<code>hello.c</code>。</p>
-<figure class="highlight c"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#<span class="meta-keyword">include</span> <span class="meta-string">&lt;stdio.h&gt;</span></span></div><div class="line"></div><div class="line"><span class="function"><span class="keyword">int</span> <span class="title">main</span><span class="params">()</span></span></div><div class="line">&#123;</div><div class="line">    <span class="built_in">printf</span>(<span class="string">"Hello World!\n"</span>);</div><div class="line">    <span class="keyword">return</span> <span class="number">0</span>;</div><div class="line">&#125;</div></pre></td></tr></table></figure>
-<p>运行 <code>gcc hello.c -o hello</code> ，编程成功，运行 <code>./hello</code> ，成功打出了 <code>Hello World!</code>。这是 C 语言学习的第一步，而我却拿来验证了编译器是否能成功执行。</p>
-<p>然后运行 <code>arm-uclibc-linux-2.6.36-gcc hello.c -o hello</code> ，报错，傻眼。</p>
-<blockquote>
-<p>/opt/brcm-arm/bin/../libexec/gcc/arm-brcm-linux-uclibcgnueabi/4.5.3/cc1: error while loading shared libraries: libmpc.so.2: cannot open shared object file: No such file or directory</p>
-</blockquote>
-<p>Google 一番之后，说有让执行 <code>ldd /opt/brcm-arm/libexec/gcc/arm-brcm-linux-uclibcgnueabi/4.5.3/cc1</code> 看看动态链接库是否完整，一看果然有 Not Found。</p>
-<blockquote>
-<p>   linux-gate.so.1 =>  (0xf77bf000)<br>   libmpc.so.2 => not found<br>   libmpfr.so.4 => not found<br>   libgmp.so.10 => not found<br>   libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf77aa000)<br>   libelf.so.1 => /usr/lib/i386-linux-gnu/libelf.so.1 (0xf7792000)<br>   libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf75e3000)<br>   /lib/ld-linux.so.2 (0xf77c0000)</p>
-</blockquote>
-<p>有三个 so 包没有能链接，在 <code>/usr/lib/i386-linux-gnu/</code> 目录里果然没有 <code>libmpc.so.2</code> 等文件。再一番 Google，意思是 <a href="http://unix.stackexchange.com/questions/119798/mint-correct-way-to-install-lib-i386-linux-gnu-libgmp-so-3" target="_blank" rel="external">装个32位链接库看看</a>，执行 <code>apt-get install ia32-libs</code>，安装错误。。。漫漫过程中一个库网络链接好像失效了，安装失败。这个时候在 StackOverflow 上看到了 <a href="http://stackoverflow.com/questions/19625451/cc1-error-while-loading-shared-libraries-libmpc-so-2-cannot-open-shared-objec" target="_blank" rel="external">一个帖子</a> 说，是否正确设置了 <strong>LD_LIBRARY_PATH</strong> 环境变量。心想，Merlin 固件的 Wiki 里没有提到呀，什么东西呀，那先 <code>echo $LD_LIBRARY_PATH</code> 看看，一 echo 为空，再在 <code>/opt/brcm-arm</code> 目录里找找，也有一个 <code>lib</code> 目录，里面就有那些缺失的文件。那就设置 <code>export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/brcm-arm/lib:/usr/local/lib:/usr/lib</code>。再执行 <code>ldd /opt/brcm-arm/libexec/gcc/arm-brcm-linux-uclibcgnueabi/4.5.3/cc1</code>，内容发生了变化，都能找到了。</p>
-<blockquote>
-<p>   linux-gate.so.1 =>  (0xf76f4000)<br>   libmpc.so.2 => /opt/brcm-arm/lib/libmpc.so.2 (0xf76de000)<br>   libmpfr.so.4 => /opt/brcm-arm/lib/libmpfr.so.4 (0xf768e000)<br>   libgmp.so.10 => /opt/brcm-arm/lib/libgmp.so.10 (0xf7631000)<br>   libdl.so.2 => /lib/i386-linux-gnu/libdl.so.2 (0xf7620000)<br>   libelf.so.1 => /usr/lib/i386-linux-gnu/libelf.so.1 (0xf7608000)<br>   libc.so.6 => /lib/i386-linux-gnu/libc.so.6 (0xf7459000)<br>   libm.so.6 => /lib/i386-linux-gnu/libm.so.6 (0xf7412000)<br>   /lib/ld-linux.so.2 (0xf76f5000)</p>
-</blockquote>
-<p>再次执行 <code>arm-uclibc-linux-2.6.36-gcc hello.c -o hello</code>，编译成功，执行 <code>./hello</code>，报错</p>
-<blockquote>
-<p>bash: ./hello: cannot execute binary file: Exec format error</p>
-</blockquote>
-<p>欣喜，貌似成功了。那把编译出来的 hello 文件 scp 到路由器上再执行，成功打印了 <code>Hello World!</code>，哇哦，看来离成功不远了。</p>
-<p>因为 Merlin 固件自带里 OpenSSL，省下一大把精力。</p>
-<p>再看了一遍那篇文章，照猫画虎的写下了以下编译命令：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line">CC=arm-uclibc-linux-2.6.36-gcc CXX=arm-uclibc-linux-2.6.36-g++ AR=arm-uclibc-linux-2.6.36-ar RANLIB=arm-uclibc-linux-2.6.36-ranlib ./configure --prefix=/vargrant/shadowsocks-libev --host=arm-uclibc-linux</div><div class="line">make &amp;&amp; make install</div></pre></td></tr></table></figure>
-<p><code>/vargrant/shadowsocks-libev/src</code> 目录下出现了4个可执行文件。成功了。。。我哭啊，赶紧再 scp 到路由器，执行 <code>./ss-local -s server_ip -p 8080 -l 7070 -k password -v -m aes-256-cfb</code>，又成功了。。。在本地配置 SOCKS5 代理，嗖嗖地翻出了万里长城。</p>
-<h2 id="后记"><a href="#后记" class="headerlink" title="后记"></a>后记</h2><p>哇哈哈，洋洋洒洒写了这么多，虽然实质内容没多少，也基本都是别人的，但是对于一个不懂交叉编译甚至是编译原理的同学来说成功能够搞定这一切，还是很值得欣慰的。我把其中经历的每一步都详实地写下来，把其中参考过的文档都附上链接地址，只是希望能够给像我这样的同学作一点参考，在茫茫 Google 搜索结果里找到一点点希望。</p>
-<p>其实，很多文章在第一次 Google 的时候会被忽略，写太多了，看不懂。第二次 Google 的时候会被扫过，挑重点看看。第n次 Google 的会被关注，醍醐灌顶，深深受益。因为你每一次都站上了不同的高度，直到你够到了作者的高度。最后，当你自己想写下什么的时候，他们会被感谢，因为没有他们，你就无法完成这一切。</p>
-<p>最后，为了 Google，感谢 Google。</p>
+    <content type="html"><![CDATA[<p>在工程目录下创建 _clang-format 文件，是 clang-format 代码格式化工具的配置文件。<br>使用该格式化配置文件需要安装Xcode插件：BBUncrustifyPlugin-Xcode，也可通过 Xcode 插件管理器 Alcatraz 搜索进行安装。或者安装另一款插件 ClangFormat-Xcode。</p>
+<p>以下对 _clang-format 文件配置进行逐行解释：</p>
+<ul>
+<li>AccessModifierOffset: 0<br>类的访问修饰关键字(private,public,protected···)缩进</li>
+<li>AlignAfterOpenBracket: true<br>在未封闭(括号的开始和结束不在同一行)的括号中的代码是否对齐</li>
+<li>AlignEscapedNewlinesLeft: false<br>在(),[],{}中代码不少于一行且换行情况下。如果true则，第二行起代码会尽量向左对齐，否则向最右边对齐</li>
+<li>AlignOperands: true<br>如果为true，水平对齐二元和三元表达式的操作数。</li>
+<li>AlignTrailingComments: true<br>如果为true，对齐各行尾部注释</li>
+<li>AllowAllParametersOfDeclarationOnNextLine: true<br>如果为true，函数申明多个参数时，允许换行</li>
+<li>AllowShortBlocksOnASingleLine: false<br>如果true，较短的代码片段允许格式化为一行</li>
+<li>AllowShortCaseLabelsOnASingleLine: false<br>是否允许短switch的case 语句在一行写完</li>
+<li>AllowShortIfStatementsOnASingleLine: false<br>是否允许短if else语句在一行写完</li>
+<li>AllowShortLoopsOnASingleLine: false<br>是否允许短的循环在一行写完</li>
+<li>AllowShortFunctionsOnASingleLine: All<br>是否允许短的方法实现在一行写完</li>
+<li>AlwaysBreakAfterDefinitionReturnType: false<br>定义函数返回类型之后换行</li>
+<li>AlwaysBreakTemplateDeclarations: false<br>定义模板之后换行</li>
+<li>AlwaysBreakBeforeMultilineStrings: false<br>多行字符串之前换行</li>
+<li>BreakBeforeBinaryOperators: None<br>二元操作符之前换行</li>
+<li>BreakBeforeTernaryOperators: true<br>三元操作符之前换行</li>
+<li>BreakConstructorInitializersBeforeComma: false<br>在构造函数初始化时按逗号断行，并以冒号对齐</li>
+<li>BinPackParameters: true<br>如果false，函数的定义或声明的参数要么是全部占同一行，要么一个参数占一行</li>
+<li>BinPackArguments: true<br>如果false，函数调用时的参数要么是全部占同一行，要么一个参数占一行</li>
+<li>ColumnLimit: 160<br>一行代码长度的限制，0为无限制</li>
+<li>ConstructorInitializerAllOnOneLineOrOnePerLine: false<br>如果true，构造函数的初始化无法适应于一行以内，那么每个参数占一行</li>
+<li>ConstructorInitializerIndentWidth: 4<br>构造函数初始化的缩进值</li>
+<li>DerivePointerAlignment: false<br>如果true，将用使用PointerAlignment的值为指针类型进行格式化</li>
+<li>ExperimentalAutoDetectBinPacking: false<br>如果true，clang-format检测方法的定义和调用是否被格式化为一个参数占据一行</li>
+<li>IndentCaseLabels: false<br>case语句的位置总是在switch语句后缩进一级</li>
+<li>IndentWrappedFunctionNames: false</li>
+<li>IndentFunctionDeclarationAfterType: false<br>If true, indent when breaking function declarations which are not also definitions after the type</li>
+<li>MaxEmptyLinesToKeep: 2<br>持续空行的最大数量</li>
+<li>KeepEmptyLinesAtTheStartOfBlocks: true<br>如果true，在一块代码前的空行将会被保留</li>
+<li>NamespaceIndentation: None<br>namespace的缩进<br>NI_None 所有的namespace均不缩进<br>NI_Inner 只在内部namespace缩进<br>NI_All 所有的namespace缩进</li>
+<li>ObjCBlockIndentWidth: 4<br>OC的block缩进宽度</li>
+<li>ObjCSpaceAfterProperty: false<br>OC的property后空格是否存在，如果true，那么@property(readonly) 代替 @property (readonly)</li>
+<li>ObjCSpaceBeforeProtocolList: true<br>OC中协议列表前的空格是否存在，如果true，那么 Person 代替 Person</li>
+<li>PenaltyBreakBeforeFirstCallParameter: 19</li>
+<li>PenaltyBreakComment: 300</li>
+<li>PenaltyBreakString: 1000</li>
+<li>PenaltyBreakFirstLessLess: 160</li>
+<li>PenaltyExcessCharacter: 1000000<br>最多能超出ColumnLimit多少个字符</li>
+<li>PenaltyReturnTypeOnItsOwnLine: 60</li>
+<li>PointerAlignment: Right<br>指针在类型那边还是在变量名那边还是在中间</li>
+<li>SpacesBeforeTrailingComments: 1<br>单行注释前的空格数</li>
+<li>Cpp11BracedListStyle: true<br>如果true，将大括号的列表格式化为最适合C++11的格式</li>
+<li>Standard: Cpp11<br>按照改Cpp11格式化 A&gt; 代替 A &gt;</li>
+<li>IndentWidth: 4<br>缩进的列数</li>
+<li>TabWidth: 4<br>制表位列数</li>
+<li>UseTab: Never<br>是否使用tab进行缩进</li>
+<li>BreakBeforeBraces: Attach<br>括号的断行模式，此处为括号紧贴代码片段</li>
+<li>SpacesInParentheses: false<br>如果true，在非空的括号中插入空格</li>
+<li>SpacesInSquareBrackets: false<br>如果true，[]中间插入空格</li>
+<li>SpacesInAngles: false<br>如果true，在&lt;&gt;中间插入空格</li>
+<li>SpaceInEmptyParentheses: false<br>如果true 空括号中加空格</li>
+<li>SpacesInCStyleCastParentheses: false</li>
+<li>SpaceAfterCStyleCast: false</li>
+<li>SpacesInContainerLiterals: true<br>是否在容器字面量(@[@”1”,@”2”])中插入空格</li>
+<li>SpaceBeforeAssignmentOperators: true<br>在=号前加空格</li>
+<li>ContinuationIndentWidth: 4<br>在续行(下一行)时的缩进长度</li>
+<li>CommentPragmas: ‘^ IWYU pragma:’<br>一个描述特殊意义的正则表达式。</li>
+<li>ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH ]<br>A vector of macros that should be interpreted as foreach loops instead of as function calls</li>
+<li>SpaceBeforeParens: ControlStatements<br>是否在括号前加上空格，此处只是在控制语句之前添加(if/while/for…)</li>
+<li>DisableFormat: false<br>禁用当前format文件</li>
+</ul>
+<p>参考文档：<a href="http://clang.llvm.org/docs/ClangFormatStyleOptions.html" target="_blank" rel="external">http://clang.llvm.org/docs/ClangFormatStyleOptions.html</a></p>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;开篇向 &lt;a href=&quot;https://github.com/RMerl/asuswrt-merlin&quot; title=&quot;ASUS-AC68U-Merlin Firewarm&quot; target=&quot;_blank&quot; rel=&quot;external&quot;&gt;Merlin固件&lt;/a&gt;及&lt;a h
+      &lt;p&gt;在工程目录下创建 _clang-format 文件，是 clang-format 代码格式化工具的配置文件。&lt;br&gt;使用该格式化配置文件需要安装Xcode插件：BBUncrustifyPlugin-Xcode，也可通过 Xcode 插件管理器 Alcatraz 搜索进行安装
     
     </summary>
     
@@ -160,112 +518,51 @@
   </entry>
   
   <entry>
-    <title>2014 Hybrid开发风潮 - 2014 iWeb峰会参会感</title>
-    <link href="http://jiyee.io/2014/08/2014%20Hybrid%E5%BC%80%E5%8F%91%E9%A3%8E%E6%BD%AE%20-%202014%20iWeb%E5%B3%B0%E4%BC%9A%E5%8F%82%E4%BC%9A%E6%84%9F/"/>
-    <id>http://jiyee.io/2014/08/2014 Hybrid开发风潮 - 2014 iWeb峰会参会感/</id>
-    <published>2014-08-18T16:00:00.000Z</published>
-    <updated>2016-12-22T09:55:05.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>上周末参加了 2014 年度的 iWeb 峰会，那叫一个人山人海啊。不过跟前几年有点不一样的是，今年似乎正刮一阵 Hybrid 开发风，主会场和工具专场连着介绍了三款不同的 Hybrid 开发框架，<a href="https://github.com/dcloudio" target="_blank" rel="external">Native.js</a>，<a href="http://www.appcan.cn" target="_blank" rel="external">AppCan</a>，<a href="https://software.intel.com/en-us/html5/tools" target="_blank" rel="external">Intel XDK</a>，各自有不同的思路和实现，给 Web 开发者们提供了不同的 App 开发平台和能力，那就一个个分别说说。</p>
-<h3 id="Native-js"><a href="#Native-js" class="headerlink" title="Native.js"></a>Native.js</h3><p>实质上属于 <a href="http://www.html5plus.org/" target="_blank" rel="external">HTML5+</a> 规范和 HBuilder 的结合实现， HTML5+ 就没什么好说的，据说是国内组织搞的（不太清楚，感觉就是 DCloud 牵头搞的），应用上跟 PhoneGap 类似。 Native.js 属于 HTML5+ 规范未实现的原生 API 部分的 Proxy ，是不是可以理解为那些规范里的实现都是通过 Native.js 实现的，就是暴露了原生 API 封装实现给了开发者，看难度好像有点大，需要根据不同平台调用原生 API 。那就要求开发者理解那些原生 API ，思路上跟 Titanium 的 Widget 类似，但是实现上选择了 JS Bridge 方式，我认为不是很好的一个方向，有点噱头的意思。那在它的平台上就只能希望 HTML5+ 规范的部分能实现的更加完整和全面。</p>
-<p>关于 Native.js 的实现，我的猜测是大量的使用了反射来将 JS 转为 Java 或者 Objective-C ，性能上是很大的考验。</p>
-<p>另外， HBuilder 是基于 Aptana 开发的，更加倾向于小清新，会场上也真的已经有了不少实际用户，让我大吃一惊。</p>
-<p>关于 HBuilder 的介绍参看：<a href="http://www.csdn.net/article/2014-04-11/2819266-jinjiang-with-hbuilder" target="_blank" rel="external">《近匠》HBuilder：如何用JS调用几十万原生API？</a></p>
-<p>Dcloud.io 官网上有关于 Native.js 的<a href="http://download.dcloud.net.cn/HTML5+%E5%BA%94%E7%94%A8%E5%BC%80%E5%8F%91-Native.js.pdf" target="_blank" rel="external">PDF文档</a></p>
-<h3 id="AppCan"><a href="#AppCan" class="headerlink" title="AppCan"></a>AppCan</h3><p>国内比较成熟的 Hybrid 开发平台，开发框架涵盖了丰富的自定义 API ，商业模式也比较清晰，但是，相对来说比较封闭，更加适合政府部门，我猜的。</p>
-<p>具体的就不予置评了，请参看<a href="http://www.appcan.cn" target="_blank" rel="external">AppCan官网</a></p>
-<h3 id="Intel-XDK"><a href="#Intel-XDK" class="headerlink" title="Intel XDK"></a>Intel XDK</h3><p>Intel XDK 框架真是第一次听说，之前孤陋寡闻了。 Intel 居然也加入了 Hybrid 开发阵营，可能真的是像他们的老大张海立所说的这款产品之前一直是国外团队在开发，国外团队也刚开始接手不久。</p>
-<p>张海立的演讲很精彩，搜了一下，复旦毕业，言语真的很像上海人，还真有点想投奔他的感觉，哈哈。</p>
-<p>至于 Intel XDK 这款产品，那就是站在开源产品之上集大成，相较于前两位更加开放、新潮，集成了包括<a href="http://cordova.apache.org" target="_blank" rel="external">Cordova</a>，<a href="http://ripple.incubator.apache.org" target="_blank" rel="external">Ripple</a>，<a href="http://brackets.io" target="_blank" rel="external">Brackets</a>， V8 ，还有一些开源的 UI 框架和开放的 Service 服务，将设计、开发、测试、编译、分发集成设计出一套完整的开发方案， IDE 级别。</p>
-<p>出彩的 <a href="https://crosswalk-project.org" target="_blank" rel="external">Crosswalk</a>，看了下官网介绍，似乎是 Cordova 升级版，以至于每次出现 XDK 必出现 Crosswalk ，躲都躲不过。</p>
-<p><a href="http://slides.com/zhanghaili/intelxdk#/" target="_blank" rel="external">XDK Slide</a>，瞧人家多潮，都用上 slides 了。。。</p>
-<p><img src="/images/iweb.jpg" alt="iWeb 峰会主会场"></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;上周末参加了 2014 年度的 iWeb 峰会，那叫一个人山人海啊。不过跟前几年有点不一样的是，今年似乎正刮一阵 Hybrid 开发风，主会场和工具专场连着介绍了三款不同的 Hybrid 开发框架，&lt;a href=&quot;https://github.com/dcloudio&quot; 
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>[转]HTML5、Web引擎与跨平台移动App开发</title>
-    <link href="http://jiyee.io/2014/08/HTML5%E3%80%81Web%E5%BC%95%E6%93%8E%E4%B8%8E%E8%B7%A8%E5%B9%B3%E5%8F%B0%E7%A7%BB%E5%8A%A8App%E5%BC%80%E5%8F%91/"/>
-    <id>http://jiyee.io/2014/08/HTML5、Web引擎与跨平台移动App开发/</id>
-    <published>2014-08-18T16:00:00.000Z</published>
-    <updated>2016-12-22T10:00:31.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>移动端跨平台应用开发是个有趣的话题。纵观该领域目前各个开发商提供的多种方案，大致可以分为三大类：</p>
-<ol>
-<li><p>基于HTML5的方案。该方案以PhoneGap/Cordova为代表。其基本思路是针对HTML5标准目前功能上的不足，补充定义了一套比较实用的API（比如硬件访问/系统交互等），然后基于平台上自带的Web引擎（比如iOS的UIWebview等），通过扩展机制实现了这些API，在此基础上再提供一套应用打包部署系统。Intel的XDK也属于此类方案。</p>
-</li>
-<li><p>将Native API映射封装成统一语言的API的方案。该方案以Titanium、Xamarin为代表，其中Titanium提供JavaScript API，Xamarin提供C# API。这样的好处是可以较容易达到和Native API类似的能力，编程模型/方式也和原生应用相似。</p>
-</li>
-<li><p>有行业针对性的HTML5 API方案。比如Ludei的CocoonJS就是一个比较有意思的方案，它设计了一套专门针对2D/3D游戏开发的API（支持iOS和Android）。可以认为它是HTML5图形操作的子集（Canvas +WebGL），再加上一些扩展的API比如硬件访问能力/广告/应用内购买/社交网络整合等，以实现一个完整的游戏引擎。</p>
-</li>
-</ol>
-<p>本文重点介绍基于HTML5的方案相比其他方案的优缺点，如何实现更好的效果，以及目前的一些进展。</p>
-<h3 id="HTML5方案的特点"><a href="#HTML5方案的特点" class="headerlink" title="HTML5方案的特点"></a>HTML5方案的特点</h3><p>原生API映射的方案，如Titanium、Xamarin，其优点在于功能和性能与原生系统比较接近。但是，由于不同系统原生API设计上还是会有不少差异，API的映射还是需要不少的权衡取舍。同时，由于这些API是这些厂商自定义的，谈不上什么标准，相应的开发资源（程序库/技术支持/社区等等）也相对有限。</p>
-<p>而另一方面，标准化、开发资源的丰富则是HTML5方案最大的优点，同时第三方的HTML5框架工具比如PhoneGap/Cordova也极大促进了HTML5应用的发展，它们提供了方便的跨平台应用打包/发布服务、实用的API、灵活的扩展机制、以及积累下来的丰富的第三方API实现。而上游的W3C一旦开始支持一些新的API，PhoneGap/Cordova也可以很快沿用这些标准的API将相关能力开放出去。</p>
-<p>HTML5方案的主要不足则在于功能和性能方面，这主要是因为HTML5应用的能力严重依赖于系统自带的Web引擎：iOS的UIWebview、Android的Webview等，此类组件的HTML5能力相比Safari for iOS、Chrome for Android都要差一截。另外在Android平台上，由于系统碎片化比较严重，不同Android版本的Webview的HTML5能力也有较大差异，导致相应的HTML5应用一致性难以保证。</p>
-<p>好消息是，现在已经出现一些第三方的Web引擎以提供比系统默认的Webview更好的功能和性能，而PhoneGap/Cordova也正在改进架构以便引入这些更好的第三方Web引擎。另外对于Tizen、Firefox OS这样本身就是HTML5 Runtime加上扩展API的系统而言，HTML5应用是一等公民，在功能拓展方面相比iOS、Android上会增强不少。</p>
-<p>而第三种方案，CocoonJS的优点是专注于2D/3D游戏开发，画图性能很好，比如同时画1000个精灵也能达到60FPS，这是绝大多数的浏览器/通用的HTML5引擎目前还做不到的。这个方案的缺点在于，由于它的画图操作简化了很多路经，它无法做到和HTML5 DOM元素的互操作，而且它的HTML5能力也只是一个子集，功能比较受限。目前CocoonJS针对Android也引入了另外一种模式Webview+作为补充，Webview+基于Chromium的内核加上Cordova API的支持以实现更通用的HTML5能力。</p>
-<p>总的来说，HTML5应用的能力很大程度上依赖于Web引擎的能力。因此，无论是移动操作系统开发商还是开发工具的开发商，都持续在Web引擎的方向投入了更多的努力。</p>
-<h3 id="Web引擎"><a href="#Web引擎" class="headerlink" title="Web引擎"></a>Web引擎</h3><p>Web引擎目前大致可分为三种方式：</p>
-<ol>
-<li>浏览器，比如Safari/Chrome/UC Browser等;</li>
-<li>系统自带的Webview组件，比如上面提到的iOS UIWebview和Android Webview</li>
-<li>专门的Web Engine，比如Intel的开源项目Crosswalk、Ludei的Webview+</li>
-</ol>
-<p>浏览器方式很容易理解，一个HTML5应用就是一个Web页面，用户通过浏览器打开一个URL，然后进入浏览器的全屏模式/App模式进行操作，或者是通过点击一个事先创建好的快捷方式打开应用。这种方式的性能取决于浏览器本身对HTML5的支持情况，一般来说要优于Webview组件的方式，但是问题在于不同的浏览器有差异，而且通过浏览器运行HTML5较难做到类似原生应用的体验（应用切换/权限管理/系统资源访问/整合等）以及丰富的API支持。</p>
-<p>Webview组件方式的一般用法是以Hybrid的方式发布HTML5应用，即上述提到的PhoneGap/Cordova方案所采用的方式。其问题已经在上面提到过，主要是Webview组件本身对HTML5的支持能力不足。</p>
-<p>专门的Web引擎可以有较好的HTML5功能和性能支持，同时有较好一致性，类似原生应用的系统整合也可以做得较好。这种方式的缺点则在于开发者需要将Web引擎与应用程序一起打包，生成的应用大小会更大，因此有的Web引擎（如Crosswalk）也提供了一种“共享模式”，让多个应用可以共享一个Web引擎，仅当应用第一次启动并且发现系统还没有相应Web引擎时才提示用户下载安装。</p>
-<p>目前的发展趋势是：通过PhoneGap/Cordova方式得到丰富的API支持，通过专门开发的Web引擎去提升HTML5的能力。</p>
-<p>Crosswalk和Ludei的Webview+在概念上比较类似。Webview+是闭源的，目前还不好评估；Crosswalk由我所在的团队开发，是开源的（BSD许可协议），基于Chromium内核，着重于对HTML5功能和性能的支持，发布周期为六周一次，支持Cordova API。</p>
-<p>目前Crosswalk正式支持的移动操作系统包括Android和Tizen，在Android 4.0及以上的系统中使用Crosswalk的Web应用程序体验和原生应用没有区别。该引擎现在已经成为众多知名HTML5平台和应用的推荐引擎，包括Google Mobile Chrome App、Intel XDK、Famo.us和Construct2等等，未来的Cordova 4.0也计划集成该Web引擎。不过比较遗憾的是，由于iOS的限制（iOS不允许应用使用使用除iOS UIWebView之外第三方的JIT–即时编译引擎），目前Crosswalk也没有办法提供直接的支持，但这也许会随着HTML5更广泛的进入移动市场而发生改变。</p>
-<h3 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h3><p>现在的HTML5 App（加上API扩展）已经可以胜任很多事了，比如教育类应用，休闲游戏等等。不过对于那些实时性要求比较高的、计算量大的（比如涉及大量的元素绘制，或并行计算等）、复杂的3D游戏，多人在线游戏/应用等还有不少差距。另外，工具方面，如何能够更高效的调试/开发/性能内存调优 HTML5应用也是另外一个需要提高的地方。不过，这些方面也在不断的演进。相信不久的将来，HTML5终会成为主流移动开发平台。</p>
-<h3 id="作者介绍"><a href="#作者介绍" class="headerlink" title="作者介绍"></a>作者介绍</h3><p>余枝强目前是英特尔开源技术中心的软件技术经理。 主要负责HTML5 引擎 – Crosswalk 在安卓平台的开发，以及一些其他和Web有关的新兴技术的研发工作（如HTML5 并行技术, 3D Camera等）。他坚信Web是未来， 也非常希望和大家一起努力，让这个未来能够更快更好的到来。</p>
-<p>本文转自<a href="http://www.infoq.com/cn/articles/html5-crosswalk" target="_blank" rel="external">http://www.infoq.com/cn/articles/html5-crosswalk</a></p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;移动端跨平台应用开发是个有趣的话题。纵观该领域目前各个开发商提供的多种方案，大致可以分为三大类：&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;&lt;p&gt;基于HTML5的方案。该方案以PhoneGap/Cordova为代表。其基本思路是针对HTML5标准目前功能上的不足，补充定义了一套比较实用的A
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Appecelerator Titanium开发经验谈之三 - 那些Ti&amp;TiShadow坑</title>
-    <link href="http://jiyee.io/2014/08/Appecelerator%20Titanium%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E8%B0%88%E4%B9%8B%E4%B8%89%20-%20%E9%82%A3%E4%BA%9BTi&amp;TiShadow%E5%9D%91/"/>
-    <id>http://jiyee.io/2014/08/Appecelerator Titanium开发经验谈之三 - 那些Ti&amp;TiShadow坑/</id>
-    <published>2014-08-11T16:00:00.000Z</published>
-    <updated>2016-12-22T09:46:51.000Z</updated>
+    <title>JSONModel 最佳实践</title>
+    <link href="http://jiyee.io/2016/03/JSONModel%20%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/"/>
+    <id>http://jiyee.io/2016/03/JSONModel 最佳实践/</id>
+    <published>2016-03-04T16:00:00.000Z</published>
+    <updated>2016-12-23T01:54:51.000Z</updated>
     
     <content type="html"><![CDATA[<ul>
-<li><p>图片素材放在 app/assets/images/ 目录，但是在引用的时候 TiShadow 环境里可以直接写 pic.png，但是在 Android 编译环境下就得写成 /images/pic.png</p>
+<li>属性类型选用 NS 类型，避免选用基本数据类型（Primitive Types）<blockquote>
+<p>基本数据类型在解析时直接调用的是 <code>setValue:forKey:</code> 方法，如果传入类型不一致的值，会抛出异常。</p>
+</blockquote>
 </li>
-<li><p>lib 放在 app/assets/lib/ 目录</p>
+<li>属性协议合理选用<ul>
+<li>有条件地设置 <code>&lt;Optional&gt;</code>，尽量避免设置全部属性均为 Optional</li>
+<li>对自定义属性设置 <code>&lt;Ignore&gt;</code>，避免解析覆盖</li>
+<li>对索引属性设置 <code>&lt;Index&gt;</code>，保证值唯一，便于比较</li>
+<li>对解析耗时的 NSArray 或者 NSDictionary 类型属性设置 <code>&lt;convertsOnDemands&gt;</code>，延时解析</li>
+</ul>
 </li>
-<li><p>TiShadow 环境里 CommonJS 写法可以写成 <code>exports = {methodName: methodName}</code>，但是在 Android 编译环境下就得写成 <code>exports.methodName = methodName</code></p>
+<li>设置统一的 KeyMapper，并结合 <code>mapper:withExceptions:</code> 方法添加例外条件</li>
+<li><code>-initWithDictionary:error:</code> 用于设置 <code>&lt;Ignore&gt;</code> 类型属性的初始值，或者设置属性的默认值，或者对经过解析之后的属性值进行值变换（避免类型变换，类型变换通过自定义 setter 方法完成）</li>
+<li><code>-validate</code> 用于检验经过解析之后的 Model 是否在业务逻辑上正常</li>
+<li>对于需要类型转换的属性，如果 JSONValueTransformer.h 里没有定义兼容转型方法，可以设置自定义 setter 方法，格式如 <code>setXXXWithYYY:</code>（ XXX 是属性名称，YYY 是 JSON 类型名）。如果需要从 Model 转回 JSON 的话，需要同时设置自定义 getter 方法，格式如 <code>JSONObjectFromXXX:</code></li>
+<li>全局性类型兼容转型，通过扩展 JSONValueTransformer 类实现，设置 <code>XXXFromYYY:</code> 方法（ XXX 是 Model 类型名，YYY 是 JSON 类型名）</li>
+<li>空置或者解析失败处理<blockquote>
+<p>所有 NSObject 类型的属性如果设置了 Optional，其属性值都可能为 nil，允许直接判断 <code>value == nil</code>。经过 JSONModel 成功解析之后的属性值不可能是 <code>NSNull</code> 类型。如果 JSON 值是 null，则一定为 nil。</p>
+</blockquote>
+</li>
+<li>如果是 NSDictionary 类型，则遍历 keys 和 values，将 value 作为协议类型执行解析，如同 NSArray 方式解析</li>
+<li>BOOL, NSInteger, ENUM 等基本数据类型（Primitive Types），如果传入 NSArray, NSDictionary 等非预期类型值的时候，都将抛出异常。<blockquote>
+<p>例如，属性 enabled 是一个映射到 JSON 的 BOOL 值，为了兼容 1/0/“1”/“0”/true/false/“true”/“false” 等常见 BOOL 设定值，同时，想防止传入其他值导致异常。<br>建议按照如下方式：</p>
+</blockquote>
 </li>
 </ul>
-<p><strong>PS：</strong> 上述坑还是吃了不了解 Android 编译过程和 TiShadow 运行时环境的亏，看来即便搞 Hybrid App 开发，不懂 Native App 开发原理，还是搞不定。</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> enabled;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSNumber</span> *__numberOfEnabled;</div></pre></td></tr></table></figure>
+<p>KeyMapper 设置为 <code>@&quot;enabled&quot; : @&quot;__numberOfEnabled&quot;</code></p>
+<p>在 initWithDictionary:error: 方法</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.enabled = <span class="literal">NO</span>;</div><div class="line"><span class="keyword">self</span> = [<span class="keyword">super</span> initWithDictionary:dict error:error]; </div><div class="line"></div><div class="line"><span class="keyword">self</span>.enabled = <span class="keyword">self</span>.__numberOfEnabled.boolValue;</div></pre></td></tr></table></figure>
 ]]></content>
     
     <summary type="html">
     
       &lt;ul&gt;
-&lt;li&gt;&lt;p&gt;图片素材放在 app/assets/images/ 目录，但是在引用的时候 TiShadow 环境里可以直接写 pic.png，但是在 Android 编译环境下就得写成 /images/pic.png&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;&lt;p&gt;lib 放在 ap
+&lt;li&gt;属性类型选用 NS 类型，避免选用基本数据类型（Primitive Types）&lt;blockquote&gt;
+&lt;p&gt;基本数据类型在解析时直接调用的是 &lt;code&gt;setValue:forKey:&lt;/code&gt; 方法，如果传入类型不一致的值，会抛出异常。&lt;/p&gt;
+&lt;/
     
     </summary>
     
@@ -273,161 +570,154 @@
   </entry>
   
   <entry>
-    <title>Mac App 盗版软件干掉计划</title>
-    <link href="http://jiyee.io/2014/08/Mac%20App%E7%9B%97%E7%89%88%E8%BD%AF%E4%BB%B6%E5%B9%B2%E6%8E%89%E8%AE%A1%E5%88%92/"/>
-    <id>http://jiyee.io/2014/08/Mac App盗版软件干掉计划/</id>
-    <published>2014-08-11T16:00:00.000Z</published>
-    <updated>2016-12-22T09:49:19.000Z</updated>
+    <title>JSONModel 源码解析（二）</title>
+    <link href="http://jiyee.io/2016/03/JSONModel%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
+    <id>http://jiyee.io/2016/03/JSONModel 源码解析（二）/</id>
+    <published>2016-03-01T16:00:00.000Z</published>
+    <updated>2016-12-23T01:56:25.000Z</updated>
     
-    <content type="html"><![CDATA[<p>一个 Macer，记得很久以前看到伞哥说过他把他 Mac 上所有的软件都正版化了。</p>
-<p>那么，现在既然经济上还能支持，那就开始我的正版化之旅，支持一下同行。</p>
-<p>希望今年之内把所有软件都正版化，尽量替换掉那些暂时买不起的。</p>
-<p>PS:</p>
-<p>好了，2014年年末，软件正版化道路基本告一段落，想买的能买的基本都已经入了，可以更愉快的玩耍了。</p>
-<p><strong>想要软件列表：</strong></p>
-<ul>
-<li>OmniGraffle</li>
-</ul>
-<p>==========================</p>
-<p><strong>已购软件列表： </strong>(注：<del>software</del>，已经购买正版或免费版)</p>
-<ul>
-<li><del>Tower</del></li>
-<li><del>DwellClick</del></li>
-<li><del>Inboard</del></li>
-<li><del>Reveal</del></li>
-<li><del>Charles</del></li>
-<li><del>MindNode Pro</del></li>
-<li><del>FlowVella</del></li>
-<li><del>LiveReload</del></li>
-<li><del>TotalPath</del></li>
-<li><del>SnapNDrag Pro</del></li>
-<li><del>MacID</del></li>
-<li><del>DwellClick</del></li>
-<li><del>iTranslate</del></li>
-<li><del>Byword</del></li>
-<li><del>Spillo</del></li>
-<li><del>Sublime Text</del></li>
-<li><del>AppCode</del></li>
-<li><del>PyCharm</del></li>
-<li><del>Sketch</del></li>
-<li><del>Framer Studio</del></li>
-<li>Microsoft Office, <del>NeoOffice</del>, <del>iWork</del>, <del>LibreOffice</del></li>
-<li><del>Beyond Compare 4</del></li>
-<li><del>CodeRunner</del></li>
-<li><del>RapidSVN</del>, <del>SmartGit</del></li>
-<li><del>Hazel</del></li>
-<li><del>Little Snitch</del></li>
-<li><del>Keyboard Maestro</del></li>
-<li><del>1Keyboard</del></li>
-<li><del>Charles</del>, <del>Cellist</del></li>
-<li><del>Boom 2</del></li>
-<li><del>Contexts</del></li>
-<li><del>TotalSpace2</del></li>
-<li>OmniGraffle，<del>XMind</del></li>
-<li>Navicat Premium，<del>Squuel Pro</del>, <del>Datum</del></li>
-<li><del>Paw</del>，<del>CocoaRestClient</del></li>
-<li><del>VMware Fusion</del></li>
-<li><del>Movist</del></li>
-<li><del>aText</del></li>
-<li><del>Elite Keylogger Pro</del></li>
-<li><del>Day One</del></li>
-<li><del>Alfred 2</del></li>
-<li>Adobe Photoshop CC, <del>pixelmator</del></li>
-<li><del>CleanMyMac 2</del></li>
-<li><del>Bartender</del></li>
-<li><del>Intellij IDEA CE</del>, <del>Android Studio</del></li>
-<li><del>Dash</del></li>
-<li><del>iTerm2</del></li>
-<li><del>1Password</del></li>
-<li><del>Yep</del></li>
-<li><del>SSH Tunnel</del></li>
-<li><del>ForkLift</del>, <del>Path Finder 7</del></li>
-<li><del>PopClip</del></li>
-<li><del>Xee3</del>, <del>LilyView</del></li>
-<li><del>Manico</del></li>
-<li><del>Moom</del></li>
-<li><del>Ulysses</del></li>
-<li><del>Scrivener</del></li>
-<li><del>Todoist</del>, <del>Clear</del>, <del>OmniFocus 2</del></li>
-<li><del>Vitamin-R 2</del></li>
-<li><del>Fantastical</del></li>
-<li><del>Leaf</del>, <del>ReadKit</del></li>
-</ul>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;一个 Macer，记得很久以前看到伞哥说过他把他 Mac 上所有的软件都正版化了。&lt;/p&gt;
-&lt;p&gt;那么，现在既然经济上还能支持，那就开始我的正版化之旅，支持一下同行。&lt;/p&gt;
-&lt;p&gt;希望今年之内把所有软件都正版化，尽量替换掉那些暂时买不起的。&lt;/p&gt;
-&lt;p&gt;PS:&lt;/p&gt;
-
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Appecelerator Titanium开发经验谈之二 - Ti、TiShadow、Genymotion环境搭建</title>
-    <link href="http://jiyee.io/2014/08/Appecelerator%20Titanium%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E8%B0%88%E4%B9%8B%E4%BA%8C%20-%20Ti%E3%80%81TiShadow%E3%80%81Genymotion%E7%8E%AF%E5%A2%83%E6%90%AD%E5%BB%BA/"/>
-    <id>http://jiyee.io/2014/08/Appecelerator Titanium开发经验谈之二 - Ti、TiShadow、Genymotion环境搭建/</id>
-    <published>2014-08-10T16:00:00.000Z</published>
-    <updated>2016-12-22T09:48:37.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>首先，不得不说最近一年，Ti 的文档得到了明显地提升，只要认真看一遍文档，基本的流程</p>
-<p>Titanium 环境搭建还是比较简单的，基本都能在 <a href="http://docs.appcelerator.com/titanium/latest/#!/guide/Quick\_Start" target="_blank" rel="external">http://docs.appcelerator.com/titanium/latest/#!/guide/Quick\_Start</a> 找到。</p>
-<ul>
-<li>安装 Java，Node 环境</li>
-<li>安装 Android platform SDKs，以及对应版本的 Android SDK</li>
-<li>安装 Titanium SDK，目前是 3.3.0</li>
-<li>安装 Titanium CLI 和 Allow CLI</li>
-<li>安装 Titanium Studio</li>
-</ul>
-<p>这样就完成了基本的 Android Titanium 开发环境。</p>
-<p>另外，Android 虚拟机的话，强烈推荐使用 <a href="http://www.genymotion.com/" target="_blank" rel="external">Genymotion</a>，比默认的快很多，而且很容易多版本部署和升级。</p>
-<p>如果想快速开发的话，那最好装上 <a href="http://tishadow.yydigital.com/" target="_blank" rel="external">TiShadow</a>，类似的还有 <a href="https://github.com/appersonlabs/RapidDev" target="_blank" rel="external">RapidDev</a>，他是在 Ti SDK 之上，再封装了一层 runtime，将本地的 Titanium+Alloy 代码进行动态编译，并在 TiShadow 运行时上进行替换更新，实现 LiveView 效果。</p>
-<p>不过在 Genymotion 上运行 TiShadow 还需要安装对应 Android 版本的 gapps。</p>
-<p>其他好像就没有什么了。</p>
-]]></content>
-    
-    <summary type="html">
-    
-      &lt;p&gt;首先，不得不说最近一年，Ti 的文档得到了明显地提升，只要认真看一遍文档，基本的流程&lt;/p&gt;
-&lt;p&gt;Titanium 环境搭建还是比较简单的，基本都能在 &lt;a href=&quot;http://docs.appcelerator.com/titanium/latest/#!/gui
-    
-    </summary>
-    
-    
-  </entry>
-  
-  <entry>
-    <title>Appecelerator Titanium开发经验谈之一 - PhoneGap与Titanium的艰难选择</title>
-    <link href="http://jiyee.io/2014/08/Appecelerator%20Titanium%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E8%B0%88%E4%B9%8B%E4%B8%80%20-%20PhoneGap%E4%B8%8ETitanium%E7%9A%84%E8%89%B0%E9%9A%BE%E9%80%89%E6%8B%A9/"/>
-    <id>http://jiyee.io/2014/08/Appecelerator Titanium开发经验谈之一 - PhoneGap与Titanium的艰难选择/</id>
-    <published>2014-08-04T16:00:00.000Z</published>
-    <updated>2016-12-22T09:54:28.000Z</updated>
-    
-    <content type="html"><![CDATA[<p>跟 PhoneGap、AppCan 类似，Appecelerator Titanium（简称<strong>Ti</strong>）致力于使用 JavaScript 去快速构建 App ([Atwood定律]在发功)。它们有效地抚平了学习曲线，使得 App 开发不再依赖于对 Objective-C 或 Java 语言以及相应开发框架，转而建立在 JavaScript、V8 和 Node 基础之上，让我等前端工程师在 App 开发大潮中有机会去施展。</p>
-<p>好像在中文社区谈论 PhoneGap 的相对多一些，至少搜索相关的 Titanium 资料就比较少。但是，在 V2EX 上关于 PhoneGap 的讨论都基本停留在它性能如何不好怎么后悔方面，但是一看发表时间好像也是 1，2 年以前的事了，这让我对此更加疑惑。按常理说，一个前端工程师肯定更加倾向于 PhoneGap ，就是一个 WebView 么，以前玩的那些都能在 App 上跑起来，多好啊。不过在深入对比过 PhoneGap 和 Titanium 的区别之后，还是抛弃了 PhoneGap ，即便 PhoneGap+Ionic+AngularJS 能够快速开发出一个复杂的、不错的应用，而 Titanium 能够开发出一个更加接近原生（Native）的 App 。</p>
-<p>PhoneGap 和 Ti 之间的艰难选择的结论主要集中到以下三点：</p>
-<ul>
-<li><p>一是产品性能问题，虽然我没有拿 PhoneGap 来开发出一个较复杂 App ，但是之前浏览器环境下的开发经验告诉我，在一个 WebView 上开发 App ，基本上也不会避开浏览器上的那些问题，包括内容加载、状态维护、页面切换、动态效果等。</p>
+    <content type="html"><![CDATA[<p>Header 引入文件列表<br><figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div><div class="line">8</div><div class="line">9</div><div class="line">10</div><div class="line">11</div><div class="line">12</div><div class="line">13</div><div class="line">14</div><div class="line">15</div></pre></td><td class="code"><pre><div class="line"><span class="meta">#import <span class="meta-string">&lt;objc/runtime.h</span></span></div><div class="line">#import &lt;objc/message.h&gt;</div><div class="line"></div><div class="line"></div><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span> * kMapperObjectKey; <span class="comment">// 自定义 keyMapper</span></div><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span> * kClassPropertiesKey; <span class="comment">// </span></div><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span> * kClassRequiredPropertyNamesKey; <span class="comment">// </span></div><div class="line"><span class="keyword">static</span> <span class="keyword">const</span> <span class="keyword">char</span> * kIndexPropertyNameKey; <span class="comment">// 索引字段名称</span></div><div class="line"></div><div class="line">allowedJSONTypes</div><div class="line">allowedPrimitiveTypes</div><div class="line">valueTransformer</div><div class="line">JSONModelClass</div><div class="line"></div><div class="line">globalKeyMapper</div></pre></td></tr></table></figure></p>
+<h2 id="allowedJSONTypes"><a href="#allowedJSONTypes" class="headerlink" title="allowedJSONTypes"></a>allowedJSONTypes</h2><p>包含 NSString, NSNumber, NSDecimalNumber, NSArray, NSDictionary, NSNull, NSMutableString, NSMutableArray, NSMutableDictionary</p>
+<h2 id="allowedPrimitiveTypes"><a href="#allowedPrimitiveTypes" class="headerlink" title="allowedPrimitiveTypes"></a>allowedPrimitiveTypes</h2><p>BOOL, float, int, long, double, short, NSInteger, NSUInteger, Block</p>
+<h2 id="JSONValueTransformer"><a href="#JSONValueTransformer" class="headerlink" title="JSONValueTransformer"></a>JSONValueTransformer</h2><p>隐式值类型转换</p>
+<h2 id="JSONModelClass"><a href="#JSONModelClass" class="headerlink" title="JSONModelClass"></a>JSONModelClass</h2><p>根据 <code>kClassPropertiesKey</code> 判断是否需要扫描 model 属性<br>根据 <code>kMapperObjectKey</code> 保存自定义 keyMapper</p>
+<p>JSONModelErrorDomain，包含几种类型错误：</p>
+<ol>
+<li>kJSONModelErrorModelIsInvalid</li>
+<li>kJSONModelErrorBadJSON</li>
+<li>kJSONModelErrorNilInput</li>
+<li>kJSONModelErrorInvalidData</li>
+</ol>
+<p>最终，都是经过 <code>initWithData:error:</code> 处理，由 <code>NSJSONSerialization</code> 解析成 NSDictionary，再中转到 <code>initWithDictionary:error:</code> 处理。</p>
+<ol>
+<li>检查输入数据结构 <code>__doesDictionary:matchModelWithKeyMapper:error:</code></li>
+<li>输入的 NSDictionary 导入值 <code>__importDictionary:withKeyMapper:validation:error:</code></li>
+<li>执行数据校验 <code>validate:</code></li>
+</ol>
+<h3 id="requiredPropertyNames"><a href="#requiredPropertyNames" class="headerlink" title="__requiredPropertyNames"></a><code>__requiredPropertyNames</code></h3><p>返回 model keys 集合，NSMutableSet 类型<br>通过 <code>kClassRequiredPropertyNamesKey</code> 属性获得包含的 keys 集合，懒加载方式，首先判断是否获取过，不然遍历 <code>__properties__</code> 方法返回的数组，判断 <code>isOptional</code> 属性值，添加 <code>p.name</code> 到 keys 集合  </p>
+<h3 id="properties"><a href="#properties" class="headerlink" title="__properties__"></a><code>__properties__</code></h3><p>获取所有的 keys 数组的方式，依赖属性扫描过程 <code>__inspectProperies</code>，保存到 <code>kClassPropertiesKey</code> 动态属性  </p>
+<h3 id="inspectProperties"><a href="#inspectProperties" class="headerlink" title="__inspectProperties"></a><code>__inspectProperties</code></h3><p>通过 NSScanner 方式检查<br>从子类开始查找，向上遍历，判断条件是 <code>class != [JSONModel class]</code><br>用到了一个 runtime.h 里的方法 <code>class_copyPropertyList</code><br>    unsigned int propertyCount;<br>    objc_property_t *properties = class_copyPropertyList(class, &amp;propertyCount);</p>
+<p>然后，从 <code>objc_property_t</code> 类型，通过 <code>property_getName</code> 和 <code>property_getAttributes</code> 方法，提取出 propertyName 和 propertyAttributes，封装成 <code>JSONModelClassProperty</code>。  </p>
+<h4 id="具体策略："><a href="#具体策略：" class="headerlink" title="具体策略："></a>具体策略：</h4><ol>
+<li>过滤到 <em>R</em> 属性的只读属性</li>
+<li>检查 <em>T</em> 的具体类型，区分三种类型，保存到 propertyType 变量里:<ol>
+<li>NSObject<br> 例如：T@”NSString”,&amp;,N,V_s1<br> 首先扫描属性名称，其次扫描协议名称，协议判断是否属于 Optional, Index, ConvertOnDemand, Ignore 等协议</li>
+<li>structure<br> 如果检查到存在 structure，则标识为非标准 JSON 类型，并将结构名保存到 structName</li>
+<li>primitive<br> 通过 <code>valueTransformer.primitivesNames</code> 字典里获取 primitive 值对应的 propertyType，并判断是否在 <code>allowedPrimitiveTypes</code> 字典，否则抛出 <strong>NSException</strong></li>
+</ol>
 </li>
-<li><p>二是框架定位问题，PhoneGap 主要还是引领 W3C 标准，致力于前瞻性的开发一些 Device API ，例如 Audio、Camera、Geolocation、localStorage 等，它提供是对于这些 Device API 的 bridge 。但是，它对于 App 本身关注较少，这也注定了 PhoneGap 的目标是让 webapp 获得更多的 Device API ，而不是构建原生的 App 。具体请参见[《跨平台移动开发工具:PhoneGap与Titanium全方位比拼》]一文，原文参见[《Comparing Titanium and PhoneGap》]（很棒的一篇文章）。</p>
+<li>判断属性是否 <code>propertyIsOptional</code></li>
+<li>判断属性是否 <code>propertyIsIgnored</code></li>
+<li>判断属性如果是 NSArray，元素是否对应于协议 <code>protocolForArrayProperty</code></li>
+<li>判断属性是否是 Block  </li>
+</ol>
+<h3 id="doesDictionary-matchModelWithKeyMapper-error"><a href="#doesDictionary-matchModelWithKeyMapper-error" class="headerlink" title="__doesDictionary:matchModelWithKeyMapper:error:"></a><code>__doesDictionary:matchModelWithKeyMapper:error:</code></h3><p>检查输入数据的结构，依赖于 dict 和 keyMapper<br>dict 是经过 NSJSONSerialize 处理之后待解析的 NSDictionary 类型<br>经过 keyMapper 转换过属性名之后，存在 <code>@try/@catch</code> 过程，步骤如下：</p>
+<ol>
+<li>试图解析 <code>valueForKeyPath:</code><ol>
+<li>试图解析 <code>valueForKey:</code></li>
+<li>如果值 value 存在，则保存到 transformedIncomingKeys</li>
+<li>如果 requiredProperties 包含的属性值 <strong>多于</strong> incomingKeys，则将多余的属性名从 requiredProperties 里移除，并返回错误 NSError，标明 Keys missing</li>
+</ol>
 </li>
-<li><p>三是 UI 问题，PhoneGap 本身不提供任何 UI 相关的接口，一切 UI 都由 HTML 实现，当然也出现了很多专门的 UI 框架，比较优秀的有 Ionic，Lungo，所以他开发出来的 UI 一致性很好，真的成也萧何败萧何，好坏自知。</p>
-<p>Ti 并没有极力去说服开发者一套代码适用于全平台，它更加强调代码的重用度，例如 Model 代码重用度 90 %， View 层代码重用度 80 %。这与 Ti 框架的设计有关，它是一个底层 Native API 的 PORT ，当然也包括了 UI 相关的 API ，它更加接近于原生 App ，这里没有说他是原生 App 是因为它仍然是在运行时再去执行你的 JavaScript 代码，并没有直接将 JavaScript 编译到 Objective-C 或者 Java ，甚至是字节码。所以，相比原生 App 它在性能上也会打个折。</p>
+</ol>
+<h3 id="mapString-withKeyMapper-importing"><a href="#mapString-withKeyMapper-importing" class="headerlink" title="__mapString:withKeyMapper:importing:"></a><code>__mapString:withKeyMapper:importing:</code></h3><p>用于 JSON 和 Model 之间属性名之间映射转换，依赖于 keyMapper，存在优先级，如果自定义 keyMapper 和全局 keyMapper 同时存在，如果先采用自定义 keyMapper 转换之后属性名一样，则接着采用全局 keyMapper 方式继续转换</p>
+<h4 id="keyMapper"><a href="#keyMapper" class="headerlink" title="keyMapper"></a>keyMapper</h4><p>双向的数据结构映射组件，用于 JSON 和 Model 之间的属性名映射，可以通过重写 <code>keyMapper</code> 方法指定自定义 keyMapper，还可以设置全局 keyMapper</p>
+<p><code>typedef NSString* (^JSONModelKeyMapBlock)(NSString* keyName);</code><br>主要就是这个 Block 来实现字段名映射</p>
+<p>同样是通过字典方式缓存映射 Map，包含 toModelMap 和 toJSONMap，而且构造函数里包含 JSONToModelBlock 和 ModelToJSONBlock</p>
+<p>如果通过 <code>initWithDictionary:</code> 初始化方法构造的话，toModelMap 采用入参 map，toJSONMap 采用 swappedMap</p>
+<p><code>convertValue:isImportingToModel:</code> 方法，则直接通过 Block 求值返回</p>
+<p><code>mapperFromUnderscoreCaseToCamelCase</code> 方法，用于构造 Underscore Case转到 Camel Case</p>
+<p><code>mapperFromUpperCaseToLowerCase</code> 方法，用于构造 Upper Case 转到 Lower Case</p>
+<h3 id="importDictionary-withKeyMapper-validation-error"><a href="#importDictionary-withKeyMapper-validation-error" class="headerlink" title="__importDictionary:withKeyMapper:validation:error:"></a><code>__importDictionary:withKeyMapper:validation:error:</code></h3><ol>
+<li>通过 keyMapper 转换成 jsonKeyPath<ol>
+<li>试图解析 <code>valueForKeyPath:</code></li>
+<li>试图解析 <code>valueForKey:</code></li>
+<li>判断是否属于 isNull</li>
+<li>如果是 Null，判断是否可选或是否待验证 validation</li>
+<li>如果错误，直接返回 NSEror，标明 Value of required model key xxx is nul</li>
+<li>获取 jsonValueClass，判断 jsonValueClass 是否属于 allowedJSONTypes 元素的子类之列</li>
+<li>如果错误，直接返回 NSError，标明 Type xxx is not allowed in JSON</li>
+<li>上述步骤都是检查步骤，下面开始走赋值步骤</li>
+<li><strong>判断是否有自定义赋值方法，命名方式为 <code>set(PropertyName)With(NSString|NSNumber|NSArray|NSDictionary|NSDate)</code>，源类名要根据值类型来指定</strong></li>
+<li>如果 type == nil 并且 structName == nil，则 为 primitives，直接赋值为 jsonValue</li>
+<li>如果 Null，直接赋值为 nil</li>
+<li>如果是 JSONModel 子类，递归解析，调用 <code>initWithDictionary:error:</code></li>
+<li>如果有协议指定，转而调用 <code>__transform:forProperty:error:</code></li>
+<li>如果是标准 JSON 类型且 jsonValue 是 type 类型，直接赋值，如果是 mutable 则赋值之前先 mutableCopy</li>
+<li>如果 jsonValue 不是 type 类型，且 jsonValue 不为空，或者是 mutable，或者是 structure，那么黑科技来了。首先，获取 jsonValue 类型对应的类型，将 Cluster 子类型转换为标准类型；拼装 selectorName，格式为 <code>(PropertyName)From(SourceClass)</code>，如果指定了此方法，就用此方法，如果没有指定，则试图查找 <code>__(selectorName)</code> 方法是否存在，如果存在使用找到的方法转换值，否则返回 NSException，标明是 Type not allowed</li>
+<li>其他情况就直接赋值</li>
+</ol>
 </li>
-</ul>
-<p><img src="/images/ti-flow.png" alt="Ti Flow"></p>
-<p>附图就是 Ti 框架下 JavaScript 最终如何与底层 API 交互的逻辑，Ti 就是作为 Proxy，在运行时动态解析 JavaScript 代码（在 V8/JavaScript Core 环境下），然后 Proxy 到 Ti SDK ，再 Proxy 到底层 API。</p>
-<p>看来是很不错的构想，距离 JavaScript 一统天下不远了，好吧，就这么定了，撇下 PhoneGap ，搭上 Titanium。</p>
+</ol>
+<h3 id="transform-forProperty-error"><a href="#transform-forProperty-error" class="headerlink" title="__transform:forProperty:error:"></a><code>__transform:forProperty:error:</code></h3><ol>
+<li>如果指定的协议不存在，当 NSArray 类型时就抛出异常，其他则直接返回</li>
+<li>如果指定的协议属于 JSONModel 子类<ol>
+<li>如果是 NSArray 类型且 value 类型也是数组，则根据是否需要 convertsOnDemand 选择走不同的逻辑，如果需要 convertsOnDemand，通过 JSONModelArray 对象初始化，经过 JSONModelArray 封装之后，可以实现需要访问子元素的时候再执行解析过程；如果不需要则通过 <code>arrayOfModelsFromDictionaries</code> 方法，一次性初始化完成，还是通过循环遍历方式初始化</li>
+<li><strong>如果是 NSDictionary 类型，则遍历 keys，将 value 作为协议类型执行初始化。这样就可以如果 NSArray 指定协议方式来扩展实现 NSDictionary</strong></li>
+</ol>
+</li>
+</ol>
+<h2 id="JSONValueTransformer-1"><a href="#JSONValueTransformer-1" class="headerlink" title="JSONValueTransformer"></a>JSONValueTransformer</h2><p>如果属性 isStandardJSONType == YES 时，不需要执行任何 valueTransform，直接赋值。<br>是否标准 JSON 类型，通过属性类型是否在 <code>allowedJSONTypes</code> 数组里来判断。<br>初始化过程中定义了 <strong>Declared property type encodings</strong> 缩写跟实际变量名对应字典，包含如下：<br>    {@”f”:@“float”,@”i”:@”int”, @”d”:@”double”, @”l”:@”long”, @”c”:@”BOOL”, @”s”:@”short”, @”q”:@”long”, @”I”:@”NSInteger”, @”Q”:@”NSUInteger”, @”B”:@”BOOL”, @?”:@”Block”}</p>
+<h3 id="classByResolvingClusterClasses"><a href="#classByResolvingClusterClasses" class="headerlink" title="classByResolvingClusterClasses"></a><code>classByResolvingClusterClasses</code></h3><p>通过 sourceClass 来归一化输入类的类型判断，检查各种类型的变种，用于类簇子类型的类型判断，主要用 <code>isSubclassOfClass:</code> 方法判断。</p>
+<p>另外，包含了许多的 NSObject 基本类型的之间相互转换，虽然看起来没有直接用到，但是在 JSONModel 的 <code>toDictionary</code> 方法里，如果需要使用 valueTransformer 的时候，将动态执行 valueTransformer 里定义的 <code>xxxFromYYY</code> 方法。</p>
+<blockquote>
+<p>为什么要进行JSONValueTransformer的转换呢，是因为在iOS的视线中，由于抽象工厂的存在，构建了大量的簇类，比如NSArray, NSNumber, NSDictionary等等，他们只是对外暴露的一层皮，实质上底层对于真正的类。比如NSArrayI \&lt;=> NSArray等等。因此，我们需要通过JSONValueTransformer得到真正的Class Type，同时通过class Type找到最合适的转换方法，在JSONValueTransformer.m的文件中，我们能找到一大堆xxxFromYYY的函数。</p>
+</blockquote>
+<h3 id="Declared-property-type-encodings"><a href="#Declared-property-type-encodings" class="headerlink" title="Declared property type encodings"></a>Declared property type encodings</h3><table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R</td>
+<td>The property is read-only (readonly).</td>
+</tr>
+<tr>
+<td>C</td>
+<td>The property is a copy of the value last assigned (copy).</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>The property is a reference to the value last assigned (returnain).</td>
+</tr>
+<tr>
+<td>N</td>
+<td>The property is non-atomic (nonatomic).</td>
+</tr>
+<tr>
+<td>G\<name\></name\></td>
+<td>The property defines a custom getter selector name. The name follows the G (for example, GcustomGetter,).</td>
+</tr>
+<tr>
+<td>S\<name\></name\></td>
+<td>The property defines a custom setter selector name. The name follows the S (for example, ScustomSetter:,).</td>
+</tr>
+<tr>
+<td>D</td>
+<td>The property is dynamic (@dynamic).</td>
+</tr>
+<tr>
+<td>W</td>
+<td>The property is a weak reference (<code>__weak</code>).</td>
+</tr>
+<tr>
+<td>P</td>
+<td>The property is eligible for garbage collection.</td>
+</tr>
+<tr>
+<td>t\<encoding\></encoding\></td>
+<td>Specifies the type using old-style encoding.</td>
+</tr>
+</tbody>
+</table>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;跟 PhoneGap、AppCan 类似，Appecelerator Titanium（简称&lt;strong&gt;Ti&lt;/strong&gt;）致力于使用 JavaScript 去快速构建 App ([Atwood定律]在发功)。它们有效地抚平了学习曲线，使得 App 开发不再依赖于对
+      &lt;p&gt;Header 引入文件列表&lt;br&gt;&lt;figure class=&quot;highlight objectivec&quot;&gt;&lt;table&gt;&lt;tr&gt;&lt;td class=&quot;gutter&quot;&gt;&lt;pre&gt;&lt;div class=&quot;line&quot;&gt;1&lt;/div&gt;&lt;div class=&quot;line&quot;&gt;2&lt;/di
     
     </summary>
     
@@ -435,24 +725,381 @@
   </entry>
   
   <entry>
-    <title>我们是一家软件公司</title>
-    <link href="http://jiyee.io/2014/07/%E6%88%91%E4%BB%AC%E6%98%AF%E4%B8%80%E5%AE%B6%E8%BD%AF%E4%BB%B6%E5%85%AC%E5%8F%B8/"/>
-    <id>http://jiyee.io/2014/07/我们是一家软件公司/</id>
-    <published>2014-06-30T16:00:00.000Z</published>
-    <updated>2016-12-23T01:16:51.000Z</updated>
+    <title>JSONModel 源码解析（一）</title>
+    <link href="http://jiyee.io/2016/03/JSONModel%20%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%EF%BC%88%E4%B8%80%EF%BC%89/"/>
+    <id>http://jiyee.io/2016/03/JSONModel 源码解析（一）/</id>
+    <published>2016-02-29T16:00:00.000Z</published>
+    <updated>2016-12-23T01:54:32.000Z</updated>
     
-    <content type="html"><![CDATA[<p>最近看 Misfit CEO 采访，他们做的是 shine 智能硬件，采访最后他定义自己是“<strong>我们是一家软件公司</strong>”。</p>
-<p>好熟悉的声音，是不是乔布斯在世的时候也时常提醒我们 Apple 是一家软件公司。再回过头看 shine 的配套软件，无论从界面简洁还是操作易用方面评价，都是一款很精致的 App。</p>
-<p>说过好的，当然说说那些渣的。对比国内<strong>点名时间</strong>支持的项目，智能开关、智能红外、智能体温计，暂且不论硬件产品做得怎么样，在软件设计上，国内的可穿戴硬件的 App  基本都是渣，要么下载不了 App（<em>酷狗 WiFi 音乐盒</em>），要么没有说明书（<em>BroadLink RM1</em>），要么 App 极丑且难用（<em>BroadLink RM1</em>），要么界面 UI 只有看不懂的 icon（<em>Raiing 体温贴</em>），操作极其别扭，要么毫无使用粘性（<em>Lemon 体重秤</em>）。唯一要表扬的是在 knewone 上订购的<em>幻腾世纪</em>智能灯泡，App 功能虽然比较单一，但是 App 设计体验上仍算别致。</p>
-<p>为什么为写这样一篇使用体验呢，其实是最近买了<em>lumoback</em>（电子背背佳，妈妈再也不用担心我驼背了），一眼看中就海淘回来。拿到手包装背面写着 <strong><em>designed in California，made in China。。。</em></strong> 硬件本身只有一个按钮，但实际操作还是比较复杂的，好在它的设计不会让你觉得困惑，因为有说明书和 App。配套说明书一分两半，基础部分和进阶部分，是不是很有软件工程师的特色，基础部分告诉你基本使用该如何如何，进阶部分你可以进一步调校硬件，或者碰到问题的时候以供查阅。打开 App 通过蓝牙连接，那 App 上实时更新的小人，在穿戴的时候加入了娱乐性，你一驼背他立马就变化，告诉你，你小心哦，我要开始震动了。哈哈，多有意思。</p>
-<p>真正用心做的产品，用户是能够感知到的。而设计先行的产品思路，从一开始就确立了产品的格调。在这里我不得不说国内产品真的是走在一条错的道路上，至少我没有耐心等你慢慢优化你 App 提升你的体验，差的第一印象可能就导致一个用户的流失。</p>
-<p>最后，感谢 Apple 在 iPhone 里加入了蓝牙 4.0，让我有机会接触到更多更新奇的智能硬件，不断地去体验，不断地去判断。</p>
+    <content type="html"><![CDATA[<h2 id="Property-Protocols"><a href="#Property-Protocols" class="headerlink" title="Property Protocols"></a>Property Protocols</h2><ul>
+<li>Ignore</li>
+<li>Optional</li>
+<li>Index</li>
+<li>ConvertOnDemand (仅对 NSArray 有效）</li>
+</ul>
+<h2 id="AbstractJSONModelProtocol"><a href="#AbstractJSONModelProtocol" class="headerlink" title="AbstractJSONModelProtocol"></a>AbstractJSONModelProtocol</h2><ul>
+<li>initWithDictionary:error:</li>
+<li>initWithData:error:</li>
+<li>toDictionary</li>
+<li>toDictionaryWithKeys:</li>
+</ul>
+<h2 id="JSONModel"><a href="#JSONModel" class="headerlink" title="JSONModel"></a>JSONModel</h2><p>实现了 <code>AbstractJSONModelProtocol</code> 和 <code>NSSecureCoding</code> 协议。<br>增加了对于 NSString 类型的 JSON 字符串解析支持:</p>
+<ul>
+<li>initWithString:error:</li>
+<li>initWithString:usingEncoding:error:</li>
+<li>toJSONString</li>
+<li>toJSONStringWithKeys:</li>
+<li>toJSONData</li>
+<li>toJSONDataWithKeys:</li>
+</ul>
+<p>对于 JSONModel 构成的数组，还增加了批量方法，用于循环解析输入数组，输出包含解析之后的 Model 的数组</p>
+<ul>
+<li>arrayOfModelsFromDictionaries:</li>
+<li>arrayOfDictionariesFromModels:</li>
+</ul>
+<p>比较 Model 的方法：</p>
+<ul>
+<li>indexPropertyName 输出索引字段名称</li>
+<li>isEqual: 比较索引字段是否相等</li>
+<li>compare: 如果没有索引字段或者索引字段不能比较，则抛出异常，<code>NSString</code> 和 <code>NSNumber</code> 可比较，如果是自定义类型，要求实现 <code>compare:</code> 方法</li>
+</ul>
+<p>验证 Model 有效性：</p>
+<ul>
+<li>validate:<br>  重写此方法，能够支持有效性验证，如果检查出无效情况，返回 NO，并且设置 error 引用参数</li>
+<li>keyMapper<br>  重写此方法，如果属性名称不对应 JSON key names</li>
+<li>setGlobalKeyMapper:<br>  影响所有 JSONModel 对象解析，自定义 keyMapper 的优先级高于全局 keyMapper</li>
+<li>propertyIsOptional:</li>
+<li>propertyIsIgnored:</li>
+<li>protocolForArrayProperty:<br>  获取 NSArray 对象定义的元素实现的协议</li>
+<li>mergeFromDictionary:useKeyMapping:<br>  将 dict 包含的值合并到 model 实例，useKeyMapping 标识是否使用自定义 keyMapper 和 全局 keyMapper</li>
+</ul>
 ]]></content>
     
     <summary type="html">
     
-      &lt;p&gt;最近看 Misfit CEO 采访，他们做的是 shine 智能硬件，采访最后他定义自己是“&lt;strong&gt;我们是一家软件公司&lt;/strong&gt;”。&lt;/p&gt;
-&lt;p&gt;好熟悉的声音，是不是乔布斯在世的时候也时常提醒我们 Apple 是一家软件公司。再回过头看 shine 的配套
+      &lt;h2 id=&quot;Property-Protocols&quot;&gt;&lt;a href=&quot;#Property-Protocols&quot; class=&quot;headerlink&quot; title=&quot;Property Protocols&quot;&gt;&lt;/a&gt;Property Protocols&lt;/h2&gt;&lt;ul&gt;
+&lt;li&gt;
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《OS X 进阶使用》－ 第八篇 命令行</title>
+    <link href="http://jiyee.io/2016/01/%E3%80%8AOS%20X%20%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E3%80%8B%EF%BC%8D%20%E7%AC%AC%E5%85%AB%E7%AF%87%20%E5%91%BD%E4%BB%A4%E8%A1%8C/"/>
+    <id>http://jiyee.io/2016/01/《OS X 进阶使用》－ 第八篇 命令行/</id>
+    <published>2016-01-10T16:00:00.000Z</published>
+    <updated>2016-12-23T02:03:04.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>命令行可能是 OS X 用户群体划分的分水岭，有的用户就是喜欢 GUI 的直接，有的用户就是喜欢 shell 的高效。虽然 OS X 没有强制用户使用哪一种方式，但是，命令行肯定是每一个用户都接触过，因为有一些操作不得不通过命令行来完成，不信你看看这份<a href="https://github.com/herrbischoff/awesome-osx-command-line" title="Awesome OS X Command Line" target="_blank" rel="external">「$Awesome OS X Command Line」</a>文档。</p>
+<p>学习和使用命令行是需要付出时间和代价的，你会感受到门槛这个东西的存在，但是总的来说也是值得的。这里不展开如何学习命令行，主要讲一讲如何在 OS X 高效地使用命令行。</p>
+<h2 id="iTerm-2-zsh-oh-my-zsh"><a href="#iTerm-2-zsh-oh-my-zsh" class="headerlink" title="iTerm 2 + zsh + oh-my-zsh"></a>iTerm 2 + zsh + oh-my-zsh</h2><p>Windows 用户想要使用 shell 需要一个终端模拟器，例如 Putty 或者 SecureCRT 等终端模拟器。OS X 默认自带了 Terminal 这款软件，但是想要用好命令行，不得不说一说「iTerm 2 + zsh + oh-my-zsh」这个组合。</p>
+<ul>
+<li><a href="http://iterm2.com" target="_blank" rel="external">iTerm 2</a> 是终端模拟器，具备Tab、分屏、全局快捷键等功能。真的是 OS X 平台上少有的免费且强大的软件，堪称业界良心。</li>
+<li><a href="http://www.zsh.org" target="_blank" rel="external">zsh</a> 是比 bash 更强大的 shell，具备主题、自动补全、通配符、别名等功能，而且更多的功能还可以通过插件方式来扩展。</li>
+<li><a href="http://ohmyz.sh" target="_blank" rel="external">oh-my-zsh</a> 是 zsh 主题和插件管理工具，集成了许多有用的插件，如 git、git-extras、autojump 等。</li>
+</ul>
+<p>如果还没有尝试过「iTerm 2 + zsh + oh-my-zsh」组合，请一定花点时间试一试。如果你还有兴趣进一步研究不同的 shell，还可以尝试看看 <a href="http://fishshell.com" target="_blank" rel="external">fish</a> 这款新起的用户友好的 shell。</p>
+<p>至于怎么配置和安装「iTerm 2 + zsh + oh-my-zsh」，网上有很多教程，这里就不再赘述。</p>
+<h2 id="Package-Manager"><a href="#Package-Manager" class="headerlink" title="Package Manager"></a>Package Manager</h2><p>在使用命令行时，肯定或多或少要用到包管理器，用于安装和管理各式各样的软件包，如同在服务器端的 yum 之于 centos。</p>
+<ul>
+<li><a href="http://brew.sh" target="_blank" rel="external">brew</a> 是 OS X 平台最主要的包管理器，几乎是事实上的官方包管理器。作者 <a href="https://news.ycombinator.com/item?id=9700067" target="_blank" rel="external">Max Howell</a> 前阵子面试 Google 因为写不出翻转二叉树被拒，断然去了 Apple 写就了 Swift Package Manager。</li>
+<li><a href="http://caskroom.io" target="_blank" rel="external">Homebrew cask</a> 是基于 brew 面向应用的管理器，使得 OS X 平台上安装应用不需要打开 dmg 包，拖动图标到 Applications 目录，而是直接通过命令行安装。</li>
+<li><a href="https://rubygems.org" target="_blank" rel="external">gem</a> 是 Ruby 包管理器，也有许多优秀的包能够使用，例如 <a href="http://jekyllrb.com" target="_blank" rel="external">Jeklly</a> 等。而且 brew 本身就是基于 gem 安装。</li>
+<li><a href="https://www.npmjs.com" target="_blank" rel="external">npm</a> 是 Node 包管理器，JavaScript 大行其道之时，自然涌现出很多优秀的由 Node 写成的包，尤其是前端相关的。</li>
+</ul>
+<h2 id="Useful-Commands-and-Packages"><a href="#Useful-Commands-and-Packages" class="headerlink" title="Useful Commands and Packages"></a>Useful Commands and Packages</h2><ul>
+<li><code>open</code> 用于在命令行打开文件和目录。例如 <code>open ./</code> 目录直接在 Finder 里跳转到指定目录，<code>open README.md</code> 文件直接在默认的应用打开。</li>
+<li><code>pbcopy / pbpaste</code> 通过和管道一起使用能够将剪切板直接和管道的输入和输出相结合，例如 <code>md5 &#39;raw string` | pbcopy</code>。</li>
+<li><a href="https://github.com/rupa/z" target="_blank" rel="external">z</a> 类似于 autojump，通过记录和分析你的 <code>cd</code> 命令，直接通过目录名称跳转到你想要的目录。例如，之前经常需要跳转到 <code>cd ~/www/renrenche</code> 目录处理文件，那之后键入 <code>z renrenche</code> 就能直接跳转到 renrenche 目录。</li>
+<li><a href="http://beyondgrep.com" target="_blank" rel="external">ack</a> 比 grep 更好用的文本查找工具，在命令行查找个代码啥的最合适不过了。</li>
+<li><a href="http://hisham.hm/htop/" target="_blank" rel="external">htop</a> 比 top 命令更有好的进程查看器，支持交互操作且分类更加详细。</li>
+<li><a href="https://tmux.github.io" target="_blank" rel="external">tmux</a> 终端复用软件，能够在登录远程服务器之后复用窗口和进程。</li>
+<li><a href="https://github.com/jkbrzt/httpie" target="_blank" rel="external">httpie</a> 比 curl 更有好的 HTTP 命令行工具。</li>
+<li><a href="https://github.com/lra/mackup" target="_blank" rel="external">mackup</a> 通过 dropbox 自动备份常用工具的配置文件，例如 <code>.zshrc</code>， <code>.vimrc</code> 等。</li>
+</ul>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="http://zhuanlan.zhihu.com/mactalk/19556676" target="_blank" rel="external">「终极 Shell——ZSH」</a></li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;命令行可能是 OS X 用户群体划分的分水岭，有的用户就是喜欢 GUI 的直接，有的用户就是喜欢 shell 的高效。虽然 OS X 没有强制用户使用哪一种方式，但是，命令行肯定是每一个用户都接触过，因为有一些操作不得不通过命令行来完成，不信你看看这份&lt;a href=&quot;ht
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《OS X 进阶使用》－ 第七篇 翻越长城</title>
+    <link href="http://jiyee.io/2016/01/%E3%80%8AOS%20X%20%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E3%80%8B%EF%BC%8D%20%E7%AC%AC%E4%B8%83%E7%AF%87%20%E7%BF%BB%E8%B6%8A%E9%95%BF%E5%9F%8E/"/>
+    <id>http://jiyee.io/2016/01/《OS X 进阶使用》－ 第七篇 翻越长城/</id>
+    <published>2016-01-09T16:00:00.000Z</published>
+    <updated>2016-12-23T02:02:50.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>GFW 对于程序员来说是一个不可忽视的障碍，翻越长城是程序员必备技能之一。</p>
+<h2 id="代理服务"><a href="#代理服务" class="headerlink" title="代理服务"></a>代理服务</h2><p>目前，翻墙的主要方式基本都是通过代理服务器来中转请求。所以，一条优质的线路保证着访问墙外世界的速度和稳定性。通常情况下，北方联通网络连接香港、日本和新加坡的线路都优化得很不错，ping 值能达到 100ms 的水平，美国线路 ping 值一般能达到 300ms 以内还算可以。但是香港和新加坡的线路一般带宽都比较小，不像美国的线路带宽那么充足。还有，日本和新加坡的线路可能存在不同机房丢包率差异巨大的情况。所以，这里存在一个选择的问题，访问网站推荐使用亚洲线路，下载文件推荐使用美国线路。</p>
+<p>另外，目前提供的代理服务基本都是通过付费购买的方式获得，购买之前要了解下代理服务的基本情况，比如 ping 值、丢包率、带宽、稳定性、是否超卖等。</p>
+<p>我建议手头不要仅有一个代理服务，一定要有备用的服务，不然在遇到情况时无法切换就比较麻烦。</p>
+<p>推荐服务：</p>
+<ul>
+<li><a href="https://vpnso.com" target="_blank" rel="external">VPNSO</a> </li>
+<li><a href="https://eurekavpt.com" target="_blank" rel="external">EurekaVPT</a> </li>
+<li><a href="https://www.ytpub.com" target="_blank" rel="external">云梯</a> </li>
+<li><a href="https://www.linost.com" target="_blank" rel="external">Linost</a> </li>
+<li><a href="https://shadowsocks.org" target="_blank" rel="external">shadowsocks</a> </li>
+</ul>
+<p>DNS 服务器列表：</p>
+<ul>
+<li><a href="http://dns.ip.cn" target="_blank" rel="external">http://dns.ip.cn</a> </li>
+<li><a href="http://dns.v2ex.com" target="_blank" rel="external">http://dns.v2ex.com</a> </li>
+</ul>
+<p>如果觉得直接配置 DNS 还不够，可以看看通过 dnsmasq 配置自定义 DNS，这里不再展开。</p>
+<h2 id="OS-X"><a href="#OS-X" class="headerlink" title="OS X"></a>OS X</h2><p>除了代理服务之外，还有一个问题就是如何选择代理软件。这里，介绍一些 OS X 和 iOS 常用的代理软件。</p>
+<ul>
+<li><p>GoAgentX<br>可能是 OS X 里最好用的代理软件，支持很多种代理方式，包括 SSH，shadowsocks，SSLedge 等，支持 PAC 代理控制。可惜作者被请喝茶，GitHub 项目被删除。但是，好在不影响使用，仍手动升级代理模块，参考 <a href="https://www.logcg.com/archives/1296.html" target="_blank" rel="external">「GoAgentX 的后续维护及使用」</a>。</p>
+</li>
+<li><p><a href="http://sourceforge.net/projects/shadowsocksgui/files/dist/" target="_blank" rel="external">shadowsocksX</a><br>如果只是使用 shadowsocks 代理方式，那推荐使用此软件，同样支持 PAC 代理控制。</p>
+</li>
+<li><p><a href="https://github.com/OpenFibers/SSHMole" target="_blank" rel="external">SSHMole</a><br>如果是古早的 SSH 代理方式，那推荐使用此软件。</p>
+</li>
+<li><p><a href="https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=en" target="_blank" rel="external">Proxy SwitchyOmega</a><br>这个是 Chrome 插件，能够支持 HTTP 和 SOCKS 代理方式和 PAC 控制。</p>
+</li>
+<li><p><a href="https://chrome.google.com/webstore/detail/falcon-proxy/gchhimlnjdafdlkojbffdkogjhhkdepf?hl=en" target="_blank" rel="external">SSLedge</a>，SSLspeedy<br>这些也是 Chrome 插件，是我最常用的方式，只是需要购买对应服务，支持灵活切换不同的代理服务器。</p>
+</li>
+<li><p><a href="https://github.com/rofl0r/proxychains-ng" target="_blank" rel="external">proxychains-ng</a><br>支持在 Terminal 里对待执行的命令行设置代理，对于使用 npm、gem 安装个啥不能的情况比较有用。</p>
+</li>
+<li><p><a href="https://github.com/cyfdecyf/cow" target="_blank" rel="external">COW</a><br>定位于智能代理，支持多种代理方式、智能检测等特性，挺不错的。</p>
+</li>
+</ul>
+<h2 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h2><ul>
+<li><p>Surge<br>之前，iOS 平台上的相关应用较少，很多都是 VPN 相关服务商提供的 VPN 接入应用，一般只能通过配置 VPN 的方式翻墙。直到前一阵子 <a href="https://surge.run" target="_blank" rel="external">Surge</a> 横空出世，一举解决了 iOS 平台上多种代理方式接入和 PAC 代理控制的问题。可惜，过于璀璨就像流星陨落，前一阵子已在 App Store 下架。只能说买到就是赚到，错过了这村就不知道下一家店在哪里了。</p>
+</li>
+<li><p><a href="https://appsto.re/us/xYfT4.i" target="_blank" rel="external">VPN On</a><br>如果使用 VPN 代理方式，这个应用可以很方便地在 Today Extension 里切换代理，非常推荐购买。</p>
+</li>
+<li><p>APNp<br>就是智能代理，通过 PAC 文件来配置代理条件，一般随服务商提供。</p>
+</li>
+</ul>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;GFW 对于程序员来说是一个不可忽视的障碍，翻越长城是程序员必备技能之一。&lt;/p&gt;
+&lt;h2 id=&quot;代理服务&quot;&gt;&lt;a href=&quot;#代理服务&quot; class=&quot;headerlink&quot; title=&quot;代理服务&quot;&gt;&lt;/a&gt;代理服务&lt;/h2&gt;&lt;p&gt;目前，翻墙的主要方式基本都是通过代
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《OS X 进阶使用》－ 第六篇 程序员 与 那些不得不拥有的软件</title>
+    <link href="http://jiyee.io/2016/01/%E3%80%8AOS%20X%20%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E3%80%8B%EF%BC%8D%20%E7%AC%AC%E5%85%AD%E7%AF%87%20%E7%A8%8B%E5%BA%8F%E5%91%98%20%E4%B8%8E%20%E9%82%A3%E4%BA%9B%E4%B8%8D%E5%BE%97%E4%B8%8D%E6%8B%A5%E6%9C%89%E7%9A%84%E8%BD%AF%E4%BB%B6/"/>
+    <id>http://jiyee.io/2016/01/《OS X 进阶使用》－ 第六篇 程序员 与 那些不得不拥有的软件/</id>
+    <published>2016-01-08T16:00:00.000Z</published>
+    <updated>2016-12-23T02:02:35.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="Dash"><a href="#Dash" class="headerlink" title="Dash"></a>Dash</h2><p><a href="https://kapeli.com/dash" target="_blank" rel="external">Dash</a> 是一款离线 API 文档查看和代码片段管理应用。几乎你可能会查阅的 API 文档都能在里面找到，还支持第三方库文档，那些被第三方库管理器（如 cocoapods，Ruby gems，PHP packagist）纳入的库提供的接口文档。而且，它的搜索、收藏和区分版本查阅功能也都很实用。而且，它支持几乎所有编辑器或者 IDE 集成，真正的是贴心到家。</p>
+<p>把它列在第一位，是因为我觉得看看 API 文档有助于提高对语言和框架的认知和理解，无论整体还是细节上。</p>
+<p>有一个有意思的地方是，可以去看看 PHP 文档里的评论，可能比文档本身更有收获。</p>
+<p>另一个有意思的是，Dash 独立开发者 Bogdan Popescu 还只是个 90 后，看看他在个人博客上公布的2014年总结。</p>
+<blockquote>
+<p>每周工作5天、每天工作6小时、年收入27万美元、5周的旅行休假以及整整有2个月都在玩《炉石传说》。</p>
+</blockquote>
+<p>羡慕吧～～ 没办法，谁让大家都争相为之付费呢？！</p>
+<p>因为他只做了这么一件事，并且把这件事做到了极致。</p>
+<p>Windows 用户可以参考 <a href="http://velocity.silverlakesoftware.com" target="_blank" rel="external">velocity</a> 这款软件。</p>
+<h2 id="CodeRunner"><a href="#CodeRunner" class="headerlink" title="CodeRunner"></a>CodeRunner</h2><p><a href="https://coderunnerapp.com" target="_blank" rel="external">CodeRunner</a> 好比 <a href="jsbin.com">JS Bin</a>，提供一个简单而直接的 REPL 环境。作为程序员，总会遇到想要试一下某个 API 怎么用，抑或跑一个简单的脚本看看结果，这个时候如果需要新建工程、配置环境、编译运行等步骤那就太碍事了，尤其面对的还是一门你可能刚入门的语言的情况下（好比，之前浩天就想看看 Java 某个 API 怎么用）。这个时候就到了 CodeRunner 的使用场景，为那些用过即扔的代码提供一个编辑器和运行环境，你不用再去关心配置问题，只要敲入代码并运行，你就能看到结果输出。</p>
+<h2 id="Moom"><a href="#Moom" class="headerlink" title="Moom"></a>Moom</h2><p><a href="http://manytricks.com/moom/" target="_blank" rel="external">Moom</a> 是一款窗体管理应用。程序员一般都拥有外接显示器，如果想拖动一个窗体到另外一个屏幕或者调整窗体大小和位置的话，最便捷的方式就是使用快捷键，那 Moom 就是为此而生。他能帮你更好地利用你的第二块、第三块屏幕。</p>
+<p>同类的软件还有很多，如 <a href="https://itunes.apple.com/us/app/divvy-window-manager/id413857545?mt=12" target="_blank" rel="external">Divvy</a>，<a href="https://github.com/jigish/slate" target="_blank" rel="external">Slate</a></p>
+<h2 id="Quiver"><a href="#Quiver" class="headerlink" title="Quiver"></a>Quiver</h2><p><a href="http://happenapps.com/#quiver" target="_blank" rel="external">Quiver</a> 是一款为程序员量身定制的笔记本应用。</p>
+<p>为什么这里不推荐使用 Evernote，因为 Evernote 过于臃肿，而且文档格式封闭，导入、导出功能基本缺失，还不支持 Markdown，更别说 Vim mode。</p>
+<p>Quiver 是我寻寻觅觅了很久才确定使用的笔记本应用。难得的是他还是国人开发，而且美誉度普遍较高。他基于文本方式来管理文档，支持普通文本、 Markdown、LaTex 三种格式，支持文档格式化输出，支持 Vim mode。配合 Git 使用，你就拥有一个支持版本管理的纯文本文档管理软件。</p>
+<p>Evernote 想做用户「第二个大脑」，Quiver 可没有这个野心。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;Dash&quot;&gt;&lt;a href=&quot;#Dash&quot; class=&quot;headerlink&quot; title=&quot;Dash&quot;&gt;&lt;/a&gt;Dash&lt;/h2&gt;&lt;p&gt;&lt;a href=&quot;https://kapeli.com/dash&quot; target=&quot;_blank&quot; rel=&quot;externa
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《OS X 进阶使用》－ 第五篇 键盘与 Keyboard Maestro（三）</title>
+    <link href="http://jiyee.io/2016/01/%E3%80%8AOS%20X%20%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E3%80%8B%EF%BC%8D%20%E7%AC%AC%E4%BA%94%E7%AF%87%20%E9%94%AE%E7%9B%98%E4%B8%8E%20Keyboard%20Maestro%EF%BC%88%E4%B8%89%EF%BC%89/"/>
+    <id>http://jiyee.io/2016/01/《OS X 进阶使用》－ 第五篇 键盘与 Keyboard Maestro（三）/</id>
+    <published>2016-01-07T16:00:00.000Z</published>
+    <updated>2016-12-23T02:02:16.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>终于讲到键盘这个主题的正文了，前面临时插入的两篇文章，无论从选题是重要性来讲都更为重要，反倒是显得讲不讲 Keyboard Maestro 无所谓了。</p>
+<p>但是，不能辜负这个随意起的标题，延续下一个主题带着一个典型应用的方式。</p>
+<p><a href="http://keyboardmaestro.com" target="_blank" rel="external">Keyboard Maestro</a> 其实是一款自动化软件，属于 OS X 典型的大而全的专业应用。只不过他的触发器一般都是快捷键罢了，至于按下快捷键之后能做些什么，看看他定义了哪些能够实现的<a href="https://www.keyboardmaestro.com/documentation/7/features.html" target="_blank" rel="external">功能</a>，例如启动软件、移动窗体、插入文本、模拟点击、管理剪切板，文件操作，甚至能够自定义流程和宏。</p>
+<blockquote>
+<p>“The only limit to Keyboard Maestro is your imagination!”</p>
+</blockquote>
+<p>这就是它的口号，对得起它的价格和它能做的事。</p>
+<p>但是，我回想了下我使用它的场景，大概用到的功能不到 5％ 吧。用的最多的就是按下快捷键启动或者激活某个特定的应用，以至于我经常将它遗忘。</p>
+<p>对于程序员来说，如果想更直观地设定自动化流程，我更加推荐 <a href="http://www.hammerspoon.org" target="_blank" rel="external">Hammerspoon</a> 这款应用，免费且支持 Lua 脚本（ Lua 很简单，分分钟就能学会），通过 Lua 脚本而不是 GUI 的方式来更为精细化地控制系统环境，而且它还支持一些更加底层的事件和行为，例如 电池、WiFi、USB 设备等。他还能跟第三篇里提到 Karabiner 组合，通过快捷键和 URL Schema 方式触发自定义宏。</p>
+<p>另外，如果大家对自定义手势感兴趣，可以参考 <a href="http://www.boastr.net/" target="_blank" rel="external">BetterTouchTool</a> 和 <a href="https://www.jitouch.com/" target="_blank" rel="external">Jitouch 2</a> 这两款应用，有非常不错的自定义手势和功能支持。</p>
+<p>最后想说的是，其实这些应用都是需要从自身的需求出发，根据实际情况去配置。理想的情况是，当你发现在每日的工作中经常性地重复某一个动作，以至于你都注意不到的时候，这时候回过头来想想是不是可以优化下自己的工作方式。到这个时候，这些自动化软件就可以帮上你忙的了。</p>
+<p>最后，忘了 OS X 其实自带的 Automator 功能也很不错，只不过之前只有 GUI 方式 和 AppleScript 脚本支持，现在支持 JavaScript 脚本，只不过几乎没有用过，不再评述。</p>
+<p>如果想 iOS 上折腾，可以找找一款叫 <a href="https://workflow.is" target="_blank" rel="external">workflows</a> 的自动化应用。</p>
+<p>Windows 用户可以看看 <a href="https://www.autohotkey.com" target="_blank" rel="external">AutoHotkey</a> 这款软件，能实现类似的功能。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;终于讲到键盘这个主题的正文了，前面临时插入的两篇文章，无论从选题是重要性来讲都更为重要，反倒是显得讲不讲 Keyboard Maestro 无所谓了。&lt;/p&gt;
+&lt;p&gt;但是，不能辜负这个随意起的标题，延续下一个主题带着一个典型应用的方式。&lt;/p&gt;
+&lt;p&gt;&lt;a href=&quot;ht
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《OS X 进阶使用》－ 第四篇 键盘和 Keyboard Maestro（二）</title>
+    <link href="http://jiyee.io/2016/01/%E3%80%8AOS%20X%20%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E3%80%8B%EF%BC%8D%20%E7%AC%AC%E5%9B%9B%E7%AF%87%20%E9%94%AE%E7%9B%98%E5%92%8C%20Keyboard%20Maestro%EF%BC%88%E4%BA%8C%EF%BC%89/"/>
+    <id>http://jiyee.io/2016/01/《OS X 进阶使用》－ 第四篇 键盘和 Keyboard Maestro（二）/</id>
+    <published>2016-01-06T16:00:00.000Z</published>
+    <updated>2016-12-23T02:02:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>本来这个段落的标题是「价值观」，我想想有点过了，还是改成「前言」好了。</p>
+<p>使用键盘方面，我的判断是：能够有效地使用键盘完成工作是衡量程序员开发效率标准之一。</p>
+<p>我见过键盘输入速度和熟练度上较高的一名选手就是 <a href="http://browserify.org" target="_blank" rel="external">browserify</a> 的作者 <a href="http://substack.net" target="_blank" rel="external">James Halliday</a>，大家有兴趣可以上 <a href="https://m.youtube.com/results?q=james%20halliday%20substack&amp;sm=1" target="_blank" rel="external">Youtube</a> 上看看他做的分享的一些视频。</p>
+<p>无论在 OS X 还是 Windows 平台上，想要高效地使用键盘都需要花费一番功夫，并不是打字足够快就能够说明高效，而是看你如何使用键盘完成一件事的方式。</p>
+<p>当然，首要的一点就是你能快速准确地使用键盘完成文本输入，尤其是代码输入，大家有兴趣可以上 <a href="http://typing.io" target="_blank" rel="external">Typing Practice for Programmers</a> 这个网站测试一下你输入代码的速度，我的 WPM 是 45+，无效按键是 19%。</p>
+<h2 id="快捷键与模式"><a href="#快捷键与模式" class="headerlink" title="快捷键与模式"></a>快捷键与模式</h2><p>除了快速、准确地文本输入之外，熟记足够多的快捷键，也是提高效率的重要一方面。</p>
+<p>在 OS X 上所有的输入框和 Terminal 快捷键模式是 <a href="http://jblevins.org/log/kbd" target="_blank" rel="external">Emacs 模式</a>，如果你是 Emacs 党，那你一定如鱼得水，如果你是 Vim 党，那可能你也得学会如何使用 Emacs 的快捷键。无论是普通的文本输入框还是 Terminal 都是 OS X 用户每日都接触的，熟练使用快捷键就能减少鼠标的使用或者一路按左或者按右的状况。</p>
+<p>作为一个伪 Vim 党，平日我基本不用 Vim 编辑器，只是保持在最常用场景中尽可能使用 <a href="https://en.m.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes" target="_blank" rel="external">Vim 模式</a>。在 Chrome 浏览器，我使用 <a href="https://chrome.google.com/webstore/detail/cvim/ihlenndgcmojhcghmfjfneahoeklbjjh?hl=en" target="_blank" rel="external">cvim</a> 插件，只需要键盘就能完成 URL 输入，页面滚动，链接跳转等工作，完全不用鼠标。在 Sublime Text，有 <a href="https://github.com/guillermooo/Vintageous" target="_blank" rel="external">Vintageous</a> 插件，在 Jetbrains 家的 AppCode，有 <a href="https://github.com/JetBrains/ideavim" target="_blank" rel="external">IdeaVim</a> 插件，这些插件除了一些宏的设置和使用上存在一定缺陷之外，基本都能保证 Vim 模式。在其他软件中，通过快捷键映射，把 Hyper＋H/J/K/L 映射到了左下上右等。</p>
+<p>我既不是 Emacs 用户，也不是 Vim 用户，很难说使用他们究竟有什么优势，大家有兴趣可以看看 <a href="https://zh.wikipedia.org/zh/%E7%BC%96%E8%BE%91%E5%99%A8%E4%B9%8B%E6%88%98" target="_blank" rel="external">「编辑器之战」</a> 这个 Wiki。但是，作为一名伪 Vim 党，我想说的是，统一使用 Emacs 或者 Vim 模式，能尽量让你保持在移动、输入和修改等操作过程中，头脑的思考方式是一致的，而且尽量避免了鼠标操作。</p>
+<p>键盘这部分已经写了两篇，看起来也很难把内容都涵盖到，我只能尽量把我认为一些重要的内容提出来简单讲一讲，希望对大家有所帮助和启发。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;本来这个段落的标题是「价值观」，我想想有点过了，还是改成「前言」好了。&lt;/p&gt;
+&lt;p&gt;使用键盘方面，我的判断是：能够有效地使用键盘完成工作是
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《OS X 进阶使用》－ 第三篇 键盘 和 Keyboard Maestro</title>
+    <link href="http://jiyee.io/2016/01/%E3%80%8AOS%20X%20%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E3%80%8B%EF%BC%8D%20%E7%AC%AC%E4%B8%89%E7%AF%87%20%E9%94%AE%E7%9B%98%20%E5%92%8C%20Keyboard%20Maestro/"/>
+    <id>http://jiyee.io/2016/01/《OS X 进阶使用》－ 第三篇 键盘 和 Keyboard Maestro/</id>
+    <published>2016-01-05T16:00:00.000Z</published>
+    <updated>2016-12-23T02:04:09.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>TL;DR<br>键盘是程序员每天都要接触的输入设备，很有必要把键盘的好好研究一番。。。<br>如果不是爱折腾人士，请忽略本文。</p>
+<h2 id="机械键盘"><a href="#机械键盘" class="headerlink" title="机械键盘"></a>机械键盘</h2><p><a href="https://zh.wikipedia.org/zh/%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98" target="_blank" rel="external">机械键盘</a>可能是每一个程序员都必备的一样外设，无论是 PC 用户还是 Mac 用户。他带来的触感和体验跟普通的薄膜键盘相比存在明显的差异，个人推荐茶轴或者青轴更适合程序员使用。至于具体哪款键盘型号或者不同轴之间的差异，这里面略微有些玄学的意思，乃至于像 HHKB 这样的静电容键盘，我没使用过，就更不好评说了。</p>
+<p>如果大家对外设感兴趣，可以看看 <a href="http://www.inwaishe.com" target="_blank" rel="external">in外设</a> 这个网站，里面尽是些外设的测评的内容，看了要剁手不要找我。</p>
+<h2 id="键位"><a href="#键位" class="headerlink" title="键位"></a>键位</h2><p>OS X 用户在外接键盘的时候，第一个问题就是在默认情况下 Command 键和 Option 键换了个位置。为了达到一致性体验，建议换回默认键位。方法也比较简单，就是在「设置－键盘－修饰键」里重设实体 Option 键和 Command 键对应的按键即可。</p>
+<p>另外，就是个性化的一些改变了，这里稍微展开一点，如有兴趣可以继续参看文章底部参考文档。</p>
+<h3 id="Hyper-Key-amp-Seil"><a href="#Hyper-Key-amp-Seil" class="headerlink" title="Hyper Key &amp; Seil"></a>Hyper Key &amp; Seil</h3><p>古早的键盘拥有更多的修饰键，如 Hyper、Super、Meta，用于状态控制。<br><img src="http://holywood.be/emacs/images/keyboard-9647.jpg" alt="Emacs"></p>
+<p>现在，通过更改键位的方式可以在现代键盘上模拟出一些修饰键，用于快捷键设置。</p>
+<p>在 OS X 里一个叫 <a href="https://pqrs.org/osx/karabiner/seil.html.en" target="_blank" rel="external">Seil</a> 的免费软件可以完成键位的 keycode 替换。</p>
+<p>对于现代键盘而言，最有用的一点是替换 CapsLock 键。因为 CapsLock 键不经常使用，却又在最容易触及的位置，把 CapsLock 键替换成 Hyper 键或者 Ctrl 键。尤其是对于 Vim 党，很多 Vim 党就是在 Vim 配置把 CapsLock 键替换成 Meta 键使用。</p>
+<h3 id="Karabiner"><a href="#Karabiner" class="headerlink" title="Karabiner"></a>Karabiner</h3><p>事情肯定没有这么简单，那替换了之后能有什么用呢？<br>下面就请出另一个免费神器 <a href="https://pqrs.org/osx/karabiner/index.html.en" target="_blank" rel="external">Karabiner</a> ，用于键盘的自定义，通过选项方式或者配置文件方式，就能完成各式各样的按键自定义，完全是为爱折腾人士准备。</p>
+<p>例如，通过按 Hyper＋Tab 方式切换的 CapsLock 状态，Hyper＋J 映射到 Down，Hyper＋K 映射到 Up，模拟在普通输入框里实现 Vim 按键映射，避免了 OS X 默认的 Emacs 快捷键方式的影响，是不是 Vim 党最爱？</p>
+<p>之前，我使用键盘有一个毛病，就是只用左 Shift＋其他键来实现大写或者符号输入，无论是 Shift＋A 还是 Shift＋K等，相信很多人也有同样的问题。后来看到通过 Karabiner 可以设定只允许正确的使用左右 Shift 键才能出来完成输入，例如左 Shift＋A 是无效的按键，右 Shift＋A 才能完成大写字母 A 的输入。很简单的一个配置就能实现，从此，妈妈再也不用担心我傻傻不会用键盘了。</p>
+<p>下面附上我一张使用 <a href="https://whatpulse.org/" target="_blank" rel="external">WhatPulse</a> 统计按键频率图。<br><img src="/images/what-pulse.png" alt="WhatPulse 键盘按键统计"></p>
+<p>最后，附一篇我觉得写得最好的关于键盘配置的参考文档：<br><a href="http://ranmocy.me/translation/a-modern-space-cadet/" target="_blank" rel="external">现代 Space Cadet</a></p>
+<p>Windows 似乎没有类似的软件，有一款 <a href="https://www.autohotkey.com/" target="_blank" rel="external">AutoHotkey</a> 的软件跟下一篇讲的 Keyboard Maestro 类似，大家有兴趣可以了解一下。</p>
+<p>还没写到 Keyboard Maestro 就已经这么长，暂时就到这里，更多的内容留待下一篇继续。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;TL;DR&lt;br&gt;键盘是程序员每天都要接触的输入设备，很有必要把键盘的好好研究一番。。。&lt;br&gt;如果不是爱折腾人士，请忽略本文。&lt;/p&gt;
+&lt;h2 id=&quot;机械键盘&quot;&gt;&lt;a href=&quot;#机械键盘&quot; class=&quot;headerlink&quot; title=&quot;机械键盘&quot;&gt;&lt;/a&gt;机械
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《OS X 进阶使用》－ 第二篇 自动化与 Alfred</title>
+    <link href="http://jiyee.io/2016/01/%E3%80%8AOS%20X%20%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E3%80%8B%EF%BC%8D%20%E7%AC%AC%E4%BA%8C%E7%AF%87%20%E8%87%AA%E5%8A%A8%E5%8C%96%E4%B8%8E%20Alfred/"/>
+    <id>http://jiyee.io/2016/01/《OS X 进阶使用》－ 第二篇 自动化与 Alfred/</id>
+    <published>2016-01-04T16:00:00.000Z</published>
+    <updated>2016-12-23T02:04:30.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="自动化"><a href="#自动化" class="headerlink" title="自动化"></a>自动化</h2><p>OS X 自动化是一个很大的话题，可以分很多小的点来展开，这一篇讲一下 Alfred 这款软件。</p>
+<h2 id="Alfred"><a href="#Alfred" class="headerlink" title="Alfred"></a>Alfred</h2><p>Alfred 是 OS X 上的神器，跟 OS X 自带的 Spotlight 功能相近，同属于搜索入口，几乎就是本地的 Google。相较于 Spotlight，Alfred 支持更多的功能和更加强大的扩展。</p>
+<p>Alfred 的入口很唯一，按下一个快捷键，弹出一个搜索框。在搜索框里，你可以查找文件，打开应用，计算器，管理剪切板，搜索网页，搜索 Wikipedia，执行 Shell 脚本，这些都是基本功能，大概已经能满足日常使用中 80％ 的需求。</p>
+<h3 id="Alfred-Workflows"><a href="#Alfred-Workflows" class="headerlink" title="Alfred Workflows"></a>Alfred Workflows</h3><p>Alfred 更强大的地方在于，支持 workflows 扩展。workflows 作用是通过搜索前缀跟脚本，扩展搜索功能。形象一点而言，搜索框就是一个入口，好比百度之前推的框计算。搜索框不仅仅是搜索功能的入口，它成了任何你想要的功能的入口。</p>
+<p>这里给出一个链接，<a href="http://www.packal.org/" target="_blank" rel="external">Packal</a>，列出了几乎所有的社区贡献的 workflows。（有句话说的好，只有天空才是你的极限。）</p>
+<p>如果上述列出的 workflows 还不能满足你特定的需求，那你也可以自己动手写一个扩展，它支持 Bash、Python、PHP、Ruby、AppleScript、JavaScript 等脚本语言，只要去响应特定的检索关键词，然后执行你自己的任务（例如，监控线上服务等等），最后给出一个输出，很像常见的 Shell 脚本干的事，只不过它的执行入口改成了统一的 Alfred 入口。</p>
+<p>这文章写的有点安利了。。。Alfred 本身是免费的，80% 的功能免费试用，支持 workflows 的 Powerpack 售价 17 欧元。在 OS X 和 iOS 的环境里，好东西基本都不是免费的，希望大家能体会到。不理解软件为什么要收费的同学，想想你每天干的事，再想想老板为啥要付你工资。</p>
+<p>Windows 用户可以看一下 <a href="http://www.launchy.net/" target="_blank" rel="external">Launchy</a> 这款免费软件，类似的功能定位，只不过功能上没有 Alfred 强大。</p>
+<p>最后提一句，我把 Aflred 快捷键改成了 CapsLock 键，它是最容易按到的一个键，而平时又没有多大用处，用来随手启动 Alfred 刚刚好。至于为何这么改，以及如何改，正好关联到下一个话题，《键盘与 Keyboard Maestro》。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;自动化&quot;&gt;&lt;a href=&quot;#自动化&quot; class=&quot;headerlink&quot; title=&quot;自动化&quot;&gt;&lt;/a&gt;自动化&lt;/h2&gt;&lt;p&gt;OS X 自动化是一个很大的话题，可以分很多小的点来展开，这一篇讲一下 Alfred 这款软件。&lt;/p&gt;
+&lt;h2 id=&quot;Alfre
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>《OS X 进阶使用》－ 第一篇 信息安全 与 1Password</title>
+    <link href="http://jiyee.io/2016/01/%E3%80%8AOS%20X%20%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8%E3%80%8B%EF%BC%8D%20%E7%AC%AC%E4%B8%80%E7%AF%87%20%E4%BF%A1%E6%81%AF%E5%AE%89%E5%85%A8%20%E4%B8%8E%201Password/"/>
+    <id>http://jiyee.io/2016/01/《OS X 进阶使用》－ 第一篇 信息安全 与 1Password/</id>
+    <published>2016-01-03T16:00:00.000Z</published>
+    <updated>2016-12-23T02:00:44.000Z</updated>
+    
+    <content type="html"><![CDATA[<h2 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h2><p>公司越来越多人使用 OS X 作为日常开发平台，原本计划做一个关于《OS X 进阶使用》的主题分享，讲一讲我在过去两年里使用 OS X 的经验。准备的过程中，想到分享受限于时间有限和细节无法展开，只能让大家在听的过程中有一个直观的印象，并不一定能很快掌握或者应用到实践。因此，我决定改变一种方式，将一些我认为比较重要的话题分段写成文字分享给大家，希望对于大家还是未来的新人都能有所帮助。</p>
+<p>PS：由于很久没有写博客，只能尽量保证内容描述清晰，行文流畅性上可能不会让大家满意，谢谢！</p>
+<h2 id="信息安全与-1Password"><a href="#信息安全与-1Password" class="headerlink" title="信息安全与 1Password"></a>信息安全与 1Password</h2><p>现在提到信息安全，几乎人人都惶惶自危。如果你还没有意识到自己的信息安全正在受到威胁，那只有两种情况，一是你根本不把信息安全当成一件事，二是你可能处于物理隔绝的环境中生活。</p>
+<p>这里不再赘述信息安全的重要性，我想说一说的是我们如何对待「密码」这一件事。</p>
+<h3 id="密码强度"><a href="#密码强度" class="headerlink" title="密码强度"></a>密码强度</h3><p>首先，关于密码强度问题，老大已经好几次发邮件提醒大家使用使用强密码，并给出过如何在线生成强密码的网址。强密码的概念相信不用多说，弱密码的隐患可能大家并不一定了解。弱密码并不一定跟长度和复杂度成正比，好比 MhxzKhl 就是一个弱密码，取自古诗，大小写都有，长度也不算短，那为什么说他还是一个弱密码，正因为他在社会工程学而言使用过于广泛。试想一下，如果黑客知道了你的姓名、英文名、网名、ID、生日、手机号、身份证号，再加上一个简单的百万行级的常用密码库，通过排列组合方式是否能碰撞到你的密码。如果这个密码正好是你的微信密码、支付宝密码，甚至银行卡密码，那后果你好好想一想。如果梅花都是弱密码，更别说你的密码或许是一个逻辑上的弱密码。</p>
+<h3 id="密码存储"><a href="#密码存储" class="headerlink" title="密码存储"></a>密码存储</h3><p>其次，关于密码存储问题，使用强密码的一个直接影响就是你要想办法保存你的密码。老大这点做的也不好，记得他曾经是使用 Evernote 来保存，还有人是使用邮件来保存。为什么这样的使用习惯是有风险的？因为这些都是网络服务，网络服务本身就存在安全性的隐患，而且存在别人窥探的可能，因为你的数据并不只有自己掌握，服务器上也有一份你的数据，而且是不加密的。例如，<a href="http://blog.yinxiang.com/blog/2013/03/03/password_reset/" target="_blank" rel="external">Evernote 被攻陷</a> 的案例。</p>
+<h3 id="1Password"><a href="#1Password" class="headerlink" title="1Password"></a>1Password</h3><p>关于密码的这两点问题，在 OS X 和 iOS 跨平台环境下最优的解决方案就是 <a href="https://agilebits.com/onepassword/" target="_blank" rel="external">1Password</a>。虽然 Apple 自带的 iCloud Keychains 具备类似的功能，但是 iCloud 同步问题在国内迟迟不稳定，故不推荐。</p>
+<p>1Password 价格不菲。他将彻底改变使用密码的习惯。不用在注册的时候费劲想密码，不用在登陆的费劲回忆密码。不用担心密码强度的问题，也不用担心密码安全保存的问题。他能分类帮你生成密码，管理密码，自动登录，设备间同步，甚至支持 Google 等两步验证登录。当然，除了密码管理，他还能管理信用卡，证件、服务器、邮箱、加密文本和软件 Licenses 等。你只要做的就是记住一个密码，这个密码就是 1Password 主密码，这个密码连自己老婆都不能告诉，当然在 iOS 设备上使用 TouchID 是一个很好的认证方式，你甚至连主密码都不需要记住。</p>
+<p>关于 1Password 更多使用方法，请详见 <a href="guides.agilebits.com/1password-ios/5/en/topic/welcome-to-1password">官网使用帮助</a>。</p>
+<h3 id="密码分级"><a href="#密码分级" class="headerlink" title="密码分级"></a>密码分级</h3><p>最后，再说一个关于密码分级管理的经验。根据隐私程度和重要性，密码需要分级管理，例如银行卡、支付宝等密码划分为最重要一级，密码要复杂，且无相关性无重复性，邮箱、WiFi 密码等划分为二级，重要网站等划分为三级，其他网站等划分为四级，这样不同级别设置不同的安全性保证。尽量保证某一个网络服务的密码泄露对你其他隐私的影响降到最低。</p>
+<p>好了，啰哩啰嗦说了这么多，我想说的还是信息安全再怎么注重都不为过。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;h2 id=&quot;前言&quot;&gt;&lt;a href=&quot;#前言&quot; class=&quot;headerlink&quot; title=&quot;前言&quot;&gt;&lt;/a&gt;前言&lt;/h2&gt;&lt;p&gt;公司越来越多人使用 OS X 作为日常开发平台，原本计划做一个关于《OS X 进阶使用》的主题分享，讲一讲我在过去两年里使用 OS X 的经
+    
+    </summary>
+    
+    
+  </entry>
+  
+  <entry>
+    <title>TiRemoteImage 代码解析</title>
+    <link href="http://jiyee.io/2015/05/TiRemoteImage%20%E4%BB%A3%E7%A0%81%E8%A7%A3%E6%9E%90/"/>
+    <id>http://jiyee.io/2015/05/TiRemoteImage 代码解析/</id>
+    <published>2015-05-09T16:00:00.000Z</published>
+    <updated>2016-12-23T01:46:06.000Z</updated>
+    
+    <content type="html"><![CDATA[<p>比较有意思的是 Component Proxy 设计，包装了 UI 组件，强化了 add，remove，open，close 等方法。</p>
+<p>还有 FileLoader 组件，包含 File Download，File Cache，<strong><em>Promise/A+ Spec</em></strong> 实现。</p>
+]]></content>
+    
+    <summary type="html">
+    
+      &lt;p&gt;比较有意思的是 Component Proxy 设计，包装了 UI 组件，强化了 add，remove，open，close 等方法。&lt;/p&gt;
+&lt;p&gt;还有 FileLoader 组件，包含 File Download，File Cache，&lt;strong&gt;&lt;em&gt;Promi
     
     </summary>
     

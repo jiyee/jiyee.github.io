@@ -1,0 +1,74 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> iOS 代码格式化 clang-format 使用说明 · Jiyee's I/O</title><meta name="description" content="iOS 代码格式化 clang-format 使用说明 - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">iOS 代码格式化 clang-format 使用说明</h1><div class="post-info">Apr 10, 2016</div><div class="post-content"><p>在工程目录下创建 _clang-format 文件，是 clang-format 代码格式化工具的配置文件。<br>使用该格式化配置文件需要安装Xcode插件：BBUncrustifyPlugin-Xcode，也可通过 Xcode 插件管理器 Alcatraz 搜索进行安装。或者安装另一款插件 ClangFormat-Xcode。</p>
+<p>以下对 _clang-format 文件配置进行逐行解释：</p>
+<ul>
+<li>AccessModifierOffset: 0<br>类的访问修饰关键字(private,public,protected···)缩进</li>
+<li>AlignAfterOpenBracket: true<br>在未封闭(括号的开始和结束不在同一行)的括号中的代码是否对齐</li>
+<li>AlignEscapedNewlinesLeft: false<br>在(),[],{}中代码不少于一行且换行情况下。如果true则，第二行起代码会尽量向左对齐，否则向最右边对齐</li>
+<li>AlignOperands: true<br>如果为true，水平对齐二元和三元表达式的操作数。</li>
+<li>AlignTrailingComments: true<br>如果为true，对齐各行尾部注释</li>
+<li>AllowAllParametersOfDeclarationOnNextLine: true<br>如果为true，函数申明多个参数时，允许换行</li>
+<li>AllowShortBlocksOnASingleLine: false<br>如果true，较短的代码片段允许格式化为一行</li>
+<li>AllowShortCaseLabelsOnASingleLine: false<br>是否允许短switch的case 语句在一行写完</li>
+<li>AllowShortIfStatementsOnASingleLine: false<br>是否允许短if else语句在一行写完</li>
+<li>AllowShortLoopsOnASingleLine: false<br>是否允许短的循环在一行写完</li>
+<li>AllowShortFunctionsOnASingleLine: All<br>是否允许短的方法实现在一行写完</li>
+<li>AlwaysBreakAfterDefinitionReturnType: false<br>定义函数返回类型之后换行</li>
+<li>AlwaysBreakTemplateDeclarations: false<br>定义模板之后换行</li>
+<li>AlwaysBreakBeforeMultilineStrings: false<br>多行字符串之前换行</li>
+<li>BreakBeforeBinaryOperators: None<br>二元操作符之前换行</li>
+<li>BreakBeforeTernaryOperators: true<br>三元操作符之前换行</li>
+<li>BreakConstructorInitializersBeforeComma: false<br>在构造函数初始化时按逗号断行，并以冒号对齐</li>
+<li>BinPackParameters: true<br>如果false，函数的定义或声明的参数要么是全部占同一行，要么一个参数占一行</li>
+<li>BinPackArguments: true<br>如果false，函数调用时的参数要么是全部占同一行，要么一个参数占一行</li>
+<li>ColumnLimit: 160<br>一行代码长度的限制，0为无限制</li>
+<li>ConstructorInitializerAllOnOneLineOrOnePerLine: false<br>如果true，构造函数的初始化无法适应于一行以内，那么每个参数占一行</li>
+<li>ConstructorInitializerIndentWidth: 4<br>构造函数初始化的缩进值</li>
+<li>DerivePointerAlignment: false<br>如果true，将用使用PointerAlignment的值为指针类型进行格式化</li>
+<li>ExperimentalAutoDetectBinPacking: false<br>如果true，clang-format检测方法的定义和调用是否被格式化为一个参数占据一行</li>
+<li>IndentCaseLabels: false<br>case语句的位置总是在switch语句后缩进一级</li>
+<li>IndentWrappedFunctionNames: false</li>
+<li>IndentFunctionDeclarationAfterType: false<br>If true, indent when breaking function declarations which are not also definitions after the type</li>
+<li>MaxEmptyLinesToKeep: 2<br>持续空行的最大数量</li>
+<li>KeepEmptyLinesAtTheStartOfBlocks: true<br>如果true，在一块代码前的空行将会被保留</li>
+<li>NamespaceIndentation: None<br>namespace的缩进<br>NI_None 所有的namespace均不缩进<br>NI_Inner 只在内部namespace缩进<br>NI_All 所有的namespace缩进</li>
+<li>ObjCBlockIndentWidth: 4<br>OC的block缩进宽度</li>
+<li>ObjCSpaceAfterProperty: false<br>OC的property后空格是否存在，如果true，那么@property(readonly) 代替 @property (readonly)</li>
+<li>ObjCSpaceBeforeProtocolList: true<br>OC中协议列表前的空格是否存在，如果true，那么 Person 代替 Person</li>
+<li>PenaltyBreakBeforeFirstCallParameter: 19</li>
+<li>PenaltyBreakComment: 300</li>
+<li>PenaltyBreakString: 1000</li>
+<li>PenaltyBreakFirstLessLess: 160</li>
+<li>PenaltyExcessCharacter: 1000000<br>最多能超出ColumnLimit多少个字符</li>
+<li>PenaltyReturnTypeOnItsOwnLine: 60</li>
+<li>PointerAlignment: Right<br>指针在类型那边还是在变量名那边还是在中间</li>
+<li>SpacesBeforeTrailingComments: 1<br>单行注释前的空格数</li>
+<li>Cpp11BracedListStyle: true<br>如果true，将大括号的列表格式化为最适合C++11的格式</li>
+<li>Standard: Cpp11<br>按照改Cpp11格式化 A&gt; 代替 A &gt;</li>
+<li>IndentWidth: 4<br>缩进的列数</li>
+<li>TabWidth: 4<br>制表位列数</li>
+<li>UseTab: Never<br>是否使用tab进行缩进</li>
+<li>BreakBeforeBraces: Attach<br>括号的断行模式，此处为括号紧贴代码片段</li>
+<li>SpacesInParentheses: false<br>如果true，在非空的括号中插入空格</li>
+<li>SpacesInSquareBrackets: false<br>如果true，[]中间插入空格</li>
+<li>SpacesInAngles: false<br>如果true，在&lt;&gt;中间插入空格</li>
+<li>SpaceInEmptyParentheses: false<br>如果true 空括号中加空格</li>
+<li>SpacesInCStyleCastParentheses: false</li>
+<li>SpaceAfterCStyleCast: false</li>
+<li>SpacesInContainerLiterals: true<br>是否在容器字面量(@[@”1”,@”2”])中插入空格</li>
+<li>SpaceBeforeAssignmentOperators: true<br>在=号前加空格</li>
+<li>ContinuationIndentWidth: 4<br>在续行(下一行)时的缩进长度</li>
+<li>CommentPragmas: ‘^ IWYU pragma:’<br>一个描述特殊意义的正则表达式。</li>
+<li>ForEachMacros: [ foreach, Q_FOREACH, BOOST_FOREACH ]<br>A vector of macros that should be interpreted as foreach loops instead of as function calls</li>
+<li>SpaceBeforeParens: ControlStatements<br>是否在括号前加上空格，此处只是在控制语句之前添加(if/while/for…)</li>
+<li>DisableFormat: false<br>禁用当前format文件</li>
+</ul>
+<p>参考文档：<a href="http://clang.llvm.org/docs/ClangFormatStyleOptions.html" target="_blank" rel="external">http://clang.llvm.org/docs/ClangFormatStyleOptions.html</a></p>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/05/一年打磨五万行代码，人人车 iOS 客户端架构演进之路（上）/" class="prev">PREV</a><a href="/2016/03/JSONModel 最佳实践/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2016/04/iOS 代码格式化 clang-format 使用说明/';
+var disqus_title = 'iOS 代码格式化 clang-format 使用说明';
+var disqus_url = 'http://jiyee.io/2016/04/iOS 代码格式化 clang-format 使用说明/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

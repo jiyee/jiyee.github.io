@@ -1,0 +1,51 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> JSONModel 源码解析（一） · Jiyee's I/O</title><meta name="description" content="JSONModel 源码解析（一） - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">JSONModel 源码解析（一）</h1><div class="post-info">Mar 1, 2016</div><div class="post-content"><h2 id="Property-Protocols"><a href="#Property-Protocols" class="headerlink" title="Property Protocols"></a>Property Protocols</h2><ul>
+<li>Ignore</li>
+<li>Optional</li>
+<li>Index</li>
+<li>ConvertOnDemand (仅对 NSArray 有效）</li>
+</ul>
+<h2 id="AbstractJSONModelProtocol"><a href="#AbstractJSONModelProtocol" class="headerlink" title="AbstractJSONModelProtocol"></a>AbstractJSONModelProtocol</h2><ul>
+<li>initWithDictionary:error:</li>
+<li>initWithData:error:</li>
+<li>toDictionary</li>
+<li>toDictionaryWithKeys:</li>
+</ul>
+<h2 id="JSONModel"><a href="#JSONModel" class="headerlink" title="JSONModel"></a>JSONModel</h2><p>实现了 <code>AbstractJSONModelProtocol</code> 和 <code>NSSecureCoding</code> 协议。<br>增加了对于 NSString 类型的 JSON 字符串解析支持:</p>
+<ul>
+<li>initWithString:error:</li>
+<li>initWithString:usingEncoding:error:</li>
+<li>toJSONString</li>
+<li>toJSONStringWithKeys:</li>
+<li>toJSONData</li>
+<li>toJSONDataWithKeys:</li>
+</ul>
+<p>对于 JSONModel 构成的数组，还增加了批量方法，用于循环解析输入数组，输出包含解析之后的 Model 的数组</p>
+<ul>
+<li>arrayOfModelsFromDictionaries:</li>
+<li>arrayOfDictionariesFromModels:</li>
+</ul>
+<p>比较 Model 的方法：</p>
+<ul>
+<li>indexPropertyName 输出索引字段名称</li>
+<li>isEqual: 比较索引字段是否相等</li>
+<li>compare: 如果没有索引字段或者索引字段不能比较，则抛出异常，<code>NSString</code> 和 <code>NSNumber</code> 可比较，如果是自定义类型，要求实现 <code>compare:</code> 方法</li>
+</ul>
+<p>验证 Model 有效性：</p>
+<ul>
+<li>validate:<br>  重写此方法，能够支持有效性验证，如果检查出无效情况，返回 NO，并且设置 error 引用参数</li>
+<li>keyMapper<br>  重写此方法，如果属性名称不对应 JSON key names</li>
+<li>setGlobalKeyMapper:<br>  影响所有 JSONModel 对象解析，自定义 keyMapper 的优先级高于全局 keyMapper</li>
+<li>propertyIsOptional:</li>
+<li>propertyIsIgnored:</li>
+<li>protocolForArrayProperty:<br>  获取 NSArray 对象定义的元素实现的协议</li>
+<li>mergeFromDictionary:useKeyMapping:<br>  将 dict 包含的值合并到 model 实例，useKeyMapping 标识是否使用自定义 keyMapper 和 全局 keyMapper</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/03/JSONModel 源码解析（二）/" class="prev">PREV</a><a href="/2016/01/《OS X 进阶使用》－ 第八篇 命令行/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2016/03/JSONModel 源码解析（一）/';
+var disqus_title = 'JSONModel 源码解析（一）';
+var disqus_url = 'http://jiyee.io/2016/03/JSONModel 源码解析（一）/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

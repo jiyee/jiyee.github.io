@@ -1,0 +1,52 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 《OS X 进阶使用》－ 第七篇 翻越长城 · Jiyee's I/O</title><meta name="description" content="《OS X 进阶使用》－ 第七篇 翻越长城 - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">《OS X 进阶使用》－ 第七篇 翻越长城</h1><div class="post-info">Jan 10, 2016</div><div class="post-content"><p>GFW 对于程序员来说是一个不可忽视的障碍，翻越长城是程序员必备技能之一。</p>
+<h2 id="代理服务"><a href="#代理服务" class="headerlink" title="代理服务"></a>代理服务</h2><p>目前，翻墙的主要方式基本都是通过代理服务器来中转请求。所以，一条优质的线路保证着访问墙外世界的速度和稳定性。通常情况下，北方联通网络连接香港、日本和新加坡的线路都优化得很不错，ping 值能达到 100ms 的水平，美国线路 ping 值一般能达到 300ms 以内还算可以。但是香港和新加坡的线路一般带宽都比较小，不像美国的线路带宽那么充足。还有，日本和新加坡的线路可能存在不同机房丢包率差异巨大的情况。所以，这里存在一个选择的问题，访问网站推荐使用亚洲线路，下载文件推荐使用美国线路。</p>
+<p>另外，目前提供的代理服务基本都是通过付费购买的方式获得，购买之前要了解下代理服务的基本情况，比如 ping 值、丢包率、带宽、稳定性、是否超卖等。</p>
+<p>我建议手头不要仅有一个代理服务，一定要有备用的服务，不然在遇到情况时无法切换就比较麻烦。</p>
+<p>推荐服务：</p>
+<ul>
+<li><a href="https://vpnso.com" target="_blank" rel="external">VPNSO</a> </li>
+<li><a href="https://eurekavpt.com" target="_blank" rel="external">EurekaVPT</a> </li>
+<li><a href="https://www.ytpub.com" target="_blank" rel="external">云梯</a> </li>
+<li><a href="https://www.linost.com" target="_blank" rel="external">Linost</a> </li>
+<li><a href="https://shadowsocks.org" target="_blank" rel="external">shadowsocks</a> </li>
+</ul>
+<p>DNS 服务器列表：</p>
+<ul>
+<li><a href="http://dns.ip.cn" target="_blank" rel="external">http://dns.ip.cn</a> </li>
+<li><a href="http://dns.v2ex.com" target="_blank" rel="external">http://dns.v2ex.com</a> </li>
+</ul>
+<p>如果觉得直接配置 DNS 还不够，可以看看通过 dnsmasq 配置自定义 DNS，这里不再展开。</p>
+<h2 id="OS-X"><a href="#OS-X" class="headerlink" title="OS X"></a>OS X</h2><p>除了代理服务之外，还有一个问题就是如何选择代理软件。这里，介绍一些 OS X 和 iOS 常用的代理软件。</p>
+<ul>
+<li><p>GoAgentX<br>可能是 OS X 里最好用的代理软件，支持很多种代理方式，包括 SSH，shadowsocks，SSLedge 等，支持 PAC 代理控制。可惜作者被请喝茶，GitHub 项目被删除。但是，好在不影响使用，仍手动升级代理模块，参考 <a href="https://www.logcg.com/archives/1296.html" target="_blank" rel="external">「GoAgentX 的后续维护及使用」</a>。</p>
+</li>
+<li><p><a href="http://sourceforge.net/projects/shadowsocksgui/files/dist/" target="_blank" rel="external">shadowsocksX</a><br>如果只是使用 shadowsocks 代理方式，那推荐使用此软件，同样支持 PAC 代理控制。</p>
+</li>
+<li><p><a href="https://github.com/OpenFibers/SSHMole" target="_blank" rel="external">SSHMole</a><br>如果是古早的 SSH 代理方式，那推荐使用此软件。</p>
+</li>
+<li><p><a href="https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=en" target="_blank" rel="external">Proxy SwitchyOmega</a><br>这个是 Chrome 插件，能够支持 HTTP 和 SOCKS 代理方式和 PAC 控制。</p>
+</li>
+<li><p><a href="https://chrome.google.com/webstore/detail/falcon-proxy/gchhimlnjdafdlkojbffdkogjhhkdepf?hl=en" target="_blank" rel="external">SSLedge</a>，SSLspeedy<br>这些也是 Chrome 插件，是我最常用的方式，只是需要购买对应服务，支持灵活切换不同的代理服务器。</p>
+</li>
+<li><p><a href="https://github.com/rofl0r/proxychains-ng" target="_blank" rel="external">proxychains-ng</a><br>支持在 Terminal 里对待执行的命令行设置代理，对于使用 npm、gem 安装个啥不能的情况比较有用。</p>
+</li>
+<li><p><a href="https://github.com/cyfdecyf/cow" target="_blank" rel="external">COW</a><br>定位于智能代理，支持多种代理方式、智能检测等特性，挺不错的。</p>
+</li>
+</ul>
+<h2 id="iOS"><a href="#iOS" class="headerlink" title="iOS"></a>iOS</h2><ul>
+<li><p>Surge<br>之前，iOS 平台上的相关应用较少，很多都是 VPN 相关服务商提供的 VPN 接入应用，一般只能通过配置 VPN 的方式翻墙。直到前一阵子 <a href="https://surge.run" target="_blank" rel="external">Surge</a> 横空出世，一举解决了 iOS 平台上多种代理方式接入和 PAC 代理控制的问题。可惜，过于璀璨就像流星陨落，前一阵子已在 App Store 下架。只能说买到就是赚到，错过了这村就不知道下一家店在哪里了。</p>
+</li>
+<li><p><a href="https://appsto.re/us/xYfT4.i" target="_blank" rel="external">VPN On</a><br>如果使用 VPN 代理方式，这个应用可以很方便地在 Today Extension 里切换代理，非常推荐购买。</p>
+</li>
+<li><p>APNp<br>就是智能代理，通过 PAC 文件来配置代理条件，一般随服务商提供。</p>
+</li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/01/《OS X 进阶使用》－ 第八篇 命令行/" class="prev">PREV</a><a href="/2016/01/《OS X 进阶使用》－ 第六篇 程序员 与 那些不得不拥有的软件/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2016/01/《OS X 进阶使用》－ 第七篇 翻越长城/';
+var disqus_title = '《OS X 进阶使用》－ 第七篇 翻越长城';
+var disqus_url = 'http://jiyee.io/2016/01/《OS X 进阶使用》－ 第七篇 翻越长城/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

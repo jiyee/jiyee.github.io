@@ -1,0 +1,22 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> IBInspectable & IBDesignable · Jiyee's I/O</title><meta name="description" content="IBInspectable &amp; IBDesignable - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">IBInspectable & IBDesignable</h1><div class="post-info">Apr 10, 2015</div><div class="post-content"><p><code>TARGET_INTERFACE_BUILDER</code>，预编译宏，用于判断是否在IB</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div><div class="line">6</div><div class="line">7</div></pre></td><td class="code"><pre><div class="line">- (<span class="keyword">void</span>)connectToMyServer &#123;</div><div class="line"><span class="meta">#if !TARGET_INTERFACE_BUILDER</span></div><div class="line">   <span class="comment">// connect to the server</span></div><div class="line"><span class="meta">#else</span></div><div class="line">   <span class="comment">// don't connect; instead, draw my custom view</span></div><div class="line"><span class="meta">#endif</span></div><div class="line">&#125;</div></pre></td></tr></table></figure>
+<p><code>IB_DESIGNABLE</code>，在UIView自定义类头部，将会实时绘制UIView到Interface Builder canvas。（示例是重载了drawRect方法实现的）</p>
+<p><code>IBInspectable</code>，在@property属性指定，将能够在IB里控制参数变化，支持的类型包括：<strong>boolean, integer or floating point number, string, localized string, rectangle, point, size, color, range, and nil.</strong></p>
+<p>局部调试，不需要启动App，还能够指定断点（有点意思）<br>Editor > Debug Selected Views</p>
+<p>由于在 Interface Builder 中呈现自定义视图不会有应用程序的完整上下文，你可能需要生成模拟数据以便显示，这里有两个地方可以处理：</p>
+<ul>
+<li><p>prepareForInterfaceBuilder()：此方法与你代码的其余部分一起编译，但只有当视图正在准备在 Interface Builder 显示时执行。</p>
+</li>
+<li><p>TARGET_INTERFACE_BUILDER：#if TARGET_INTERFACE_BUILDER 预处理宏在 Objective-C 或 Swift 下都是工作的，它会视情况编译正确代码：</p>
+</li>
+</ul>
+<p><a href="http://nshipster.cn/ibinspectable-ibdesignable/" target="_blank" rel="external">http://nshipster.cn/ibinspectable-ibdesignable/</a></p>
+</div></article></div></main><footer><div class="paginator"><a href="/2015/04/Expandable UITableView Cell 源码解析/" class="prev">PREV</a><a href="/2015/03/WhatPulse 键盘按键数据分析/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2015/04/IBInspectable &amp; IBDesignable/';
+var disqus_title = 'IBInspectable &amp; IBDesignable';
+var disqus_url = 'http://jiyee.io/2015/04/IBInspectable &amp; IBDesignable/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

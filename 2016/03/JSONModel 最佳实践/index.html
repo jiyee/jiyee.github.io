@@ -1,0 +1,40 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> JSONModel 最佳实践 · Jiyee's I/O</title><meta name="description" content="JSONModel 最佳实践 - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">JSONModel 最佳实践</h1><div class="post-info">Mar 5, 2016</div><div class="post-content"><ul>
+<li>属性类型选用 NS 类型，避免选用基本数据类型（Primitive Types）<blockquote>
+<p>基本数据类型在解析时直接调用的是 <code>setValue:forKey:</code> 方法，如果传入类型不一致的值，会抛出异常。</p>
+</blockquote>
+</li>
+<li>属性协议合理选用<ul>
+<li>有条件地设置 <code>&lt;Optional&gt;</code>，尽量避免设置全部属性均为 Optional</li>
+<li>对自定义属性设置 <code>&lt;Ignore&gt;</code>，避免解析覆盖</li>
+<li>对索引属性设置 <code>&lt;Index&gt;</code>，保证值唯一，便于比较</li>
+<li>对解析耗时的 NSArray 或者 NSDictionary 类型属性设置 <code>&lt;convertsOnDemands&gt;</code>，延时解析</li>
+</ul>
+</li>
+<li>设置统一的 KeyMapper，并结合 <code>mapper:withExceptions:</code> 方法添加例外条件</li>
+<li><code>-initWithDictionary:error:</code> 用于设置 <code>&lt;Ignore&gt;</code> 类型属性的初始值，或者设置属性的默认值，或者对经过解析之后的属性值进行值变换（避免类型变换，类型变换通过自定义 setter 方法完成）</li>
+<li><code>-validate</code> 用于检验经过解析之后的 Model 是否在业务逻辑上正常</li>
+<li>对于需要类型转换的属性，如果 JSONValueTransformer.h 里没有定义兼容转型方法，可以设置自定义 setter 方法，格式如 <code>setXXXWithYYY:</code>（ XXX 是属性名称，YYY 是 JSON 类型名）。如果需要从 Model 转回 JSON 的话，需要同时设置自定义 getter 方法，格式如 <code>JSONObjectFromXXX:</code></li>
+<li>全局性类型兼容转型，通过扩展 JSONValueTransformer 类实现，设置 <code>XXXFromYYY:</code> 方法（ XXX 是 Model 类型名，YYY 是 JSON 类型名）</li>
+<li>空置或者解析失败处理<blockquote>
+<p>所有 NSObject 类型的属性如果设置了 Optional，其属性值都可能为 nil，允许直接判断 <code>value == nil</code>。经过 JSONModel 成功解析之后的属性值不可能是 <code>NSNull</code> 类型。如果 JSON 值是 null，则一定为 nil。</p>
+</blockquote>
+</li>
+<li>如果是 NSDictionary 类型，则遍历 keys 和 values，将 value 作为协议类型执行解析，如同 NSArray 方式解析</li>
+<li>BOOL, NSInteger, ENUM 等基本数据类型（Primitive Types），如果传入 NSArray, NSDictionary 等非预期类型值的时候，都将抛出异常。<blockquote>
+<p>例如，属性 enabled 是一个映射到 JSON 的 BOOL 值，为了兼容 1/0/“1”/“0”/true/false/“true”/“false” 等常见 BOOL 设定值，同时，想防止传入其他值导致异常。<br>建议按照如下方式：</p>
+</blockquote>
+</li>
+</ul>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">assign</span>) <span class="built_in">BOOL</span> enabled;</div><div class="line"><span class="keyword">@property</span> (<span class="keyword">nonatomic</span>, <span class="keyword">strong</span>) <span class="built_in">NSNumber</span> *__numberOfEnabled;</div></pre></td></tr></table></figure>
+<p>KeyMapper 设置为 <code>@&quot;enabled&quot; : @&quot;__numberOfEnabled&quot;</code></p>
+<p>在 initWithDictionary:error: 方法</p>
+<figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div></pre></td><td class="code"><pre><div class="line"><span class="keyword">self</span>.enabled = <span class="literal">NO</span>;</div><div class="line"><span class="keyword">self</span> = [<span class="keyword">super</span> initWithDictionary:dict error:error]; </div><div class="line"></div><div class="line"><span class="keyword">self</span>.enabled = <span class="keyword">self</span>.__numberOfEnabled.boolValue;</div></pre></td></tr></table></figure>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/04/iOS 代码格式化 clang-format 使用说明/" class="prev">PREV</a><a href="/2016/03/JSONModel 源码解析（二）/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2016/03/JSONModel 最佳实践/';
+var disqus_title = 'JSONModel 最佳实践';
+var disqus_url = 'http://jiyee.io/2016/03/JSONModel 最佳实践/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>
