@@ -1,0 +1,60 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 客户端数据缓存策略 · Jiyee's I/O</title><meta name="description" content="客户端数据缓存策略 - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">客户端数据缓存策略</h1><div class="post-info">May 19, 2016</div><div class="post-content"><h2 id="缓存类型："><a href="#缓存类型：" class="headerlink" title="缓存类型："></a>缓存类型：</h2><p>区分文件缓存和内存缓存。<br>差别在于文件缓存有缓存过期时间，其生命周期依赖于缓存过期时间；内存缓存的生命周期跟 App 生命周期一致。</p>
+<h2 id="缓存策略："><a href="#缓存策略：" class="headerlink" title="缓存策略："></a>缓存策略：</h2><ol>
+<li><p>缓存数据和网络请求二选一</p>
+<ul>
+<li>加载缓存没有过期，就不发起网络请求；</li>
+<li><p>缓存一旦过期，就发起网络请求；</p>
+<p>使用场景：</p>
+</li>
+</ul>
+<ol>
+<li>节省网络请求</li>
+<li>过期失效数据无法使用</li>
+</ol>
+</li>
+<li><p>缓存数据与网络请求数据顺序加载</p>
+<ul>
+<li>无论缓存有没有过期，均发起网络请求；<br>使用场景：</li>
+</ul>
+<ol>
+<li>过期失效数据仍有一定使用价值</li>
+<li>每次又想更新内容</li>
+</ol>
+</li>
+<li><p>只加载请求网络数据</p>
+<ul>
+<li>在不判断缓存的情况下，主动忽略缓存，发起网络请求；  </li>
+<li><p>这个策略比较好的满足方式是，在策略二的基础上，比较缓存数据和网络数据是否相同，如果相同即不重复回调。  </p>
+<p>使用场景：</p>
+</li>
+</ul>
+<ol>
+<li>不想重复回调刷新页面</li>
+</ol>
+</li>
+</ol>
+<h2 id="缓存过期时间："><a href="#缓存过期时间：" class="headerlink" title="缓存过期时间："></a>缓存过期时间：</h2><p>针对缓存策略1（只加载缓存数据）情况，缓存过期时间用于确定缓存是否过期。<br>对于其他两种缓存策略，过期时间无效。</p>
+<h2 id="注意事项"><a href="#注意事项" class="headerlink" title="注意事项"></a>注意事项</h2><ul>
+<li>缓存策略很容易和网络策略混在一起<br><em> 缓存技术问题又很容易跟产品业务问题混在一起
+</em> 缓存问题从根本上来看其实是数据源选择的问题</li>
+</ul>
+<p>如果认同数据源选择的说法，那么上述三个策略可以概括为：</p>
+<ol>
+<li>同步有依赖的多源数据的选择（数据源的获取是同步的，是否获取下一个数据源依赖于上一个数据源是否返回结果）</li>
+<li>同步无依赖的多源数据的选择（数据源的获取是同步的，是否获取不同数据源没有相互依赖）</li>
+<li>单源选择</li>
+</ol>
+<p>那么，目前遇到的问题就可以拆分为两个问题讨论：</p>
+<ol>
+<li>多源选择策略的问题</li>
+<li>单源数据如何保存和获取的问题</li>
+</ol>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/08/Enemy of the State 阅读摘要/" class="prev">PREV</a><a href="/2016/05/一年打磨五万行代码，人人车 iOS 客户端架构演进之路（上）/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2016/05/客户端数据缓存策略/';
+var disqus_title = '客户端数据缓存策略';
+var disqus_url = 'http://jiyee.io/2016/05/客户端数据缓存策略/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

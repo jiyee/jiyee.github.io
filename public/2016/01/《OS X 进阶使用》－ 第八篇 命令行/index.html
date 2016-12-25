@@ -1,0 +1,39 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 《OS X 进阶使用》－ 第八篇 命令行 · Jiyee's I/O</title><meta name="description" content="《OS X 进阶使用》－ 第八篇 命令行 - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">《OS X 进阶使用》－ 第八篇 命令行</h1><div class="post-info">Jan 11, 2016</div><div class="post-content"><p>命令行可能是 OS X 用户群体划分的分水岭，有的用户就是喜欢 GUI 的直接，有的用户就是喜欢 shell 的高效。虽然 OS X 没有强制用户使用哪一种方式，但是，命令行肯定是每一个用户都接触过，因为有一些操作不得不通过命令行来完成，不信你看看这份<a href="https://github.com/herrbischoff/awesome-osx-command-line" title="Awesome OS X Command Line" target="_blank" rel="external">「$Awesome OS X Command Line」</a>文档。</p>
+<p>学习和使用命令行是需要付出时间和代价的，你会感受到门槛这个东西的存在，但是总的来说也是值得的。这里不展开如何学习命令行，主要讲一讲如何在 OS X 高效地使用命令行。</p>
+<h2 id="iTerm-2-zsh-oh-my-zsh"><a href="#iTerm-2-zsh-oh-my-zsh" class="headerlink" title="iTerm 2 + zsh + oh-my-zsh"></a>iTerm 2 + zsh + oh-my-zsh</h2><p>Windows 用户想要使用 shell 需要一个终端模拟器，例如 Putty 或者 SecureCRT 等终端模拟器。OS X 默认自带了 Terminal 这款软件，但是想要用好命令行，不得不说一说「iTerm 2 + zsh + oh-my-zsh」这个组合。</p>
+<ul>
+<li><a href="http://iterm2.com" target="_blank" rel="external">iTerm 2</a> 是终端模拟器，具备Tab、分屏、全局快捷键等功能。真的是 OS X 平台上少有的免费且强大的软件，堪称业界良心。</li>
+<li><a href="http://www.zsh.org" target="_blank" rel="external">zsh</a> 是比 bash 更强大的 shell，具备主题、自动补全、通配符、别名等功能，而且更多的功能还可以通过插件方式来扩展。</li>
+<li><a href="http://ohmyz.sh" target="_blank" rel="external">oh-my-zsh</a> 是 zsh 主题和插件管理工具，集成了许多有用的插件，如 git、git-extras、autojump 等。</li>
+</ul>
+<p>如果还没有尝试过「iTerm 2 + zsh + oh-my-zsh」组合，请一定花点时间试一试。如果你还有兴趣进一步研究不同的 shell，还可以尝试看看 <a href="http://fishshell.com" target="_blank" rel="external">fish</a> 这款新起的用户友好的 shell。</p>
+<p>至于怎么配置和安装「iTerm 2 + zsh + oh-my-zsh」，网上有很多教程，这里就不再赘述。</p>
+<h2 id="Package-Manager"><a href="#Package-Manager" class="headerlink" title="Package Manager"></a>Package Manager</h2><p>在使用命令行时，肯定或多或少要用到包管理器，用于安装和管理各式各样的软件包，如同在服务器端的 yum 之于 centos。</p>
+<ul>
+<li><a href="http://brew.sh" target="_blank" rel="external">brew</a> 是 OS X 平台最主要的包管理器，几乎是事实上的官方包管理器。作者 <a href="https://news.ycombinator.com/item?id=9700067" target="_blank" rel="external">Max Howell</a> 前阵子面试 Google 因为写不出翻转二叉树被拒，断然去了 Apple 写就了 Swift Package Manager。</li>
+<li><a href="http://caskroom.io" target="_blank" rel="external">Homebrew cask</a> 是基于 brew 面向应用的管理器，使得 OS X 平台上安装应用不需要打开 dmg 包，拖动图标到 Applications 目录，而是直接通过命令行安装。</li>
+<li><a href="https://rubygems.org" target="_blank" rel="external">gem</a> 是 Ruby 包管理器，也有许多优秀的包能够使用，例如 <a href="http://jekyllrb.com" target="_blank" rel="external">Jeklly</a> 等。而且 brew 本身就是基于 gem 安装。</li>
+<li><a href="https://www.npmjs.com" target="_blank" rel="external">npm</a> 是 Node 包管理器，JavaScript 大行其道之时，自然涌现出很多优秀的由 Node 写成的包，尤其是前端相关的。</li>
+</ul>
+<h2 id="Useful-Commands-and-Packages"><a href="#Useful-Commands-and-Packages" class="headerlink" title="Useful Commands and Packages"></a>Useful Commands and Packages</h2><ul>
+<li><code>open</code> 用于在命令行打开文件和目录。例如 <code>open ./</code> 目录直接在 Finder 里跳转到指定目录，<code>open README.md</code> 文件直接在默认的应用打开。</li>
+<li><code>pbcopy / pbpaste</code> 通过和管道一起使用能够将剪切板直接和管道的输入和输出相结合，例如 <code>md5 &#39;raw string` | pbcopy</code>。</li>
+<li><a href="https://github.com/rupa/z" target="_blank" rel="external">z</a> 类似于 autojump，通过记录和分析你的 <code>cd</code> 命令，直接通过目录名称跳转到你想要的目录。例如，之前经常需要跳转到 <code>cd ~/www/renrenche</code> 目录处理文件，那之后键入 <code>z renrenche</code> 就能直接跳转到 renrenche 目录。</li>
+<li><a href="http://beyondgrep.com" target="_blank" rel="external">ack</a> 比 grep 更好用的文本查找工具，在命令行查找个代码啥的最合适不过了。</li>
+<li><a href="http://hisham.hm/htop/" target="_blank" rel="external">htop</a> 比 top 命令更有好的进程查看器，支持交互操作且分类更加详细。</li>
+<li><a href="https://tmux.github.io" target="_blank" rel="external">tmux</a> 终端复用软件，能够在登录远程服务器之后复用窗口和进程。</li>
+<li><a href="https://github.com/jkbrzt/httpie" target="_blank" rel="external">httpie</a> 比 curl 更有好的 HTTP 命令行工具。</li>
+<li><a href="https://github.com/lra/mackup" target="_blank" rel="external">mackup</a> 通过 dropbox 自动备份常用工具的配置文件，例如 <code>.zshrc</code>， <code>.vimrc</code> 等。</li>
+</ul>
+<h3 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h3><ul>
+<li><a href="http://zhuanlan.zhihu.com/mactalk/19556676" target="_blank" rel="external">「终极 Shell——ZSH」</a></li>
+</ul>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/03/JSONModel 源码解析（一）/" class="prev">PREV</a><a href="/2016/01/《OS X 进阶使用》－ 第七篇 翻越长城/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2016/01/《OS X 进阶使用》－ 第八篇 命令行/';
+var disqus_title = '《OS X 进阶使用》－ 第八篇 命令行';
+var disqus_url = 'http://jiyee.io/2016/01/《OS X 进阶使用》－ 第八篇 命令行/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

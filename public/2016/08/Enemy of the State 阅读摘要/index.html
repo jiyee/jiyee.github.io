@@ -1,0 +1,30 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> Enemy of the State 阅读摘要 · Jiyee's I/O</title><meta name="description" content="Enemy of the State 阅读摘要 - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">Enemy of the State 阅读摘要</h1><div class="post-info">Aug 8, 2016</div><div class="post-content"><p>Justin Spahr-Summers<br>2014</p>
+<p>state and mutation</p>
+<ul>
+<li>Simple:less concepts and concerns</li>
+<li>Complexity: mixing “complecting” </li>
+</ul>
+<p>All systems have essential complexity.</p>
+<p>State is hard to test.</p>
+<p>State is an implicit input that can change unexpecteble</p>
+<h2 id="Minimize-states"><a href="#Minimize-states" class="headerlink" title="Minimize states."></a>Minimize states.</h2><ul>
+<li>Values</li>
+<li>Purity</li>
+<li>Isolation</li>
+</ul>
+<h3 id="Values"><a href="#Values" class="headerlink" title="Values"></a>Values</h3><p>Structs, Enums, Copied (not shared)</p>
+<p>Value types are immutable in swift.</p>
+<p>Keys:<br><strong>Variables mutate</strong><br><strong>Values never change</strong></p>
+<p>Values are automatically <strong>thread-safe</strong><br>Values are automatically <strong>predicatable</strong></p>
+<h3 id="Pure-functions"><a href="#Pure-functions" class="headerlink" title="Pure functions"></a>Pure functions</h3><p>same inputs always yield the same result.<br>Must not have <em>observable</em> side effects.</p>
+<h3 id="Isolation"><a href="#Isolation" class="headerlink" title="Isolation"></a>Isolation</h3><p>Objects should have only one reason to change<br>isolate unrelatted piece of states<br>Before log in and After log in ViewModel 差异</p>
+<p>stateless core, stateful shell</p>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/09/iOS 开发工具推荐列表/" class="prev">PREV</a><a href="/2016/05/客户端数据缓存策略/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2016/08/Enemy of the State 阅读摘要/';
+var disqus_title = 'Enemy of the State 阅读摘要';
+var disqus_url = 'http://jiyee.io/2016/08/Enemy of the State 阅读摘要/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script></body></html>

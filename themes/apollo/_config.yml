@@ -1,0 +1,18 @@
+menu:
+    Blog: /
+    Archive: /archives/
+    GitHub: https://github.com/jiyee
+    Rss: /atom.xml
+
+favicon: /favicon.png
+logo: /favicon.png
+
+# Comment
+disqus: jiyee
+
+# Analytics
+# google-analytics:
+# ga: UA-65933410-1
+
+# Copyright
+startyear: 2016
