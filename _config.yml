@@ -87,6 +87,9 @@ social:
 favicon: /favicon.png
 logo: /favicon.png
 
+sitemap:
+  path: sitemap.xml
+
 # Deployment
 ## Docs: https://hexo.io/docs/deployment.html
 deploy:
