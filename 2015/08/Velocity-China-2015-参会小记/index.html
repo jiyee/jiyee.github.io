@@ -34,20 +34,24 @@
 <p>另外，讲了些遇到的坑，包括废弃使用DB，直接采用 LocalStorage；废弃使用 NativeImgCache，直接采用 Last-Modified 方式进行图片资源缓存；H5首页 和 Native 交叉调用请求的合并。</p>
 <h3 id="手机淘宝性能优化"><a href="#手机淘宝性能优化" class="headerlink" title="手机淘宝性能优化"></a>手机淘宝性能优化</h3><p>性能瓶颈：CPU Load 高、连续 I/O，内存对象过多导致频繁 GC、移动网络。<br>性能监测指标：响应时间、FPS、GC次数、内存占用。</p>
 <p>优化方案：</p>
-<pre><code>1. 布局优化，避免过多嵌套
-2. 本地缓存，建立离线化 View
-3. 初始化任务分级，合理并行
-4. 懒加载，多模块集中场景
-5. 预加载，弱网情况
-6. 图片在弱网情况下，采用锐度较高、质量较低的图片，显示效果还可以，弱网情况下，列表页的图直接给详情页使用
-7. 图片bitmap对象复用
-</code></pre><p>网络优化：</p>
-<pre><code>1. 报文缩减，采用 PB 格式
-2. 域名收敛（最初为了在图片并行下载，采用多个图片域名方式）
-3. HTTP DNS（就是 7层自建DNS，实现网络优化、控制流量）
-4. SPDY 长链接
-5. TCP 参数调优
-</code></pre></div></article></div></main><footer><div class="paginator"><a href="/2016/01/《OS X 进阶使用》－ 第一篇 信息安全 与 1Password/" class="prev">上一篇</a><a href="/2015/05/TiRemoteImage 代码解析/" class="next">下一篇</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+<ol>
+<li>布局优化，避免过多嵌套</li>
+<li>本地缓存，建立离线化 View</li>
+<li>初始化任务分级，合理并行</li>
+<li>懒加载，多模块集中场景</li>
+<li>预加载，弱网情况</li>
+<li>图片在弱网情况下，采用锐度较高、质量较低的图片，显示效果还可以，弱网情况下，列表页的图直接给详情页使用</li>
+<li>图片bitmap对象复用</li>
+</ol>
+<p>网络优化：</p>
+<ol>
+<li>报文缩减，采用 PB 格式</li>
+<li>域名收敛（最初为了在图片并行下载，采用多个图片域名方式）</li>
+<li>HTTP DNS（就是 7层自建DNS，实现网络优化、控制流量）</li>
+<li>SPDY 长链接</li>
+<li>TCP 参数调优</li>
+</ol>
+</div></article></div></main><footer><div class="paginator"><a href="/2016/01/《OS X 进阶使用》－ 第一篇 信息安全 与 1Password/" class="prev">上一篇</a><a href="/2015/05/TiRemoteImage 代码解析/" class="next">下一篇</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
 var disqus_identifier = '2015/08/Velocity-China-2015-参会小记/';
 var disqus_title = 'Velocity China 2015 参会小记';
 var disqus_url = 'http://jiyee.io/2015/08/Velocity-China-2015-参会小记/';
