@@ -6,7 +6,7 @@
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line">bfg --delete-folders fastlane ./</div><div class="line">bfg --delete-folders UMengFeedback_SDK_2.1.1 ./</div><div class="line">bfg --delete-folders UMSocial_Sdk_4.2.2 ./</div><div class="line">bfg --delete-folders AdhocSDK.framework ./</div><div class="line">bfg --delete-folders node_modules ./</div></pre></td></tr></table></figure>
 <p>最后执行以下命令完成清理工作。<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git reflog expire --expire=now --all &amp;&amp; git gc --prune=now --aggressive</div></pre></td></tr></table></figure></p>
 <p>效果对比，左边是精简之前，右边是精简之后的体积。</p>
-</div></article></div></main><footer><div class="paginator"><a href="/2016/10/GONMarkupParser 源码解析/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+</div></article></div></main><footer><div class="paginator"><a href="/2016/12/JSPatch 源码阅读笔记/" class="prev">上一篇</a><a href="/2016/10/GONMarkupParser 源码解析/" class="next">下一篇</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
 var disqus_identifier = '2016/12/Git 仓库精简记录/';
 var disqus_title = 'Git 仓库精简记录';
 var disqus_url = 'http://jiyee.io/2016/12/Git 仓库精简记录/';
@@ -14,7 +14,7 @@ var disqus_url = 'http://jiyee.io/2016/12/Git 仓库精简记录/';
     var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
     dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
     (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
-})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>var _hmt = _hmt || [];
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 - 2017 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>var _hmt = _hmt || [];
 (function() {
     var hm = document.createElement("script");
     hm.src = "https://hm.baidu.com/hm.js?ba828c541dc9447a1fbbb5910973873d";

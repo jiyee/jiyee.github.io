@@ -1,0 +1,33 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> JSPatch 源码阅读笔记（下） · Jiyee's I/O</title><meta name="description" content="JSPatch 源码阅读笔记（下） - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">JSPatch 源码阅读笔记（下）</h1><div class="post-info">Jan 9, 2017</div><div class="post-content"><h2 id="v0-2"><a href="#v0-2" class="headerlink" title="v0.2"></a>v0.2</h2><h3 id="版本动态"><a href="#版本动态" class="headerlink" title="版本动态"></a>版本动态</h3><ul>
+<li>增加 addProtocol() 接口</li>
+<li>增加对可变参数的支持</li>
+<li>修复在父类forwardInvocation被重写时可能引发的bug</li>
+<li>增加 JPCleaner() 接口</li>
+</ul>
+<h2 id="v1-0"><a href="#v1-0" class="headerlink" title="v1.0"></a>v1.0</h2><h3 id="版本动态-1"><a href="#版本动态-1" class="headerlink" title="版本动态"></a>版本动态</h3><ul>
+<li>增加在 defineClass 增加属性</li>
+<li>增加 JPLocker 和 JPSpecialInit</li>
+<li>增加 defineJSClass 方法，支持以 OC 方式定义 JS 方法</li>
+</ul>
+<h2 id="v1-1"><a href="#v1-1" class="headerlink" title="v1.1"></a>v1.1</h2><h3 id="版本动态-2"><a href="#版本动态-2" class="headerlink" title="版本动态"></a>版本动态</h3><ul>
+<li>引入 libffi，支持动态调用 C 函数</li>
+</ul>
+<h2 id="v1-1-1"><a href="#v1-1-1" class="headerlink" title="v1.1.1"></a>v1.1.1</h2><h3 id="版本动态-3"><a href="#版本动态-3" class="headerlink" title="版本动态"></a>版本动态</h3><ul>
+<li>增加 po() 和 bt() 方法，用于 Safari 调试</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><h3 id="从架构上理解"><a href="#从架构上理解" class="headerlink" title="从架构上理解"></a>从架构上理解</h3><h3 id="从流程上理解"><a href="#从流程上理解" class="headerlink" title="从流程上理解"></a>从流程上理解</h3><h3 id="从-TestCase-上理解"><a href="#从-TestCase-上理解" class="headerlink" title="从 TestCase 上理解"></a>从 TestCase 上理解</h3></div></article></div></main><footer><div class="paginator"><a href="/2016/12/JSPatch 源码阅读笔记（上）/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2017/01/JSPatch 源码阅读笔记（下）/';
+var disqus_title = 'JSPatch 源码阅读笔记（下）';
+var disqus_url = 'http://jiyee.io/2017/01/JSPatch 源码阅读笔记（下）/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 - 2017 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?ba828c541dc9447a1fbbb5910973873d";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script></body></html>
