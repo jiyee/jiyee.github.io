@@ -5,7 +5,7 @@
   <link href="/atom.xml" rel="self"/>
   
   <link href="http://jiyee.io/"/>
-  <updated>2017-01-09T09:47:08.000Z</updated>
+  <updated>2017-01-09T09:51:35.000Z</updated>
   <id>http://jiyee.io/</id>
   
   <author>
@@ -20,9 +20,12 @@
     <link href="http://jiyee.io/2016/12/JSPatch%20%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/"/>
     <id>http://jiyee.io/2016/12/JSPatch 源码阅读笔记/</id>
     <published>2016-12-22T16:00:00.000Z</published>
-    <updated>2017-01-09T09:47:08.000Z</updated>
+    <updated>2017-01-09T09:51:35.000Z</updated>
     
-    <content type="html"><![CDATA[<h2 id="v0-0-1"><a href="#v0-0-1" class="headerlink" title="v0.0.1"></a>v0.0.1</h2><p>JSPatch 文件结构简单得让人不可思议，只有 JPEngine{.h,.m} 和 JSPatch.js 三个文件。</p>
+    <content type="html"><![CDATA[<p>本文作为 JSPatch 源码阅读笔记，记录了 v0.0.1 到 v1.2.2 版本之间的主要 commit 变化，尝试从源码反向理解 JSPatch 实现原理和细节。</p>
+<p>未完待续。</p>
+<a id="more"></a>
+<h2 id="v0-0-1"><a href="#v0-0-1" class="headerlink" title="v0.0.1"></a>v0.0.1</h2><p>JSPatch 文件结构简单得让人不可思议，只有 JPEngine{.h,.m} 和 JSPatch.js 三个文件。</p>
 <h3 id="JPEngine-h"><a href="#JPEngine-h" class="headerlink" title="JPEngine.h"></a>JPEngine.h</h3><p>JSPatch 依赖 <code>&lt;JavaScriptCore/JavaScriptCore.h&gt;</code> 和 <code>&lt;objc/runtime.h&gt;</code></p>
 <figure class="highlight objectivec"><table><tr><td class="gutter"><pre><div class="line">1</div><div class="line">2</div><div class="line">3</div><div class="line">4</div><div class="line">5</div></pre></td><td class="code"><pre><div class="line"><span class="class"><span class="keyword">@interface</span> <span class="title">JPEngine</span> : <span class="title">NSObject</span></span></div><div class="line">+ (<span class="keyword">void</span>)startEngine;</div><div class="line">+ (JSValue *)evaluateScript:(<span class="built_in">NSString</span> *)script;</div><div class="line">+ (JSContext *)context;</div><div class="line"><span class="keyword">@end</span></div></pre></td></tr></table></figure>
 <h3 id="JPEngine-m"><a href="#JPEngine-m" class="headerlink" title="JPEngine.m"></a>JPEngine.m</h3><p><code>startEngine</code> 方法里新建并维持一个 JSContext 静态实例，并注入一些 JavaScript 方法和 exceptionHandler，最后在创建的 context 里加载 patch 文件。</p>
@@ -216,7 +219,8 @@
     
     <summary type="html">
     
-      &lt;h2 id=&quot;v0-0-1&quot;&gt;&lt;a href=&quot;#v0-0-1&quot; class=&quot;headerlink&quot; title=&quot;v0.0.1&quot;&gt;&lt;/a&gt;v0.0.1&lt;/h2&gt;&lt;p&gt;JSPatch 文件结构简单得让人不可思议，只有 JPEngine{.h,.m} 和 JSPatch.js 
+      &lt;p&gt;本文作为 JSPatch 源码阅读笔记，记录了 v0.0.1 到 v1.2.2 版本之间的主要 commit 变化，尝试从源码反向理解 JSPatch 实现原理和细节。&lt;/p&gt;
+&lt;p&gt;未完待续。&lt;/p&gt;
     
     </summary>
     
@@ -228,9 +232,10 @@
     <link href="http://jiyee.io/2016/12/Git%20%E4%BB%93%E5%BA%93%E7%B2%BE%E7%AE%80%E8%AE%B0%E5%BD%95/"/>
     <id>http://jiyee.io/2016/12/Git 仓库精简记录/</id>
     <published>2016-12-11T16:00:00.000Z</published>
-    <updated>2016-12-23T02:40:53.000Z</updated>
+    <updated>2017-01-09T09:53:04.000Z</updated>
     
-    <content type="html"><![CDATA[<p>目前，iOS 仓库体积越来越大，导致 Jenkins 重新拉取代码时经常超时，研究了如何删除 Git 仓库历史记录，达到精简仓库体积的目的。</p>
+    <content type="html"><![CDATA[<p>目前，iOS 项目仓库体积越来越大，导致 Jenkins 拉取代码常常超时，本文记录了如何利用 bfg 工具删除 Git 仓库历史记录，达到精简仓库体积的目的。</p>
+<a id="more"></a>
 <p>参考文档：<br><a href="http://harttle.com/2016/03/22/purge-large-files-in-gitrepo.html" target="_blank" rel="external">http://harttle.com/2016/03/22/purge-large-files-in-gitrepo.html</a></p>
 <figure class="highlight plain"><table><tr><td class="gutter"><pre><div class="line">1</div></pre></td><td class="code"><pre><div class="line">git rev-list --objects --all | grep &quot;$(git verify-pack -v .git/objects/pack/*.idx | sort -k 3 -n | tail -20 | awk &apos;&#123;print$1&#125;&apos;)&quot;</div></pre></td></tr></table></figure>
 <p>这个命令通过两个 Git 命令结合实现仓库历史文件大小排序，找出待删除目录或文件。</p>
@@ -242,8 +247,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;目前，iOS 仓库体积越来越大，导致 Jenkins 重新拉取代码时经常超时，研究了如何删除 Git 仓库历史记录，达到精简仓库体积的目的。&lt;/p&gt;
-&lt;p&gt;参考文档：&lt;br&gt;&lt;a href=&quot;http://harttle.com/2016/03/22/purge-large
+      &lt;p&gt;目前，iOS 项目仓库体积越来越大，导致 Jenkins 拉取代码常常超时，本文记录了如何利用 bfg 工具删除 Git 仓库历史记录，达到精简仓库体积的目的。&lt;/p&gt;
     
     </summary>
     
@@ -278,9 +282,10 @@
     <link href="http://jiyee.io/2016/10/%E5%A6%82%E4%BD%95%E6%9C%89%E6%95%88%E6%94%B6%E9%9B%86%E8%B5%84%E6%96%99%EF%BC%88iOS%EF%BC%89/"/>
     <id>http://jiyee.io/2016/10/如何有效收集资料（iOS）/</id>
     <published>2016-10-07T16:00:00.000Z</published>
-    <updated>2016-12-23T01:37:46.000Z</updated>
+    <updated>2017-01-09T09:53:25.000Z</updated>
     
     <content type="html"><![CDATA[<p>一直想写一篇文章或者做一个分享，介绍自己日常如何收集、阅读和消化网络上浩瀚的资料。最近，碰巧阅读到 <a href="http://www.playpcesor.com/2016/05/blog-post.html" target="_blank" rel="external">《如何有效收集資料？給知識工作與學習者的建議流程》</a> 这篇文章，跟作者的想法比较契合，索性花点时间写一篇文章介绍在 iOS 开发领域如何收集资料。</p>
+<a id="more"></a>
 <p>谈到有效收集资料，我认为在如今浩如烟海的互联网环境下，最重要的是<strong>快速判断你眼前看到的资料是否有价值，或者对于当下的你是否有价值</strong>。判断是否有价值的标准是，<strong>是否能激发起你的想法</strong>。有些资料看似很有用，你甚至看不懂或者略微看得懂，你觉得如果你收集起来知识就是你的了，有一天拿出来再看看或许就看得懂了。其实，然并卵。根本不是这样的，这样只会造成你的知识库的累赘。</p>
 <p>这里其实有两个前提条件，一是你至少脑子里要有一些想法，不然看了也不容易激发出来，这些想法可能是清晰的，也可能是模糊的。二是想要快速判断，就需要长期训练，形成一种适合自我的收集资料的方式和判断。</p>
 <h2 id="方法论"><a href="#方法论" class="headerlink" title="方法论"></a>方法论</h2><p>这个我觉得我看到的这篇文章已经写的很好了，建议认真阅读一番。</p>
@@ -301,7 +306,7 @@
     
     <summary type="html">
     
-      &lt;p&gt;一直想写一篇文章或者做一个分享，介绍自己日常如何收集、阅读和消化网络上浩瀚的资料。最近，碰巧阅读到 &lt;a href=&quot;http://www.playpcesor.com/2016/05/blog-post.html&quot; target=&quot;_blank&quot; rel=&quot;externa
+      &lt;p&gt;一直想写一篇文章或者做一个分享，介绍自己日常如何收集、阅读和消化网络上浩瀚的资料。最近，碰巧阅读到 &lt;a href=&quot;http://www.playpcesor.com/2016/05/blog-post.html&quot;&gt;《如何有效收集資料？給知識工作與學習者的建議流程》&lt;/a&gt; 这篇文章，跟作者的想法比较契合，索性花点时间写一篇文章介绍在 iOS 开发领域如何收集资料。&lt;/p&gt;
     
     </summary>
     
@@ -313,9 +318,11 @@
     <link href="http://jiyee.io/2016/09/iOS%20%E5%BC%80%E5%8F%91%E5%B7%A5%E5%85%B7%E6%8E%A8%E8%8D%90%E5%88%97%E8%A1%A8/"/>
     <id>http://jiyee.io/2016/09/iOS 开发工具推荐列表/</id>
     <published>2016-09-29T16:00:00.000Z</published>
-    <updated>2016-12-23T02:33:49.000Z</updated>
+    <updated>2017-01-09T09:53:54.000Z</updated>
     
-    <content type="html"><![CDATA[<table>
+    <content type="html"><![CDATA[<p>非常全面且实用的 iOS 开发工具推荐列表。</p>
+<a id="more"></a>
+<table>
 <thead>
 <tr>
 <th>应用</th>
@@ -445,18 +452,7 @@
     
     <summary type="html">
     
-      &lt;table&gt;
-&lt;thead&gt;
-&lt;tr&gt;
-&lt;th&gt;应用&lt;/th&gt;
-&lt;th&gt;描述&lt;/th&gt;
-&lt;th&gt;网址&lt;/th&gt;
-&lt;/tr&gt;
-&lt;/thead&gt;
-&lt;tbody&gt;
-&lt;tr&gt;
-&lt;td&gt;fui&lt;/td&gt;
-&lt;td&gt;Find unused Objective-C imports.&lt;br&gt;查找
+      &lt;p&gt;非常全面且实用的 iOS 开发工具推荐列表。&lt;/p&gt;
     
     </summary>
     
