@@ -1,0 +1,106 @@
+<!DOCTYPE html><html lang="cn"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><title> 《AngularJS 高级程序设计》读书笔记 · Jiyee's I/O</title><meta name="description" content="《AngularJS 高级程序设计》读书笔记 - Jiyee Sheng"><meta name="viewport" content="width=device-width, initial-scale=1"><link rel="icon" href="/favicon.png"><link rel="stylesheet" href="/css/apollo.css"><link rel="search" type="application/opensearchdescription+xml" href="http://jiyee.io/atom.xml" title="Jiyee's I/O"></head><body><div class="wrap"><header><a href="/" class="logo-link"><img src="/favicon.png" alt="logo"></a><ul class="nav nav-list"><li class="nav-list-item"><a href="/" target="_self" class="nav-list-link">BLOG</a></li><li class="nav-list-item"><a href="/archives/" target="_self" class="nav-list-link">ARCHIVE</a></li><li class="nav-list-item"><a href="https://github.com/jiyee" target="_blank" class="nav-list-link">GITHUB</a></li><li class="nav-list-item"><a href="/atom.xml" target="_self" class="nav-list-link">RSS</a></li></ul></header><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">《AngularJS 高级程序设计》读书笔记</h1><div class="post-info">Aug 31, 2015</div><div class="post-content"><p>依赖：<br>Karma<br>Deployd</p>
+<p>不要使用数据绑定来执行复杂逻辑或者对模型进行操作，那是控制器该做的事。<br>Module.run 方法在 Injector is done loading all modules<br>DOMContentLoaded 触发 AngularJS 启动<br>AngularJS  以单页面应用程序和复杂的回合式应用程序见长。<br>MVC 关键在于关注点分离，即应用程序中的数据模型与业务和展示逻辑解耦。<br>视图模型，只表示从控制器传往视图的数据；领域模型，包含了业务领域的数据，以及用于创建、存储和操作这些数据的各种操作、转换和规则，统称为逻辑模型。<br>其目标并不是要从模型中消除邏輯，而是爲了確保模型中所包含的邏輯只是用於創建和管理模型數據的。</p>
+<p>模型應該：</p>
+<ul>
+<li>包含領域數據</li>
+<li>包含創建、管理和修改領域數據的邏輯</li>
+<li>提供整潔的 API ，能夠暴露模型數據及之上的操作</li>
+</ul>
+<p>模型不應該：</p>
+<ul>
+<li>暴露模型數據是如何獲取或管理的細節</li>
+<li>包含根據用戶交互對模型進行轉換的邏輯</li>
+<li>包含將數據顯示給用戶的邏輯</li>
+</ul>
+<p>確保模型與控制器和視圖相分離的好處是使你可以更容易地測試你的邏輯，並使得對整個程序的優化和維護變得更簡單和容易些。</p>
+<p>控制器應當：</p>
+<ul>
+<li>包含初始化作用域所需的邏輯</li>
+<li>包含視圖所需的用於表示作用域中的數據的邏輯/行爲</li>
+<li>包含根據用於交互來更新作用域所需的邏輯/行爲</li>
+</ul>
+<p>控制區不應當：</p>
+<ul>
+<li>包含操作 DOM 的邏輯</li>
+<li>包含管理數據持久化的邏輯</li>
+<li>在作用域之外操作數據</li>
+</ul>
+<p>視圖應當：</p>
+<ul>
+<li>包含將數據呈現給用於所需的邏輯和標記</li>
+</ul>
+<p>視圖不應當：</p>
+<ul>
+<li>包含複雜邏輯</li>
+<li>包含創建、存儲或者操作領域模型的邏輯</li>
+</ul>
+<p>盡可能地讓你的 URL  保持簡單而清晰，並將 URL 格式與數據存儲結構之間的隱射保留在服務器內部。</p>
+<ul>
+<li>将业务逻辑放在视图中，而不是控制器中</li>
+<li>将领域逻辑放到控制器中，而不是模型中</li>
+<li><p>在使用 RESTful 的服务时将数据存储逻辑放在客户端模型中</p>
+</li>
+<li><p>视图逻辑应该仅爲顯示準備數據，並且永遠都不應該修改模型</p>
+</li>
+<li>控制器邏輯永遠都不應該直接創建、更新或刪除模型中的數據</li>
+<li>客戶端永遠都不應該直接訪問數據存儲</li>
+</ul>
+<p>服務端的職責應當是隱藏數據存儲的實現細節，並向客戶端以一種合適的數據格式表達數據</p>
+<p>Module 粒度过大，复用性不如 Component，模块和组件之间有什么区别？</p>
+<p>依赖注入改变了函数参数的用途，类似于C#的命名参数。</p>
+<p>所有的可用于创建 AngularJS 构件的 Module 方法都可以接受函数作为参数。这些函数通常被称为工厂函数，之所以这么叫是因为他们负责创建那些将被 AngularJS 用来执行工作的对象。工厂函数常常会返回一个工人函数，也就是将被 AngularJS 用来执行工作的对象也是一个函数。</p>
+<p>还有一点很重要，要知道不能够依赖于工厂函数或工人函数在某个特定时刻被调用。</p>
+<p>注意：指令函数的参数是 scope 而不是 $scope。<br>指令并不声明对 $scope 服务的依赖，取而代之的是，传入的是指令被应用到的视图的控制器所创建的作用域。<br>因为它允许单个指令在一个应用程序中被使用多次，而每个程序可能在作用域层次结构上的不同作用域上工作的。</p>
+<p>AngularJS 会加载定义在程序中的所有模块并解析依赖，将每个模块所包含的构件进行合并。</p>
+<p>传给 config 方法的函数在当前模块被加载后调用， config 方法通常通过注入来自其他服务的值。<br>传给 run 方法的函数在所有模块被加载后调用。</p>
+<p>其他库都是将 HTML 文档当做一个需要解决的问题，在将其用于创建 Web 程序之前需要进行修改。<br>AngularJS 则另辟蹊径：通过包含和增强 HTML 来创建 AngularJS 的 Web 应用程序，将 HTML 当做构建程序特性的基础而不是问题来处理。</p>
+<p>数据绑定指令<br><code>ng-bind</code><br><code>ng-bind-html</code><br><code>ng-bind-template</code><br><code>ng-model</code><br><code>ng-non-bindable</code></p>
+<p><code>ng-include</code> 指令的真正威力在于 src 的设置是可以通过计算得到的，src 属性要用单引号引用，因为被当做 JavaScript 表达式进行计算。</p>
+<p>它允许你创建可复用的局部视图，并被整个程序所使用，可避免重复并保证数据表达形式的一致性。</p>
+<p>表单校验需要在表单元素上添加 novalidate 属性，该属性用于告诉浏览器不要自己校验表单，从而允许 AngularJS 不受干扰的工作。</p>
+<p>form attrs<br><code>$pristine</code><br><code>$dirty</code><br><code>$valid</code><br><code>$invalid</code><br><code>$error</code></p>
+<p><code>$error</code>对象直到校验出问题时才会被定义，所以用了 angular.isDefined 方法，当有多个校验错误时，$error 对象实际上会有多个属性。</p>
+<p>控制器就像領域模型與視圖之間的紐帶，他給視圖提供數據和服務，並且定義了所需的業務邏輯，從而將用戶行爲轉換成模型上的變化。</p>
+<p>工廠函數能夠使用依賴注入特性來聲明對 AngularJS 服務的依賴。（通過閉包特性，利用依賴注入）</p>
+<p>作用域之間的通信，<code>$boardcast</code> 和 <code>$emit</code> 事件都是具有方向性的，他们沿着作用域的层级结构向上发送事件直到根作用域，或者向下发送直到每一个子作用域。</p>
+<p>AngularJS 习惯使用服务来调解作用域之间的通行。</p>
+<p>必须通过 <code>$apply</code> 方法指定一个表达式，以便让作用域知道产生的变化并传播给所绑定的表达式。</p>
+<p><code>$scope</code> 能够访问 AngularJS 屬性</p>
+<p>過濾器工廠函數聲明了對 <code>$filter</code> 服務的依賴，這提供了對模塊中所有已經定義的過濾器的訪問能力。</p>
+<p>鏈接函數，它提供了將指令與 HTML 文档和作用域数据相连接的方法</p>
+<p><code>scope.$eval</code> 能够计算当前作用域下的表达式</p>
+<p>函数所访问的变量是在函数被调用时进行计算的，而不是函数被定义时。</p>
+<p>立即调用的函数表达式（IIFE），在定義時就被執行的。</p>
+<p>默認情況下，鏈接函數被傳入了控制器的作用域，而該控制器管理着的視圖包含了指令所應用到的元素。</p>
+<p>另一種更優雅的方式，通過設置 scope 定義對象屬於爲 true 來請求 AngularJS 爲每個指令實例創建一個作用域。</p>
+<p>隔離作用域允許你使用應用於指令旁邊的元素上的屬性將數據值綁定到控制器作用域上。</p>
+<p>設置 transclude 为 true 后，会对指令所应用到的元素内容进行包装，但並不是元素本身。</p>
+<p>即被嵌入包含的內容中的表達式是在控制器作用域中被計算的，而不是指令的作用域。</p>
+<p>當指令特別複雜或者需要處理大量數據時，使用編譯函數操作 DOM 并讓鏈接函數執行其他任務</p>
+<p>編譯函數應當僅僅是操作 DOM 的，所以並沒有爲它提供作用域。從編譯函數返回一個鏈接函數是有幫助的，因爲它提供了一個簡單的將數據從指令的一部分傳遞到下一部分的方法。</p>
+<p>link 方法的參數均不是注入的，所有沒有 <code>$</code> 符号</p>
+<p>定義控制器函數的價值來自於對功能進行分離和重用的能力。</p>
+<p>服務裏定義的構造函數，實質上是爲了定義將在新的對象上被定義的功能的模板，你可以在模板中一次性定義功能，然後把它適用於多個對象。</p>
+<p><code>$exceptionHandler</code> 服务仅处理未捕获的异常。</p>
+<p>严格上下文转义<code>（strict contextual escaping) SCE</code>，使用 <code>ngSanitize</code> 模块，使用 <code>$sce</code> 服务声明内容是可信的。</p>
+<p><code>$parse</code> 服务传入表达式，并转换为函数，你可以使用该函数求得使用作用域对象的表达式的值。它本身不計算表達式本身，它是做實際工作的函數的工廠。<br>其他还有 <code>$compile</code>，<code>$interpolate</code>，<code>$parse</code></p>
+<p><code>$http</code> 方法的属性设置<br>transformRequest<br>transformResponse<br>withCredentials</p>
+<p>承诺表示一个活动的单一实例，一旦它们被解决或者拒绝，承诺无法再次使用。<br>承诺适于发出指定活动的结果的信号，然而事件发出可以重复甚至不同的结果的信号。</p>
+<p><code>$q.all</code>，分组承诺</p>
+<p>resolve 配置属性允许你制定将被注入 controller 屬性指定的控制器的依賴，更多用於初始化視圖所必須執行的工作，也可以將承諾對象作爲依賴返回。</p>
+</div></article></div></main><footer><div class="paginator"><a href="/2015/10/Functional Reactive Programming On iOS/" class="prev">PREV</a><a href="/2015/08/Velocity-China-2015-参会小记/" class="next">NEXT</a></div><div id="disqus_thread"></div><script>var disqus_shortname = 'jiyee';
+var disqus_identifier = '2015/08/《AngularJS-高级程序设计》读书笔记/';
+var disqus_title = '《AngularJS 高级程序设计》读书笔记';
+var disqus_url = 'http://jiyee.io/2015/08/《AngularJS-高级程序设计》读书笔记/';
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript'; dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();</script><script id="dsq-count-scr" src="//jiyee.disqus.com/count.js" async></script><div class="copyright"><p>© 2016 - 2017 <a href="http://jiyee.io">Jiyee Sheng</a> | Powered by <a href="https://hexo.io/" target="_blank">Hexo</a> and <a href="https://github.com/pinggod/hexo-theme-apollo" target="_blank">hexo-theme-apollo</a>.</p></div></footer></div><script async src="//cdn.bootcss.com/mathjax/2.7.0/MathJax.js?config=TeX-MML-AM_CHTML" integrity="sha384-crwIf/BuaWM9rM65iM+dWFldgQ1Un8jWZMuh3puxb8TOY9+linwLoI7ZHZT+aekW" crossorigin="anonymous"></script><script>var _hmt = _hmt || [];
+(function() {
+    var hm = document.createElement("script");
+    hm.src = "https://hm.baidu.com/hm.js?ba828c541dc9447a1fbbb5910973873d";
+    var s = document.getElementsByTagName("script")[0];
+    s.parentNode.insertBefore(hm, s);
+})();
+</script></body></html>
