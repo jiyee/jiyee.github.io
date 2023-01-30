@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="/cactus.js"></script>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> JSONModel 最佳实践 | Jiyee&#39;s I/O</title>
+  <link rel = 'canonical' href = 'https://jiyee.io/2016/03/jsonmodel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/'>
+  <meta name="description" content="A blog for sharing articles and insights about software development.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="JSONModel 最佳实践" />
+<meta property="og:description" content="属性类型选用 NS 类型，避免选用基本数据类型（Primitive Types） 基本数据类型在解析时直接调用的是 setValue:forKey: 方法，如果传入类型不一致的值，会抛出异常。
+属性协议合理选用 有条件地设置 &lt;Optional&gt;，尽量避免设置全部属性均为 Optional 对自定义属性设置 &lt;Ignore&gt;，避免解析覆盖 对索引属性设置 &lt;Index&gt;，保证值唯一，便于比较 对解析耗时的 NSArray 或者 NSDictionary 类型属性设置 &lt;convertsOnDemands&gt;，延时解析 设置统一的 KeyMapper，并结合 mapper:withExceptions: 方法添加例外条件 -initWithDictionary:error: 用于设置 &lt;Ignore&gt; 类型属性的初始值，或者设置属性的默认值，或者对经过解析之后的属性值进行值变换（避免类型变换，类型变换通过自定义 setter 方法完成） -validate 用于检验经过解析之后的 Model 是否在业务逻辑上正常 对于需要类型转换的属性，如果 JSONValueTransformer.h 里没有定义兼容转型方法，可以设置自定义 setter 方法，格式如 setXXXWithYYY:（ XXX 是属性名称，YYY 是 JSON 类型名）。如果需要从 Model 转回 JSON 的话，需要同时设置自定义 getter 方法，格式如 JSONObjectFromXXX: 全局性类型兼容转型，通过扩展 JSONValueTransformer 类实现，设置 XXXFromYYY: 方法（ XXX 是 Model 类型名，YYY 是 JSON 类型名） 空置或者解析失败处理 所有 NSObject 类型的属性如果设置了 Optional，其属性值都可能为 nil，允许直接判断 value == nil。经过 JSONModel 成功解析之后的属性值不可能是 NSNull 类型。如果 JSON 值是 null，则一定为 nil。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiyee.io/2016/03/jsonmodel-%E6%9C%80%E4%BD%B3%E5%AE%9E%E8%B7%B5/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-03-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-03-05T00:00:00+00:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JSONModel 最佳实践"/>
+<meta name="twitter:description" content="属性类型选用 NS 类型，避免选用基本数据类型（Primitive Types） 基本数据类型在解析时直接调用的是 setValue:forKey: 方法，如果传入类型不一致的值，会抛出异常。
+属性协议合理选用 有条件地设置 &lt;Optional&gt;，尽量避免设置全部属性均为 Optional 对自定义属性设置 &lt;Ignore&gt;，避免解析覆盖 对索引属性设置 &lt;Index&gt;，保证值唯一，便于比较 对解析耗时的 NSArray 或者 NSDictionary 类型属性设置 &lt;convertsOnDemands&gt;，延时解析 设置统一的 KeyMapper，并结合 mapper:withExceptions: 方法添加例外条件 -initWithDictionary:error: 用于设置 &lt;Ignore&gt; 类型属性的初始值，或者设置属性的默认值，或者对经过解析之后的属性值进行值变换（避免类型变换，类型变换通过自定义 setter 方法完成） -validate 用于检验经过解析之后的 Model 是否在业务逻辑上正常 对于需要类型转换的属性，如果 JSONValueTransformer.h 里没有定义兼容转型方法，可以设置自定义 setter 方法，格式如 setXXXWithYYY:（ XXX 是属性名称，YYY 是 JSON 类型名）。如果需要从 Model 转回 JSON 的话，需要同时设置自定义 getter 方法，格式如 JSONObjectFromXXX: 全局性类型兼容转型，通过扩展 JSONValueTransformer 类实现，设置 XXXFromYYY: 方法（ XXX 是 Model 类型名，YYY 是 JSON 类型名） 空置或者解析失败处理 所有 NSObject 类型的属性如果设置了 Optional，其属性值都可能为 nil，允许直接判断 value == nil。经过 JSONModel 成功解析之后的属性值不可能是 NSNull 类型。如果 JSON 值是 null，则一定为 nil。"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://jiyee.io/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q==">
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://jiyee.io/images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+    <header id="header">
+  <a href="https://jiyee.io/">
+  
+    <div id="logo" style="background-image: url(https://jiyee.io/images/logo.png)"></div>
+  
+  <div id="title">
+    <h1>Jiyee&#39;s I/O</h1>
+  </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+      </li>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+</header>
+
+
+
+    
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="content" itemprop="articleBody">
+  
+    <ul>
+<li>属性类型选用 NS 类型，避免选用基本数据类型（Primitive Types）
+<blockquote>
+<p>基本数据类型在解析时直接调用的是 <code>setValue:forKey:</code> 方法，如果传入类型不一致的值，会抛出异常。</p>
+</blockquote>
+</li>
+<li>属性协议合理选用
+<ul>
+<li>有条件地设置 <code>&lt;Optional&gt;</code>，尽量避免设置全部属性均为 Optional</li>
+<li>对自定义属性设置 <code>&lt;Ignore&gt;</code>，避免解析覆盖</li>
+<li>对索引属性设置 <code>&lt;Index&gt;</code>，保证值唯一，便于比较</li>
+<li>对解析耗时的 NSArray 或者 NSDictionary 类型属性设置 <code>&lt;convertsOnDemands&gt;</code>，延时解析</li>
+</ul>
+</li>
+<li>设置统一的 KeyMapper，并结合 <code>mapper:withExceptions:</code> 方法添加例外条件</li>
+<li><code>-initWithDictionary:error:</code> 用于设置 <code>&lt;Ignore&gt;</code> 类型属性的初始值，或者设置属性的默认值，或者对经过解析之后的属性值进行值变换（避免类型变换，类型变换通过自定义 setter 方法完成）</li>
+<li><code>-validate</code> 用于检验经过解析之后的 Model 是否在业务逻辑上正常</li>
+<li>对于需要类型转换的属性，如果 JSONValueTransformer.h 里没有定义兼容转型方法，可以设置自定义 setter 方法，格式如 <code>setXXXWithYYY:</code>（ XXX 是属性名称，YYY 是 JSON 类型名）。如果需要从 Model 转回 JSON 的话，需要同时设置自定义 getter 方法，格式如 <code>JSONObjectFromXXX:</code></li>
+<li>全局性类型兼容转型，通过扩展 JSONValueTransformer 类实现，设置 <code>XXXFromYYY:</code> 方法（ XXX 是 Model 类型名，YYY 是 JSON 类型名）</li>
+<li>空置或者解析失败处理
+<blockquote>
+<p>所有 NSObject 类型的属性如果设置了 Optional，其属性值都可能为 nil，允许直接判断 <code>value == nil</code>。经过 JSONModel 成功解析之后的属性值不可能是 <code>NSNull</code> 类型。如果 JSON 值是 null，则一定为 nil。</p>
+</blockquote>
+</li>
+<li>如果是 NSDictionary 类型，则遍历 keys 和 values，将 value 作为协议类型执行解析，如同 NSArray 方式解析</li>
+<li>BOOL, NSInteger, ENUM 等基本数据类型（Primitive Types），如果传入 NSArray, NSDictionary 等非预期类型值的时候，都将抛出异常。
+<blockquote>
+<p>例如，属性 enabled 是一个映射到 JSON 的 BOOL 值，为了兼容 1/0/&ldquo;1&rdquo;/&ldquo;0&rdquo;/true/false/&ldquo;true&rdquo;/&ldquo;false&rdquo; 等常见 BOOL 设定值，同时，想防止传入其他值导致异常。
+建议按照如下方式：</p>
+</blockquote>
+</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span>		<span style="color:#66d9ef">@property</span> (<span style="color:#66d9ef">nonatomic</span>, <span style="color:#66d9ef">assign</span>) <span style="color:#66d9ef">BOOL</span> enabled;
+</span></span><span style="display:flex;"><span>		<span style="color:#66d9ef">@property</span> (<span style="color:#66d9ef">nonatomic</span>, <span style="color:#66d9ef">strong</span>) NSNumber <span style="color:#f92672">*</span>__numberOfEnabled;
+</span></span></code></pre></div><p>KeyMapper 设置为 <code>@&quot;enabled&quot; : @&quot;__numberOfEnabled&quot;</code></p>
+<p>在 initWithDictionary:error: 方法</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span>	self.enabled <span style="color:#f92672">=</span> NO;
+</span></span><span style="display:flex;"><span>	self <span style="color:#f92672">=</span> [super initWithDictionary:dict error:error]; 
+</span></span><span style="display:flex;"><span>	
+</span></span><span style="display:flex;"><span>	self.enabled <span style="color:#f92672">=</span> self.__numberOfEnabled.boolValue;
+</span></span></code></pre></div>
+  
+  </div>
+</article>
+
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  Jiyee&#39;s I/O 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+</html>

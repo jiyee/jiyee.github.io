@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="/cactus.js"></script>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> 《OS X 进阶使用》－ 第六篇 程序员 与 那些不得不拥有的软件 | Jiyee&#39;s I/O</title>
+  <link rel = 'canonical' href = 'https://jiyee.io/2016/01/09/os-x-%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8-%E7%AC%AC%E5%85%AD%E7%AF%87-%E7%A8%8B%E5%BA%8F%E5%91%98-%E4%B8%8E-%E9%82%A3%E4%BA%9B%E4%B8%8D%E5%BE%97%E4%B8%8D%E6%8B%A5%E6%9C%89%E7%9A%84%E8%BD%AF%E4%BB%B6/'>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="《OS X 进阶使用》－ 第六篇 程序员 与 那些不得不拥有的软件" />
+<meta property="og:description" content="Dash Dash 是一款离线 API 文档查看和代码片段管理应用。几乎你可能会查阅的 API 文档都能在里面找到，还支持第三方库文档，那些被第三方库管理器（如 cocoapods，Ruby gems，PHP packagist）纳入的库提供的接口文档。而且，它的搜索、收藏和区分版本查阅功能也都很实用。而且，它支持几乎所有编辑器或者 IDE 集成，真正的是贴心到家。
+把它列在第一位，是因为我觉得看看 API 文档有助于提高对语言和框架的认知和理解，无论整体还是细节上。
+有一个有意思的地方是，可以去看看 PHP 文档里的评论，可能比文档本身更有收获。
+另一个有意思的是，Dash 独立开发者 Bogdan Popescu 还只是个 90 后，看看他在个人博客上公布的2014年总结。
+每周工作5天、每天工作6小时、年收入27万美元、5周的旅行休假以及整整有2个月都在玩《炉石传说》。
+羡慕吧～～ 没办法，谁让大家都争相为之付费呢？！
+因为他只做了这么一件事，并且把这件事做到了极致。
+Windows 用户可以参考 velocity 这款软件。
+CodeRunner CodeRunner 好比 JS Bin，提供一个简单而直接的 REPL 环境。作为程序员，总会遇到想要试一下某个 API 怎么用，抑或跑一个简单的脚本看看结果，这个时候如果需要新建工程、配置环境、编译运行等步骤那就太碍事了，尤其面对的还是一门你可能刚入门的语言的情况下（好比，之前浩天就想看看 Java 某个 API 怎么用）。这个时候就到了 CodeRunner 的使用场景，为那些用过即扔的代码提供一个编辑器和运行环境，你不用再去关心配置问题，只要敲入代码并运行，你就能看到结果输出。
+Moom Moom 是一款窗体管理应用。程序员一般都拥有外接显示器，如果想拖动一个窗体到另外一个屏幕或者调整窗体大小和位置的话，最便捷的方式就是使用快捷键，那 Moom 就是为此而生。他能帮你更好地利用你的第二块、第三块屏幕。
+同类的软件还有很多，如 Divvy，Slate
+Quiver Quiver 是一款为程序员量身定制的笔记本应用。
+为什么这里不推荐使用 Evernote，因为 Evernote 过于臃肿，而且文档格式封闭，导入、导出功能基本缺失，还不支持 Markdown，更别说 Vim mode。
+Quiver 是我寻寻觅觅了很久才确定使用的笔记本应用。难得的是他还是国人开发，而且美誉度普遍较高。他基于文本方式来管理文档，支持普通文本、 Markdown、LaTex 三种格式，支持文档格式化输出，支持 Vim mode。配合 Git 使用，你就拥有一个支持版本管理的纯文本文档管理软件。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiyee.io/2016/01/09/os-x-%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8-%E7%AC%AC%E5%85%AD%E7%AF%87-%E7%A8%8B%E5%BA%8F%E5%91%98-%E4%B8%8E-%E9%82%A3%E4%BA%9B%E4%B8%8D%E5%BE%97%E4%B8%8D%E6%8B%A5%E6%9C%89%E7%9A%84%E8%BD%AF%E4%BB%B6/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-01-09T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-01-09T00:00:00+00:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《OS X 进阶使用》－ 第六篇 程序员 与 那些不得不拥有的软件"/>
+<meta name="twitter:description" content="Dash Dash 是一款离线 API 文档查看和代码片段管理应用。几乎你可能会查阅的 API 文档都能在里面找到，还支持第三方库文档，那些被第三方库管理器（如 cocoapods，Ruby gems，PHP packagist）纳入的库提供的接口文档。而且，它的搜索、收藏和区分版本查阅功能也都很实用。而且，它支持几乎所有编辑器或者 IDE 集成，真正的是贴心到家。
+把它列在第一位，是因为我觉得看看 API 文档有助于提高对语言和框架的认知和理解，无论整体还是细节上。
+有一个有意思的地方是，可以去看看 PHP 文档里的评论，可能比文档本身更有收获。
+另一个有意思的是，Dash 独立开发者 Bogdan Popescu 还只是个 90 后，看看他在个人博客上公布的2014年总结。
+每周工作5天、每天工作6小时、年收入27万美元、5周的旅行休假以及整整有2个月都在玩《炉石传说》。
+羡慕吧～～ 没办法，谁让大家都争相为之付费呢？！
+因为他只做了这么一件事，并且把这件事做到了极致。
+Windows 用户可以参考 velocity 这款软件。
+CodeRunner CodeRunner 好比 JS Bin，提供一个简单而直接的 REPL 环境。作为程序员，总会遇到想要试一下某个 API 怎么用，抑或跑一个简单的脚本看看结果，这个时候如果需要新建工程、配置环境、编译运行等步骤那就太碍事了，尤其面对的还是一门你可能刚入门的语言的情况下（好比，之前浩天就想看看 Java 某个 API 怎么用）。这个时候就到了 CodeRunner 的使用场景，为那些用过即扔的代码提供一个编辑器和运行环境，你不用再去关心配置问题，只要敲入代码并运行，你就能看到结果输出。
+Moom Moom 是一款窗体管理应用。程序员一般都拥有外接显示器，如果想拖动一个窗体到另外一个屏幕或者调整窗体大小和位置的话，最便捷的方式就是使用快捷键，那 Moom 就是为此而生。他能帮你更好地利用你的第二块、第三块屏幕。
+同类的软件还有很多，如 Divvy，Slate
+Quiver Quiver 是一款为程序员量身定制的笔记本应用。
+为什么这里不推荐使用 Evernote，因为 Evernote 过于臃肿，而且文档格式封闭，导入、导出功能基本缺失，还不支持 Markdown，更别说 Vim mode。
+Quiver 是我寻寻觅觅了很久才确定使用的笔记本应用。难得的是他还是国人开发，而且美誉度普遍较高。他基于文本方式来管理文档，支持普通文本、 Markdown、LaTex 三种格式，支持文档格式化输出，支持 Vim mode。配合 Git 使用，你就拥有一个支持版本管理的纯文本文档管理软件。"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://jiyee.io/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q==">
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://jiyee.io/images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+    <header id="header">
+  <a href="https://jiyee.io/">
+  
+    <div id="logo" style="background-image: url(https://jiyee.io/images/logo.png)"></div>
+  
+  <div id="title">
+    <h1>Jiyee&#39;s I/O</h1>
+  </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+      </li>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+</header>
+
+
+
+    
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="content" itemprop="articleBody">
+  
+    <h2 id="dash">Dash</h2>
+<p><a href="https://kapeli.com/dash">Dash</a> 是一款离线 API 文档查看和代码片段管理应用。几乎你可能会查阅的 API 文档都能在里面找到，还支持第三方库文档，那些被第三方库管理器（如 cocoapods，Ruby gems，PHP packagist）纳入的库提供的接口文档。而且，它的搜索、收藏和区分版本查阅功能也都很实用。而且，它支持几乎所有编辑器或者 IDE 集成，真正的是贴心到家。</p>
+<p>把它列在第一位，是因为我觉得看看 API 文档有助于提高对语言和框架的认知和理解，无论整体还是细节上。</p>
+<p>有一个有意思的地方是，可以去看看 PHP 文档里的评论，可能比文档本身更有收获。</p>
+<p>另一个有意思的是，Dash 独立开发者 Bogdan Popescu 还只是个 90 后，看看他在个人博客上公布的2014年总结。</p>
+<blockquote>
+<p>每周工作5天、每天工作6小时、年收入27万美元、5周的旅行休假以及整整有2个月都在玩《炉石传说》。</p>
+</blockquote>
+<p>羡慕吧～～ 没办法，谁让大家都争相为之付费呢？！</p>
+<p>因为他只做了这么一件事，并且把这件事做到了极致。</p>
+<p>Windows 用户可以参考 <a href="http://velocity.silverlakesoftware.com">velocity</a> 这款软件。</p>
+<h2 id="coderunner">CodeRunner</h2>
+<p><a href="https://coderunnerapp.com">CodeRunner</a> 好比 <a href="jsbin.com">JS Bin</a>，提供一个简单而直接的 REPL 环境。作为程序员，总会遇到想要试一下某个 API 怎么用，抑或跑一个简单的脚本看看结果，这个时候如果需要新建工程、配置环境、编译运行等步骤那就太碍事了，尤其面对的还是一门你可能刚入门的语言的情况下（好比，之前浩天就想看看 Java 某个 API 怎么用）。这个时候就到了 CodeRunner 的使用场景，为那些用过即扔的代码提供一个编辑器和运行环境，你不用再去关心配置问题，只要敲入代码并运行，你就能看到结果输出。</p>
+<h2 id="moom">Moom</h2>
+<p><a href="http://manytricks.com/moom/">Moom</a> 是一款窗体管理应用。程序员一般都拥有外接显示器，如果想拖动一个窗体到另外一个屏幕或者调整窗体大小和位置的话，最便捷的方式就是使用快捷键，那 Moom 就是为此而生。他能帮你更好地利用你的第二块、第三块屏幕。</p>
+<p>同类的软件还有很多，如 <a href="https://itunes.apple.com/us/app/divvy-window-manager/id413857545?mt=12">Divvy</a>，<a href="https://github.com/jigish/slate">Slate</a></p>
+<h2 id="quiver">Quiver</h2>
+<p><a href="http://happenapps.com/#quiver">Quiver</a> 是一款为程序员量身定制的笔记本应用。</p>
+<p>为什么这里不推荐使用 Evernote，因为 Evernote 过于臃肿，而且文档格式封闭，导入、导出功能基本缺失，还不支持 Markdown，更别说 Vim mode。</p>
+<p>Quiver 是我寻寻觅觅了很久才确定使用的笔记本应用。难得的是他还是国人开发，而且美誉度普遍较高。他基于文本方式来管理文档，支持普通文本、 Markdown、LaTex 三种格式，支持文档格式化输出，支持 Vim mode。配合 Git 使用，你就拥有一个支持版本管理的纯文本文档管理软件。</p>
+<p>Evernote 想做用户「第二个大脑」，Quiver 可没有这个野心。</p>
+
+  
+  </div>
+</article>
+
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  Jiyee&#39;s I/O 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+</html>

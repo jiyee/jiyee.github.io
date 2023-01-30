@@ -1,0 +1,307 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="/cactus.js"></script>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> JSONModel 源码解析（二） | Jiyee&#39;s I/O</title>
+  <link rel = 'canonical' href = 'https://jiyee.io/2016/03/02/jsonmodel-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%BA%8C/'>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="JSONModel 源码解析（二）" />
+<meta property="og:description" content="Header 引入文件列表
+#import &lt;objc/runtime.h #import &lt;objc/message.h&gt; static const char * kMapperObjectKey; // 自定义 keyMapper static const char * kClassPropertiesKey; // static const char * kClassRequiredPropertyNamesKey; // static const char * kIndexPropertyNameKey; // 索引字段名称 allowedJSONTypes allowedPrimitiveTypes valueTransformer JSONModelClass globalKeyMapper allowedJSONTypes 包含 NSString, NSNumber, NSDecimalNumber, NSArray, NSDictionary, NSNull, NSMutableString, NSMutableArray, NSMutableDictionary
+allowedPrimitiveTypes BOOL, float, int, long, double, short, NSInteger, NSUInteger, Block
+JSONValueTransformer 隐式值类型转换
+JSONModelClass 根据 kClassPropertiesKey 判断是否需要扫描 model 属性 根据 kMapperObjectKey 保存自定义 keyMapper" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiyee.io/2016/03/02/jsonmodel-%E6%BA%90%E7%A0%81%E8%A7%A3%E6%9E%90%E4%BA%8C/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-03-02T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-03-02T00:00:00+00:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JSONModel 源码解析（二）"/>
+<meta name="twitter:description" content="Header 引入文件列表
+#import &lt;objc/runtime.h #import &lt;objc/message.h&gt; static const char * kMapperObjectKey; // 自定义 keyMapper static const char * kClassPropertiesKey; // static const char * kClassRequiredPropertyNamesKey; // static const char * kIndexPropertyNameKey; // 索引字段名称 allowedJSONTypes allowedPrimitiveTypes valueTransformer JSONModelClass globalKeyMapper allowedJSONTypes 包含 NSString, NSNumber, NSDecimalNumber, NSArray, NSDictionary, NSNull, NSMutableString, NSMutableArray, NSMutableDictionary
+allowedPrimitiveTypes BOOL, float, int, long, double, short, NSInteger, NSUInteger, Block
+JSONValueTransformer 隐式值类型转换
+JSONModelClass 根据 kClassPropertiesKey 判断是否需要扫描 model 属性 根据 kMapperObjectKey 保存自定义 keyMapper"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://jiyee.io/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q==">
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://jiyee.io/images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+    <header id="header">
+  <a href="https://jiyee.io/">
+  
+    <div id="logo" style="background-image: url(https://jiyee.io/images/logo.png)"></div>
+  
+  <div id="title">
+    <h1>Jiyee&#39;s I/O</h1>
+  </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+      </li>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+</header>
+
+
+
+    
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="content" itemprop="articleBody">
+  
+    <p>Header 引入文件列表</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span>	<span style="color:#75715e">#import &lt;objc/runtime.h
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#75715e">#import &lt;objc/message.h&gt;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span> kMapperObjectKey; <span style="color:#75715e">// 自定义 keyMapper
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span> kClassPropertiesKey; <span style="color:#75715e">// 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span> kClassRequiredPropertyNamesKey; <span style="color:#75715e">// 
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>	<span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span> kIndexPropertyNameKey; <span style="color:#75715e">// 索引字段名称
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>	allowedJSONTypes
+</span></span><span style="display:flex;"><span>	allowedPrimitiveTypes
+</span></span><span style="display:flex;"><span>	valueTransformer
+</span></span><span style="display:flex;"><span>	JSONModelClass
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>	globalKeyMapper
+</span></span></code></pre></div><h2 id="allowedjsontypes">allowedJSONTypes</h2>
+<p>包含 NSString, NSNumber, NSDecimalNumber, NSArray, NSDictionary, NSNull, NSMutableString, NSMutableArray, NSMutableDictionary</p>
+<h2 id="allowedprimitivetypes">allowedPrimitiveTypes</h2>
+<p>BOOL, float, int, long, double, short, NSInteger, NSUInteger, Block</p>
+<h2 id="jsonvaluetransformer">JSONValueTransformer</h2>
+<p>隐式值类型转换</p>
+<h2 id="jsonmodelclass">JSONModelClass</h2>
+<p>根据 <code>kClassPropertiesKey</code> 判断是否需要扫描 model 属性
+根据 <code>kMapperObjectKey</code> 保存自定义 keyMapper</p>
+<p>JSONModelErrorDomain，包含几种类型错误：</p>
+<ol>
+<li>kJSONModelErrorModelIsInvalid</li>
+<li>kJSONModelErrorBadJSON</li>
+<li>kJSONModelErrorNilInput</li>
+<li>kJSONModelErrorInvalidData</li>
+</ol>
+<p>最终，都是经过 <code>initWithData:error:</code> 处理，由 <code>NSJSONSerialization</code> 解析成 NSDictionary，再中转到 <code>initWithDictionary:error:</code> 处理。</p>
+<ol>
+<li>检查输入数据结构 <code>__doesDictionary:matchModelWithKeyMapper:error:</code></li>
+<li>输入的 NSDictionary 导入值 <code>__importDictionary:withKeyMapper:validation:error:</code></li>
+<li>执行数据校验 <code>validate:</code></li>
+</ol>
+<h3 id="__requiredpropertynames"><code>__requiredPropertyNames</code></h3>
+<p>返回 model keys 集合，NSMutableSet 类型<br>
+通过 <code>kClassRequiredPropertyNamesKey</code> 属性获得包含的 keys 集合，懒加载方式，首先判断是否获取过，不然遍历 <code>__properties__</code> 方法返回的数组，判断 <code>isOptional</code> 属性值，添加 <code>p.name</code> 到 keys 集合</p>
+<h3 id="__properties__"><code>__properties__</code></h3>
+<p>获取所有的 keys 数组的方式，依赖属性扫描过程 <code>__inspectProperies</code>，保存到 <code>kClassPropertiesKey</code> 动态属性</p>
+<h3 id="__inspectproperties"><code>__inspectProperties</code></h3>
+<p>通过 NSScanner 方式检查<br>
+从子类开始查找，向上遍历，判断条件是 <code>class != [JSONModel class]</code><br>
+用到了一个 runtime.h 里的方法 <code>class_copyPropertyList</code>
+unsigned int propertyCount;
+objc_property_t *properties = class_copyPropertyList(class, &amp;propertyCount);</p>
+<p>然后，从 <code>objc_property_t</code> 类型，通过 <code>property_getName</code> 和 <code>property_getAttributes</code> 方法，提取出 propertyName 和 propertyAttributes，封装成 <code>JSONModelClassProperty</code>。</p>
+<h4 id="具体策略">具体策略：</h4>
+<ol>
+<li>过滤到 <em>R</em> 属性的只读属性</li>
+<li>检查 <em>T</em> 的具体类型，区分三种类型，保存到 propertyType 变量里:
+<ol>
+<li>NSObject<br>
+例如：T@&ldquo;NSString&rdquo;,&amp;,N,V_s1<br>
+首先扫描属性名称，其次扫描协议名称，协议判断是否属于 Optional, Index, ConvertOnDemand, Ignore 等协议</li>
+<li>structure<br>
+如果检查到存在 structure，则标识为非标准 JSON 类型，并将结构名保存到 structName</li>
+<li>primitive<br>
+通过 <code>valueTransformer.primitivesNames</code> 字典里获取 primitive 值对应的 propertyType，并判断是否在 <code>allowedPrimitiveTypes</code> 字典，否则抛出 <strong>NSException</strong></li>
+</ol>
+</li>
+<li>判断属性是否 <code>propertyIsOptional</code></li>
+<li>判断属性是否 <code>propertyIsIgnored</code></li>
+<li>判断属性如果是 NSArray，元素是否对应于协议 <code>protocolForArrayProperty</code></li>
+<li>判断属性是否是 Block</li>
+</ol>
+<h3 id="__doesdictionarymatchmodelwithkeymappererror"><code>__doesDictionary:matchModelWithKeyMapper:error:</code></h3>
+<p>检查输入数据的结构，依赖于 dict 和 keyMapper
+dict 是经过 NSJSONSerialize 处理之后待解析的 NSDictionary 类型
+经过 keyMapper 转换过属性名之后，存在 <code>@try/@catch</code> 过程，步骤如下：</p>
+<ol>
+<li>试图解析 <code>valueForKeyPath:</code>
+2. 试图解析 <code>valueForKey:</code>
+3. 如果值 value 存在，则保存到 transformedIncomingKeys
+4. 如果 requiredProperties 包含的属性值 <strong>多于</strong> incomingKeys，则将多余的属性名从 requiredProperties 里移除，并返回错误 NSError，标明 Keys missing</li>
+</ol>
+<h3 id="__mapstringwithkeymapperimporting"><code>__mapString:withKeyMapper:importing:</code></h3>
+<p>用于 JSON 和 Model 之间属性名之间映射转换，依赖于 keyMapper，存在优先级，如果自定义 keyMapper 和全局 keyMapper 同时存在，如果先采用自定义 keyMapper 转换之后属性名一样，则接着采用全局 keyMapper 方式继续转换</p>
+<h4 id="keymapper">keyMapper</h4>
+<p>双向的数据结构映射组件，用于 JSON 和 Model 之间的属性名映射，可以通过重写 <code>keyMapper</code> 方法指定自定义 keyMapper，还可以设置全局 keyMapper</p>
+<p><code>typedef NSString* (^JSONModelKeyMapBlock)(NSString* keyName);</code>
+主要就是这个 Block 来实现字段名映射</p>
+<p>同样是通过字典方式缓存映射 Map，包含 toModelMap 和 toJSONMap，而且构造函数里包含 JSONToModelBlock 和 ModelToJSONBlock</p>
+<p>如果通过 <code>initWithDictionary:</code> 初始化方法构造的话，toModelMap 采用入参 map，toJSONMap 采用 swappedMap</p>
+<p><code>convertValue:isImportingToModel:</code> 方法，则直接通过 Block 求值返回</p>
+<p><code>mapperFromUnderscoreCaseToCamelCase</code> 方法，用于构造 Underscore Case转到 Camel Case</p>
+<p><code>mapperFromUpperCaseToLowerCase</code> 方法，用于构造 Upper Case 转到 Lower Case</p>
+<h3 id="__importdictionarywithkeymappervalidationerror"><code>__importDictionary:withKeyMapper:validation:error:</code></h3>
+<ol>
+<li>通过 keyMapper 转换成 jsonKeyPath
+2. 试图解析 <code>valueForKeyPath:</code>
+3. 试图解析 <code>valueForKey:</code>
+4. 判断是否属于 isNull
+5. 如果是 Null，判断是否可选或是否待验证 validation
+6. 如果错误，直接返回 NSEror，标明 Value of required model key xxx is nul
+7. 获取 jsonValueClass，判断 jsonValueClass 是否属于 allowedJSONTypes 元素的子类之列
+8. 如果错误，直接返回 NSError，标明 Type xxx is not allowed in JSON
+9. 上述步骤都是检查步骤，下面开始走赋值步骤
+10. <strong>判断是否有自定义赋值方法，命名方式为 <code>set(PropertyName)With(NSString|NSNumber|NSArray|NSDictionary|NSDate)</code>，源类名要根据值类型来指定</strong>
+11. 如果 type == nil 并且 structName == nil，则 为 primitives，直接赋值为 jsonValue
+12. 如果 Null，直接赋值为 nil
+13. 如果是 JSONModel 子类，递归解析，调用 <code>initWithDictionary:error:</code>
+14. 如果有协议指定，转而调用 <code>__transform:forProperty:error:</code>
+15. 如果是标准 JSON 类型且 jsonValue 是 type 类型，直接赋值，如果是 mutable 则赋值之前先 mutableCopy
+16. 如果 jsonValue 不是 type 类型，且 jsonValue 不为空，或者是 mutable，或者是 structure，那么黑科技来了。首先，获取 jsonValue 类型对应的类型，将 Cluster 子类型转换为标准类型；拼装 selectorName，格式为 <code>(PropertyName)From(SourceClass)</code>，如果指定了此方法，就用此方法，如果没有指定，则试图查找 <code>__(selectorName)</code> 方法是否存在，如果存在使用找到的方法转换值，否则返回 NSException，标明是 Type not allowed
+17. 其他情况就直接赋值</li>
+</ol>
+<h3 id="__transformforpropertyerror"><code>__transform:forProperty:error:</code></h3>
+<ol>
+<li>如果指定的协议不存在，当 NSArray 类型时就抛出异常，其他则直接返回</li>
+<li>如果指定的协议属于 JSONModel 子类
+<ol>
+<li>如果是 NSArray 类型且 value 类型也是数组，则根据是否需要 convertsOnDemand 选择走不同的逻辑，如果需要 convertsOnDemand，通过 JSONModelArray 对象初始化，经过 JSONModelArray 封装之后，可以实现需要访问子元素的时候再执行解析过程；如果不需要则通过 <code>arrayOfModelsFromDictionaries</code> 方法，一次性初始化完成，还是通过循环遍历方式初始化</li>
+<li><strong>如果是 NSDictionary 类型，则遍历 keys，将 value 作为协议类型执行初始化。这样就可以如果 NSArray 指定协议方式来扩展实现 NSDictionary</strong></li>
+</ol>
+</li>
+</ol>
+<h2 id="jsonvaluetransformer-1">JSONValueTransformer</h2>
+<p>如果属性 isStandardJSONType == YES 时，不需要执行任何 valueTransform，直接赋值。
+是否标准 JSON 类型，通过属性类型是否在 <code>allowedJSONTypes</code> 数组里来判断。
+初始化过程中定义了 <strong>Declared property type encodings</strong> 缩写跟实际变量名对应字典，包含如下：
+{@&ldquo;f&rdquo;:@“float&quot;,@&ldquo;i&rdquo;:@&ldquo;int&rdquo;, @&ldquo;d&rdquo;:@&ldquo;double&rdquo;, @&ldquo;l&rdquo;:@&ldquo;long&rdquo;, @&ldquo;c&rdquo;:@&ldquo;BOOL&rdquo;, @&ldquo;s&rdquo;:@&ldquo;short&rdquo;, @&ldquo;q&rdquo;:@&ldquo;long&rdquo;, @&ldquo;I&rdquo;:@&ldquo;NSInteger&rdquo;, @&ldquo;Q&rdquo;:@&ldquo;NSUInteger&rdquo;, @&ldquo;B&rdquo;:@&ldquo;BOOL&rdquo;, @?&quot;:@&ldquo;Block&rdquo;}</p>
+<h3 id="classbyresolvingclusterclasses"><code>classByResolvingClusterClasses</code></h3>
+<p>通过 sourceClass 来归一化输入类的类型判断，检查各种类型的变种，用于类簇子类型的类型判断，主要用 <code>isSubclassOfClass:</code> 方法判断。</p>
+<p>另外，包含了许多的 NSObject 基本类型的之间相互转换，虽然看起来没有直接用到，但是在 JSONModel 的 <code>toDictionary</code> 方法里，如果需要使用 valueTransformer 的时候，将动态执行 valueTransformer 里定义的 <code>xxxFromYYY</code> 方法。</p>
+<blockquote>
+<p>为什么要进行JSONValueTransformer的转换呢，是因为在iOS的视线中，由于抽象工厂的存在，构建了大量的簇类，比如NSArray, NSNumber, NSDictionary等等，他们只是对外暴露的一层皮，实质上底层对于真正的类。比如NSArrayI &lt;=&gt; NSArray等等。因此，我们需要通过JSONValueTransformer得到真正的Class Type，同时通过class Type找到最合适的转换方法，在JSONValueTransformer.m的文件中，我们能找到一大堆xxxFromYYY的函数。</p>
+</blockquote>
+<h3 id="declared-property-type-encodings">Declared property type encodings</h3>
+<table>
+<thead>
+<tr>
+<th>Code</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>R</td>
+<td>The property is read-only (readonly).</td>
+</tr>
+<tr>
+<td>C</td>
+<td>The property is a copy of the value last assigned (copy).</td>
+</tr>
+<tr>
+<td>&amp;</td>
+<td>The property is a reference to the value last assigned (returnain).</td>
+</tr>
+<tr>
+<td>N</td>
+<td>The property is non-atomic (nonatomic).</td>
+</tr>
+<tr>
+<td>G&lt;name&gt;</td>
+<td>The property defines a custom getter selector name. The name follows the G (for example, GcustomGetter,).</td>
+</tr>
+<tr>
+<td>S&lt;name&gt;</td>
+<td>The property defines a custom setter selector name. The name follows the S (for example, ScustomSetter:,).</td>
+</tr>
+<tr>
+<td>D</td>
+<td>The property is dynamic (@dynamic).</td>
+</tr>
+<tr>
+<td>W</td>
+<td>The property is a weak reference (<code>__weak</code>).</td>
+</tr>
+<tr>
+<td>P</td>
+<td>The property is eligible for garbage collection.</td>
+</tr>
+<tr>
+<td>t&lt;encoding&gt;</td>
+<td>Specifies the type using old-style encoding.</td>
+</tr>
+</tbody>
+</table>
+
+  
+  </div>
+</article>
+
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  Jiyee&#39;s I/O 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+</html>

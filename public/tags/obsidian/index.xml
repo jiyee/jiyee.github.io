@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8" standalone="yes"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>Obsidian on Jiyee&#39;s I/O</title>
+    <link>https://jiyee.io/tags/obsidian/</link>
+    <description>Recent content in Obsidian on Jiyee&#39;s I/O</description>
+    <generator>Hugo -- gohugo.io</generator>
+    <language>zh-CN</language>
+    <lastBuildDate>Mon, 30 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://jiyee.io/tags/obsidian/index.xml" rel="self" type="application/rss+xml" />
+    <item>
+      <title>Quality of Obsidian Vim Mode Improvements</title>
+      <link>https://jiyee.io/2023/01/quality-of-obsidian-vim-mode-improvements/</link>
+      <pubDate>Mon, 30 Jan 2023 00:00:00 +0000</pubDate>
+      
+      <guid>https://jiyee.io/2023/01/quality-of-obsidian-vim-mode-improvements/</guid>
+      <description>过去一段时间我开始认真地体验 Obsidian（黑曜石）这款软件，深度使用了一段时间之后便退订了 Ulysses 订阅，将全部的文档都迁移到了 Obsidian。由于其平台的开放性，Obsidian 的定位不仅仅是笔记软件，更适合作为 PKM 工具使用。
+关于 Obsidian 介绍的文章和视频已经不计其数，通过阅读这些优秀的经验分享，让我快速掌握 Obsidian 的使用技巧。之前在论坛里看到一篇文章 「VIM Mode - Quality of Life Improvements - Share &amp;amp; showcase - Obsidian Forum」，介绍了 Obsidian 里如何高效地使用 Vim Mode，而 Obsidian 吸引我的其中最重要的一点就是支持 Vim Mode。过去我一直在各种 IDE 里使用 Vim Mode，已经熟悉了 Vim Mode 操作习惯，在最早支持 Vim Mode 的 Markdown 笔记软件里，我还使用过一段时间的 Haroopad，可惜软件很久没有更新了。Obsidian 经过 2 年多迭代和各类 Vim Mode 周边插件支持，目前 Obsidian 支持的 Vim Mode 功能已经能够我满足日常写作使用，这篇文章就总结一下目前我是如何在 Obsidian 使用 Vim Mode 以及对其周边插件进行完善。
+Vim Mode 周边插件 1. Vimrc Support 使用 Vim Mode 一定会使用到 Vimrc Support 这个插件，配合自定义 .</description>
+    </item>
+    
+  </channel>
+</rss>

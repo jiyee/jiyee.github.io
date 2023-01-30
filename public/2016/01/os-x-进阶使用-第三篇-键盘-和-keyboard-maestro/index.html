@@ -1,0 +1,161 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="/cactus.js"></script>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> 《OS X 进阶使用》－ 第三篇 键盘 和 Keyboard Maestro | Jiyee&#39;s I/O</title>
+  <link rel = 'canonical' href = 'https://jiyee.io/2016/01/os-x-%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AF%87-%E9%94%AE%E7%9B%98-%E5%92%8C-keyboard-maestro/'>
+  <meta name="description" content="A blog for sharing articles and insights about software development.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="《OS X 进阶使用》－ 第三篇 键盘 和 Keyboard Maestro" />
+<meta property="og:description" content="TL;DR 键盘是程序员每天都要接触的输入设备，很有必要把键盘的好好研究一番。。。 如果不是爱折腾人士，请忽略本文。
+机械键盘 机械键盘可能是每一个程序员都必备的一样外设，无论是 PC 用户还是 Mac 用户。他带来的触感和体验跟普通的薄膜键盘相比存在明显的差异，个人推荐茶轴或者青轴更适合程序员使用。至于具体哪款键盘型号或者不同轴之间的差异，这里面略微有些玄学的意思，乃至于像 HHKB 这样的静电容键盘，我没使用过，就更不好评说了。
+如果大家对外设感兴趣，可以看看 in外设 这个网站，里面尽是些外设的测评的内容，看了要剁手不要找我。
+键位 OS X 用户在外接键盘的时候，第一个问题就是在默认情况下 Command 键和 Option 键换了个位置。为了达到一致性体验，建议换回默认键位。方法也比较简单，就是在「设置－键盘－修饰键」里重设实体 Option 键和 Command 键对应的按键即可。
+另外，就是个性化的一些改变了，这里稍微展开一点，如有兴趣可以继续参看文章底部参考文档。
+Hyper Key &amp; Seil 古早的键盘拥有更多的修饰键，如 Hyper、Super、Meta，用于状态控制。 现在，通过更改键位的方式可以在现代键盘上模拟出一些修饰键，用于快捷键设置。
+在 OS X 里一个叫 Seil 的免费软件可以完成键位的 keycode 替换。
+对于现代键盘而言，最有用的一点是替换 CapsLock 键。因为 CapsLock 键不经常使用，却又在最容易触及的位置，把 CapsLock 键替换成 Hyper 键或者 Ctrl 键。尤其是对于 Vim 党，很多 Vim 党就是在 Vim 配置把 CapsLock 键替换成 Meta 键使用。
+Karabiner 事情肯定没有这么简单，那替换了之后能有什么用呢？ 下面就请出另一个免费神器 Karabiner ，用于键盘的自定义，通过选项方式或者配置文件方式，就能完成各式各样的按键自定义，完全是为爱折腾人士准备。
+例如，通过按 Hyper＋Tab 方式切换的 CapsLock 状态，Hyper＋J 映射到 Down，Hyper＋K 映射到 Up，模拟在普通输入框里实现 Vim 按键映射，避免了 OS X 默认的 Emacs 快捷键方式的影响，是不是 Vim 党最爱？" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiyee.io/2016/01/os-x-%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8-%E7%AC%AC%E4%B8%89%E7%AF%87-%E9%94%AE%E7%9B%98-%E5%92%8C-keyboard-maestro/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-01-06T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-01-06T00:00:00+00:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《OS X 进阶使用》－ 第三篇 键盘 和 Keyboard Maestro"/>
+<meta name="twitter:description" content="TL;DR 键盘是程序员每天都要接触的输入设备，很有必要把键盘的好好研究一番。。。 如果不是爱折腾人士，请忽略本文。
+机械键盘 机械键盘可能是每一个程序员都必备的一样外设，无论是 PC 用户还是 Mac 用户。他带来的触感和体验跟普通的薄膜键盘相比存在明显的差异，个人推荐茶轴或者青轴更适合程序员使用。至于具体哪款键盘型号或者不同轴之间的差异，这里面略微有些玄学的意思，乃至于像 HHKB 这样的静电容键盘，我没使用过，就更不好评说了。
+如果大家对外设感兴趣，可以看看 in外设 这个网站，里面尽是些外设的测评的内容，看了要剁手不要找我。
+键位 OS X 用户在外接键盘的时候，第一个问题就是在默认情况下 Command 键和 Option 键换了个位置。为了达到一致性体验，建议换回默认键位。方法也比较简单，就是在「设置－键盘－修饰键」里重设实体 Option 键和 Command 键对应的按键即可。
+另外，就是个性化的一些改变了，这里稍微展开一点，如有兴趣可以继续参看文章底部参考文档。
+Hyper Key &amp; Seil 古早的键盘拥有更多的修饰键，如 Hyper、Super、Meta，用于状态控制。 现在，通过更改键位的方式可以在现代键盘上模拟出一些修饰键，用于快捷键设置。
+在 OS X 里一个叫 Seil 的免费软件可以完成键位的 keycode 替换。
+对于现代键盘而言，最有用的一点是替换 CapsLock 键。因为 CapsLock 键不经常使用，却又在最容易触及的位置，把 CapsLock 键替换成 Hyper 键或者 Ctrl 键。尤其是对于 Vim 党，很多 Vim 党就是在 Vim 配置把 CapsLock 键替换成 Meta 键使用。
+Karabiner 事情肯定没有这么简单，那替换了之后能有什么用呢？ 下面就请出另一个免费神器 Karabiner ，用于键盘的自定义，通过选项方式或者配置文件方式，就能完成各式各样的按键自定义，完全是为爱折腾人士准备。
+例如，通过按 Hyper＋Tab 方式切换的 CapsLock 状态，Hyper＋J 映射到 Down，Hyper＋K 映射到 Up，模拟在普通输入框里实现 Vim 按键映射，避免了 OS X 默认的 Emacs 快捷键方式的影响，是不是 Vim 党最爱？"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://jiyee.io/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q==">
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://jiyee.io/images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+    <header id="header">
+  <a href="https://jiyee.io/">
+  
+    <div id="logo" style="background-image: url(https://jiyee.io/images/logo.png)"></div>
+  
+  <div id="title">
+    <h1>Jiyee&#39;s I/O</h1>
+  </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+      </li>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+</header>
+
+
+
+    
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="content" itemprop="articleBody">
+  
+    <p>TL;DR
+键盘是程序员每天都要接触的输入设备，很有必要把键盘的好好研究一番。。。
+如果不是爱折腾人士，请忽略本文。</p>
+<h2 id="机械键盘">机械键盘</h2>
+<p><a href="https://zh.wikipedia.org/zh/%E6%9C%BA%E6%A2%B0%E9%94%AE%E7%9B%98">机械键盘</a>可能是每一个程序员都必备的一样外设，无论是 PC 用户还是 Mac 用户。他带来的触感和体验跟普通的薄膜键盘相比存在明显的差异，个人推荐茶轴或者青轴更适合程序员使用。至于具体哪款键盘型号或者不同轴之间的差异，这里面略微有些玄学的意思，乃至于像 HHKB 这样的静电容键盘，我没使用过，就更不好评说了。</p>
+<p>如果大家对外设感兴趣，可以看看 <a href="http://www.inwaishe.com">in外设</a> 这个网站，里面尽是些外设的测评的内容，看了要剁手不要找我。</p>
+<h2 id="键位">键位</h2>
+<p>OS X 用户在外接键盘的时候，第一个问题就是在默认情况下 Command 键和 Option 键换了个位置。为了达到一致性体验，建议换回默认键位。方法也比较简单，就是在「设置－键盘－修饰键」里重设实体 Option 键和 Command 键对应的按键即可。</p>
+<p>另外，就是个性化的一些改变了，这里稍微展开一点，如有兴趣可以继续参看文章底部参考文档。</p>
+<h3 id="hyper-key--seil">Hyper Key &amp; Seil</h3>
+<p>古早的键盘拥有更多的修饰键，如 Hyper、Super、Meta，用于状态控制。
+<img src="http://holywood.be/emacs/images/keyboard-9647.jpg" alt="Emacs"></p>
+<p>现在，通过更改键位的方式可以在现代键盘上模拟出一些修饰键，用于快捷键设置。</p>
+<p>在 OS X 里一个叫 <a href="https://pqrs.org/osx/karabiner/seil.html.en">Seil</a> 的免费软件可以完成键位的 keycode 替换。</p>
+<p>对于现代键盘而言，最有用的一点是替换 CapsLock 键。因为 CapsLock 键不经常使用，却又在最容易触及的位置，把 CapsLock 键替换成 Hyper 键或者 Ctrl 键。尤其是对于 Vim 党，很多 Vim 党就是在 Vim 配置把 CapsLock 键替换成 Meta 键使用。</p>
+<h3 id="karabiner">Karabiner</h3>
+<p>事情肯定没有这么简单，那替换了之后能有什么用呢？
+下面就请出另一个免费神器 <a href="https://pqrs.org/osx/karabiner/index.html.en">Karabiner</a> ，用于键盘的自定义，通过选项方式或者配置文件方式，就能完成各式各样的按键自定义，完全是为爱折腾人士准备。</p>
+<p>例如，通过按 Hyper＋Tab 方式切换的 CapsLock 状态，Hyper＋J 映射到 Down，Hyper＋K 映射到 Up，模拟在普通输入框里实现 Vim 按键映射，避免了 OS X 默认的 Emacs 快捷键方式的影响，是不是 Vim 党最爱？</p>
+<p>之前，我使用键盘有一个毛病，就是只用左 Shift＋其他键来实现大写或者符号输入，无论是 Shift＋A 还是 Shift＋K等，相信很多人也有同样的问题。后来看到通过 Karabiner 可以设定只允许正确的使用左右 Shift 键才能出来完成输入，例如左 Shift＋A 是无效的按键，右 Shift＋A 才能完成大写字母 A 的输入。很简单的一个配置就能实现，从此，妈妈再也不用担心我傻傻不会用键盘了。</p>
+<p>下面附上我一张使用 <a href="https://whatpulse.org/">WhatPulse</a> 统计按键频率图。
+<img src="/images/what-pulse.png" alt="WhatPulse 键盘按键统计"></p>
+<p>最后，附一篇我觉得写得最好的关于键盘配置的参考文档：
+<a href="http://ranmocy.me/translation/a-modern-space-cadet/">现代 Space Cadet</a></p>
+<p>Windows 似乎没有类似的软件，有一款 <a href="https://www.autohotkey.com/">AutoHotkey</a> 的软件跟下一篇讲的 Keyboard Maestro 类似，大家有兴趣可以了解一下。</p>
+<p>还没写到 Keyboard Maestro 就已经这么长，暂时就到这里，更多的内容留待下一篇继续。</p>
+
+  
+  </div>
+</article>
+
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  Jiyee&#39;s I/O 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+</html>

@@ -1,0 +1,167 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="/cactus.js"></script>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> Enemy of the State 阅读摘要 | Jiyee&#39;s I/O</title>
+  <link rel = 'canonical' href = 'https://jiyee.io/2016/08/enemy-of-the-state-%E9%98%85%E8%AF%BB%E6%91%98%E8%A6%81/'>
+  <meta name="description" content="A blog for sharing articles and insights about software development.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="Enemy of the State 阅读摘要" />
+<meta property="og:description" content="Justin Spahr-Summers 2014
+state and mutation
+Simple:less concepts and concerns Complexity: mixing “complecting” All systems have essential complexity.
+State is hard to test.
+State is an implicit input that can change unexpecteble
+Minimize states. Values Purity Isolation Values Structs, Enums, Copied (not shared)
+Value types are immutable in swift.
+Keys: Variables mutate Values never change
+Values are automatically thread-safe Values are automatically predicatable
+Pure functions same inputs always yield the same result." />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiyee.io/2016/08/enemy-of-the-state-%E9%98%85%E8%AF%BB%E6%91%98%E8%A6%81/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-08-08T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-08-08T00:00:00+00:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Enemy of the State 阅读摘要"/>
+<meta name="twitter:description" content="Justin Spahr-Summers 2014
+state and mutation
+Simple:less concepts and concerns Complexity: mixing “complecting” All systems have essential complexity.
+State is hard to test.
+State is an implicit input that can change unexpecteble
+Minimize states. Values Purity Isolation Values Structs, Enums, Copied (not shared)
+Value types are immutable in swift.
+Keys: Variables mutate Values never change
+Values are automatically thread-safe Values are automatically predicatable
+Pure functions same inputs always yield the same result."/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://jiyee.io/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q==">
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://jiyee.io/images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+    <header id="header">
+  <a href="https://jiyee.io/">
+  
+    <div id="logo" style="background-image: url(https://jiyee.io/images/logo.png)"></div>
+  
+  <div id="title">
+    <h1>Jiyee&#39;s I/O</h1>
+  </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+      </li>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+</header>
+
+
+
+    
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="content" itemprop="articleBody">
+  
+    <p>Justin Spahr-Summers
+2014</p>
+<p>state and mutation</p>
+<ul>
+<li>Simple:less concepts and concerns</li>
+<li>Complexity: mixing “complecting”</li>
+</ul>
+<p>All systems have essential complexity.</p>
+<p>State is hard to test.</p>
+<p>State is an implicit input that can change unexpecteble</p>
+<h2 id="minimize-states">Minimize states.</h2>
+<ul>
+<li>Values</li>
+<li>Purity</li>
+<li>Isolation</li>
+</ul>
+<h3 id="values">Values</h3>
+<p>Structs, Enums, Copied (not shared)</p>
+<p>Value types are immutable in swift.</p>
+<p>Keys:
+<strong>Variables mutate</strong>
+<strong>Values never change</strong></p>
+<p>Values are automatically <strong>thread-safe</strong>
+Values are automatically <strong>predicatable</strong></p>
+<h3 id="pure-functions">Pure functions</h3>
+<p>same inputs always yield the same result.
+Must not have <em>observable</em> side effects.</p>
+<h3 id="isolation">Isolation</h3>
+<p>Objects should have only one reason to change
+isolate unrelatted piece of states
+Before log in and After log in ViewModel 差异</p>
+<p>stateless core, stateful shell</p>
+
+  
+  </div>
+</article>
+
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  Jiyee&#39;s I/O 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+</html>

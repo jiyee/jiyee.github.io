@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="/cactus.js"></script>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> Appecelerator Titanium开发经验谈之一 - PhoneGap与Titanium的艰难选择 | Jiyee&#39;s I/O</title>
+  <link rel = 'canonical' href = 'https://jiyee.io/2014/08/appecelerator-titanium%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E8%B0%88%E4%B9%8B%E4%B8%80-phonegap%E4%B8%8Etitanium%E7%9A%84%E8%89%B0%E9%9A%BE%E9%80%89%E6%8B%A9/'>
+  <meta name="description" content="A blog for sharing articles and insights about software development.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="Appecelerator Titanium开发经验谈之一 - PhoneGap与Titanium的艰难选择" />
+<meta property="og:description" content="跟 PhoneGap、AppCan 类似，Appecelerator Titanium（简称Ti）致力于使用 JavaScript 去快速构建 App ([Atwood定律]在发功)。它们有效地抚平了学习曲线，使得 App 开发不再依赖于对 Objective-C 或 Java 语言以及相应开发框架，转而建立在 JavaScript、V8 和 Node 基础之上，让我等前端工程师在 App 开发大潮中有机会去施展。
+好像在中文社区谈论 PhoneGap 的相对多一些，至少搜索相关的 Titanium 资料就比较少。但是，在 V2EX 上关于 PhoneGap 的讨论都基本停留在它性能如何不好怎么后悔方面，但是一看发表时间好像也是 1，2 年以前的事了，这让我对此更加疑惑。按常理说，一个前端工程师肯定更加倾向于 PhoneGap ，就是一个 WebView 么，以前玩的那些都能在 App 上跑起来，多好啊。不过在深入对比过 PhoneGap 和 Titanium 的区别之后，还是抛弃了 PhoneGap ，即便 PhoneGap&#43;Ionic&#43;AngularJS 能够快速开发出一个复杂的、不错的应用，而 Titanium 能够开发出一个更加接近原生（Native）的 App 。
+PhoneGap 和 Ti 之间的艰难选择的结论主要集中到以下三点：
+一是产品性能问题，虽然我没有拿 PhoneGap 来开发出一个较复杂 App ，但是之前浏览器环境下的开发经验告诉我，在一个 WebView 上开发 App ，基本上也不会避开浏览器上的那些问题，包括内容加载、状态维护、页面切换、动态效果等。
+二是框架定位问题，PhoneGap 主要还是引领 W3C 标准，致力于前瞻性的开发一些 Device API ，例如 Audio、Camera、Geolocation、localStorage 等，它提供是对于这些 Device API 的 bridge 。但是，它对于 App 本身关注较少，这也注定了 PhoneGap 的目标是让 webapp 获得更多的 Device API ，而不是构建原生的 App 。具体请参见[《跨平台移动开发工具:PhoneGap与Titanium全方位比拼》]一文，原文参见[《Comparing Titanium and PhoneGap》]（很棒的一篇文章）。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiyee.io/2014/08/appecelerator-titanium%E5%BC%80%E5%8F%91%E7%BB%8F%E9%AA%8C%E8%B0%88%E4%B9%8B%E4%B8%80-phonegap%E4%B8%8Etitanium%E7%9A%84%E8%89%B0%E9%9A%BE%E9%80%89%E6%8B%A9/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2014-08-05T00:00:00+00:00" />
+<meta property="article:modified_time" content="2014-08-05T00:00:00+00:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="Appecelerator Titanium开发经验谈之一 - PhoneGap与Titanium的艰难选择"/>
+<meta name="twitter:description" content="跟 PhoneGap、AppCan 类似，Appecelerator Titanium（简称Ti）致力于使用 JavaScript 去快速构建 App ([Atwood定律]在发功)。它们有效地抚平了学习曲线，使得 App 开发不再依赖于对 Objective-C 或 Java 语言以及相应开发框架，转而建立在 JavaScript、V8 和 Node 基础之上，让我等前端工程师在 App 开发大潮中有机会去施展。
+好像在中文社区谈论 PhoneGap 的相对多一些，至少搜索相关的 Titanium 资料就比较少。但是，在 V2EX 上关于 PhoneGap 的讨论都基本停留在它性能如何不好怎么后悔方面，但是一看发表时间好像也是 1，2 年以前的事了，这让我对此更加疑惑。按常理说，一个前端工程师肯定更加倾向于 PhoneGap ，就是一个 WebView 么，以前玩的那些都能在 App 上跑起来，多好啊。不过在深入对比过 PhoneGap 和 Titanium 的区别之后，还是抛弃了 PhoneGap ，即便 PhoneGap&#43;Ionic&#43;AngularJS 能够快速开发出一个复杂的、不错的应用，而 Titanium 能够开发出一个更加接近原生（Native）的 App 。
+PhoneGap 和 Ti 之间的艰难选择的结论主要集中到以下三点：
+一是产品性能问题，虽然我没有拿 PhoneGap 来开发出一个较复杂 App ，但是之前浏览器环境下的开发经验告诉我，在一个 WebView 上开发 App ，基本上也不会避开浏览器上的那些问题，包括内容加载、状态维护、页面切换、动态效果等。
+二是框架定位问题，PhoneGap 主要还是引领 W3C 标准，致力于前瞻性的开发一些 Device API ，例如 Audio、Camera、Geolocation、localStorage 等，它提供是对于这些 Device API 的 bridge 。但是，它对于 App 本身关注较少，这也注定了 PhoneGap 的目标是让 webapp 获得更多的 Device API ，而不是构建原生的 App 。具体请参见[《跨平台移动开发工具:PhoneGap与Titanium全方位比拼》]一文，原文参见[《Comparing Titanium and PhoneGap》]（很棒的一篇文章）。"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://jiyee.io/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q==">
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://jiyee.io/images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+    <header id="header">
+  <a href="https://jiyee.io/">
+  
+    <div id="logo" style="background-image: url(https://jiyee.io/images/logo.png)"></div>
+  
+  <div id="title">
+    <h1>Jiyee&#39;s I/O</h1>
+  </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+      </li>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+</header>
+
+
+
+    
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="content" itemprop="articleBody">
+  
+    <p>跟 PhoneGap、AppCan 类似，Appecelerator Titanium（简称<strong>Ti</strong>）致力于使用 JavaScript 去快速构建 App ([Atwood定律]在发功)。它们有效地抚平了学习曲线，使得 App 开发不再依赖于对 Objective-C 或 Java 语言以及相应开发框架，转而建立在 JavaScript、V8 和 Node 基础之上，让我等前端工程师在 App 开发大潮中有机会去施展。</p>
+<p>好像在中文社区谈论 PhoneGap 的相对多一些，至少搜索相关的 Titanium 资料就比较少。但是，在 V2EX 上关于 PhoneGap 的讨论都基本停留在它性能如何不好怎么后悔方面，但是一看发表时间好像也是 1，2 年以前的事了，这让我对此更加疑惑。按常理说，一个前端工程师肯定更加倾向于 PhoneGap ，就是一个 WebView 么，以前玩的那些都能在 App 上跑起来，多好啊。不过在深入对比过 PhoneGap 和 Titanium 的区别之后，还是抛弃了 PhoneGap ，即便 PhoneGap+Ionic+AngularJS 能够快速开发出一个复杂的、不错的应用，而 Titanium 能够开发出一个更加接近原生（Native）的 App 。</p>
+<p>PhoneGap 和 Ti 之间的艰难选择的结论主要集中到以下三点：</p>
+<ul>
+<li>
+<p>一是产品性能问题，虽然我没有拿 PhoneGap 来开发出一个较复杂 App ，但是之前浏览器环境下的开发经验告诉我，在一个 WebView 上开发 App ，基本上也不会避开浏览器上的那些问题，包括内容加载、状态维护、页面切换、动态效果等。</p>
+</li>
+<li>
+<p>二是框架定位问题，PhoneGap 主要还是引领 W3C 标准，致力于前瞻性的开发一些 Device API ，例如 Audio、Camera、Geolocation、localStorage 等，它提供是对于这些 Device API 的 bridge 。但是，它对于 App 本身关注较少，这也注定了 PhoneGap 的目标是让 webapp 获得更多的 Device API ，而不是构建原生的 App 。具体请参见[《跨平台移动开发工具:PhoneGap与Titanium全方位比拼》]一文，原文参见[《Comparing Titanium and PhoneGap》]（很棒的一篇文章）。</p>
+</li>
+<li>
+<p>三是 UI 问题，PhoneGap 本身不提供任何 UI 相关的接口，一切 UI 都由 HTML 实现，当然也出现了很多专门的 UI 框架，比较优秀的有 Ionic，Lungo，所以他开发出来的 UI 一致性很好，真的成也萧何败萧何，好坏自知。</p>
+<p>Ti 并没有极力去说服开发者一套代码适用于全平台，它更加强调代码的重用度，例如 Model 代码重用度 90 %， View 层代码重用度 80 %。这与 Ti 框架的设计有关，它是一个底层 Native API 的 PORT ，当然也包括了 UI 相关的 API ，它更加接近于原生 App ，这里没有说他是原生 App 是因为它仍然是在运行时再去执行你的 JavaScript 代码，并没有直接将 JavaScript 编译到 Objective-C 或者 Java ，甚至是字节码。所以，相比原生 App 它在性能上也会打个折。</p>
+</li>
+</ul>
+<p><img src="/images/ti-flow.png" alt="Ti Flow"></p>
+<p>附图就是 Ti 框架下 JavaScript 最终如何与底层 API 交互的逻辑，Ti 就是作为 Proxy，在运行时动态解析 JavaScript 代码（在 V8/JavaScript Core 环境下），然后 Proxy 到 Ti SDK ，再 Proxy 到底层 API。</p>
+<p>看来是很不错的构想，距离 JavaScript 一统天下不远了，好吧，就这么定了，撇下 PhoneGap ，搭上 Titanium。</p>
+
+  
+  </div>
+</article>
+
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  Jiyee&#39;s I/O 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+</html>

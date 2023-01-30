@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="/cactus.js"></script>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> 《OS X 进阶使用》－ 第四篇 键盘和 Keyboard Maestro（二） | Jiyee&#39;s I/O</title>
+  <link rel = 'canonical' href = 'https://jiyee.io/2016/01/os-x-%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8-%E7%AC%AC%E5%9B%9B%E7%AF%87-%E9%94%AE%E7%9B%98%E5%92%8C-keyboard-maestro%E4%BA%8C/'>
+  <meta name="description" content="A blog for sharing articles and insights about software development.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="《OS X 进阶使用》－ 第四篇 键盘和 Keyboard Maestro（二）" />
+<meta property="og:description" content="前言 本来这个段落的标题是「价值观」，我想想有点过了，还是改成「前言」好了。
+使用键盘方面，我的判断是：能够有效地使用键盘完成工作是衡量程序员开发效率标准之一。
+我见过键盘输入速度和熟练度上较高的一名选手就是 browserify 的作者 James Halliday，大家有兴趣可以上 Youtube 上看看他做的分享的一些视频。
+无论在 OS X 还是 Windows 平台上，想要高效地使用键盘都需要花费一番功夫，并不是打字足够快就能够说明高效，而是看你如何使用键盘完成一件事的方式。
+当然，首要的一点就是你能快速准确地使用键盘完成文本输入，尤其是代码输入，大家有兴趣可以上 Typing Practice for Programmers 这个网站测试一下你输入代码的速度，我的 WPM 是 45&#43;，无效按键是 19%。
+快捷键与模式 除了快速、准确地文本输入之外，熟记足够多的快捷键，也是提高效率的重要一方面。
+在 OS X 上所有的输入框和 Terminal 快捷键模式是 Emacs 模式，如果你是 Emacs 党，那你一定如鱼得水，如果你是 Vim 党，那可能你也得学会如何使用 Emacs 的快捷键。无论是普通的文本输入框还是 Terminal 都是 OS X 用户每日都接触的，熟练使用快捷键就能减少鼠标的使用或者一路按左或者按右的状况。
+作为一个伪 Vim 党，平日我基本不用 Vim 编辑器，只是保持在最常用场景中尽可能使用 Vim 模式。在 Chrome 浏览器，我使用 cvim 插件，只需要键盘就能完成 URL 输入，页面滚动，链接跳转等工作，完全不用鼠标。在 Sublime Text，有 Vintageous 插件，在 Jetbrains 家的 AppCode，有 IdeaVim 插件，这些插件除了一些宏的设置和使用上存在一定缺陷之外，基本都能保证 Vim 模式。在其他软件中，通过快捷键映射，把 Hyper＋H/J/K/L 映射到了左下上右等。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiyee.io/2016/01/os-x-%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8-%E7%AC%AC%E5%9B%9B%E7%AF%87-%E9%94%AE%E7%9B%98%E5%92%8C-keyboard-maestro%E4%BA%8C/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-01-07T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-01-07T00:00:00+00:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《OS X 进阶使用》－ 第四篇 键盘和 Keyboard Maestro（二）"/>
+<meta name="twitter:description" content="前言 本来这个段落的标题是「价值观」，我想想有点过了，还是改成「前言」好了。
+使用键盘方面，我的判断是：能够有效地使用键盘完成工作是衡量程序员开发效率标准之一。
+我见过键盘输入速度和熟练度上较高的一名选手就是 browserify 的作者 James Halliday，大家有兴趣可以上 Youtube 上看看他做的分享的一些视频。
+无论在 OS X 还是 Windows 平台上，想要高效地使用键盘都需要花费一番功夫，并不是打字足够快就能够说明高效，而是看你如何使用键盘完成一件事的方式。
+当然，首要的一点就是你能快速准确地使用键盘完成文本输入，尤其是代码输入，大家有兴趣可以上 Typing Practice for Programmers 这个网站测试一下你输入代码的速度，我的 WPM 是 45&#43;，无效按键是 19%。
+快捷键与模式 除了快速、准确地文本输入之外，熟记足够多的快捷键，也是提高效率的重要一方面。
+在 OS X 上所有的输入框和 Terminal 快捷键模式是 Emacs 模式，如果你是 Emacs 党，那你一定如鱼得水，如果你是 Vim 党，那可能你也得学会如何使用 Emacs 的快捷键。无论是普通的文本输入框还是 Terminal 都是 OS X 用户每日都接触的，熟练使用快捷键就能减少鼠标的使用或者一路按左或者按右的状况。
+作为一个伪 Vim 党，平日我基本不用 Vim 编辑器，只是保持在最常用场景中尽可能使用 Vim 模式。在 Chrome 浏览器，我使用 cvim 插件，只需要键盘就能完成 URL 输入，页面滚动，链接跳转等工作，完全不用鼠标。在 Sublime Text，有 Vintageous 插件，在 Jetbrains 家的 AppCode，有 IdeaVim 插件，这些插件除了一些宏的设置和使用上存在一定缺陷之外，基本都能保证 Vim 模式。在其他软件中，通过快捷键映射，把 Hyper＋H/J/K/L 映射到了左下上右等。"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://jiyee.io/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q==">
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://jiyee.io/images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+    <header id="header">
+  <a href="https://jiyee.io/">
+  
+    <div id="logo" style="background-image: url(https://jiyee.io/images/logo.png)"></div>
+  
+  <div id="title">
+    <h1>Jiyee&#39;s I/O</h1>
+  </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+      </li>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+</header>
+
+
+
+    
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="content" itemprop="articleBody">
+  
+    <h2 id="前言">前言</h2>
+<p>本来这个段落的标题是「价值观」，我想想有点过了，还是改成「前言」好了。</p>
+<p>使用键盘方面，我的判断是：能够有效地使用键盘完成工作是衡量程序员开发效率标准之一。</p>
+<p>我见过键盘输入速度和熟练度上较高的一名选手就是 <a href="http://browserify.org">browserify</a> 的作者 <a href="http://substack.net">James Halliday</a>，大家有兴趣可以上 <a href="https://m.youtube.com/results?q=james%20halliday%20substack&amp;sm=1">Youtube</a> 上看看他做的分享的一些视频。</p>
+<p>无论在 OS X 还是 Windows 平台上，想要高效地使用键盘都需要花费一番功夫，并不是打字足够快就能够说明高效，而是看你如何使用键盘完成一件事的方式。</p>
+<p>当然，首要的一点就是你能快速准确地使用键盘完成文本输入，尤其是代码输入，大家有兴趣可以上 <a href="http://typing.io">Typing Practice for Programmers</a> 这个网站测试一下你输入代码的速度，我的 WPM 是 45+，无效按键是 19%。</p>
+<h2 id="快捷键与模式">快捷键与模式</h2>
+<p>除了快速、准确地文本输入之外，熟记足够多的快捷键，也是提高效率的重要一方面。</p>
+<p>在 OS X 上所有的输入框和 Terminal 快捷键模式是 <a href="http://jblevins.org/log/kbd">Emacs 模式</a>，如果你是 Emacs 党，那你一定如鱼得水，如果你是 Vim 党，那可能你也得学会如何使用 Emacs 的快捷键。无论是普通的文本输入框还是 Terminal 都是 OS X 用户每日都接触的，熟练使用快捷键就能减少鼠标的使用或者一路按左或者按右的状况。</p>
+<p>作为一个伪 Vim 党，平日我基本不用 Vim 编辑器，只是保持在最常用场景中尽可能使用 <a href="https://en.m.wikibooks.org/wiki/Learning_the_vi_Editor/Vim/Modes">Vim 模式</a>。在 Chrome 浏览器，我使用 <a href="https://chrome.google.com/webstore/detail/cvim/ihlenndgcmojhcghmfjfneahoeklbjjh?hl=en">cvim</a> 插件，只需要键盘就能完成 URL 输入，页面滚动，链接跳转等工作，完全不用鼠标。在 Sublime Text，有 <a href="https://github.com/guillermooo/Vintageous">Vintageous</a> 插件，在 Jetbrains 家的 AppCode，有 <a href="https://github.com/JetBrains/ideavim">IdeaVim</a> 插件，这些插件除了一些宏的设置和使用上存在一定缺陷之外，基本都能保证 Vim 模式。在其他软件中，通过快捷键映射，把 Hyper＋H/J/K/L 映射到了左下上右等。</p>
+<p>我既不是 Emacs 用户，也不是 Vim 用户，很难说使用他们究竟有什么优势，大家有兴趣可以看看 <a href="https://zh.wikipedia.org/zh/%E7%BC%96%E8%BE%91%E5%99%A8%E4%B9%8B%E6%88%98">「编辑器之战」</a> 这个 Wiki。但是，作为一名伪 Vim 党，我想说的是，统一使用 Emacs 或者 Vim 模式，能尽量让你保持在移动、输入和修改等操作过程中，头脑的思考方式是一致的，而且尽量避免了鼠标操作。</p>
+<p>键盘这部分已经写了两篇，看起来也很难把内容都涵盖到，我只能尽量把我认为一些重要的内容提出来简单讲一讲，希望对大家有所帮助和启发。</p>
+
+  
+  </div>
+</article>
+
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  Jiyee&#39;s I/O 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+</html>

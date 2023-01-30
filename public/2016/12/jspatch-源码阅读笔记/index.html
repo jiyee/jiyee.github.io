@@ -1,0 +1,730 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="/cactus.js"></script>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> JSPatch 源码阅读笔记 | Jiyee&#39;s I/O</title>
+  <link rel = 'canonical' href = 'https://jiyee.io/2016/12/jspatch-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/'>
+  <meta name="description" content="A blog for sharing articles and insights about software development.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="JSPatch 源码阅读笔记" />
+<meta property="og:description" content="本文作为 JSPatch 源码阅读笔记，记录了 v0.0.1 到 v1.2.2 版本之间的主要 commit 变化，尝试从源码反向理解 JSPatch 实现原理和细节。
+未完待续。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiyee.io/2016/12/jspatch-%E6%BA%90%E7%A0%81%E9%98%85%E8%AF%BB%E7%AC%94%E8%AE%B0/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-12-23T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-12-23T00:00:00+00:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="JSPatch 源码阅读笔记"/>
+<meta name="twitter:description" content="本文作为 JSPatch 源码阅读笔记，记录了 v0.0.1 到 v1.2.2 版本之间的主要 commit 变化，尝试从源码反向理解 JSPatch 实现原理和细节。
+未完待续。"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://jiyee.io/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q==">
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://jiyee.io/images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+    <header id="header">
+  <a href="https://jiyee.io/">
+  
+    <div id="logo" style="background-image: url(https://jiyee.io/images/logo.png)"></div>
+  
+  <div id="title">
+    <h1>Jiyee&#39;s I/O</h1>
+  </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+      </li>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+</header>
+
+
+
+    
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="content" itemprop="articleBody">
+  
+    <p>本文作为 JSPatch 源码阅读笔记，记录了 v0.0.1 到 v1.2.2 版本之间的主要 commit 变化，尝试从源码反向理解 JSPatch 实现原理和细节。</p>
+<p>未完待续。</p>
+<h2 id="v001">v0.0.1</h2>
+<p>JSPatch 文件结构简单得让人不可思议，只有 JPEngine{.h,.m} 和 JSPatch.js 三个文件。</p>
+<h3 id="jpengineh">JPEngine.h</h3>
+<p>JSPatch 依赖 <code>&lt;JavaScriptCore/JavaScriptCore.h&gt;</code> 和 <code>&lt;objc/runtime.h&gt;</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">@interface</span> <span style="color:#a6e22e">JPEngine</span> : <span style="color:#a6e22e">NSObject</span>
+</span></span><span style="display:flex;"><span>+ (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">startEngine</span>;
+</span></span><span style="display:flex;"><span>+ (JSValue <span style="color:#f92672">*</span>)<span style="color:#a6e22e">evaluateScript:</span>(NSString <span style="color:#f92672">*</span>)script;
+</span></span><span style="display:flex;"><span>+ (JSContext <span style="color:#f92672">*</span>)<span style="color:#a6e22e">context</span>;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">@end</span>
+</span></span></code></pre></div><h3 id="jpenginem">JPEngine.m</h3>
+<p><code>startEngine</code> 方法里新建并维持一个 JSContext 静态实例，并注入一些 JavaScript 方法和 exceptionHandler，最后在创建的 context 里加载 patch 文件。</p>
+<p>注入方法包括：</p>
+<ul>
+<li>_OC_defineClass</li>
+<li>_OC_callI</li>
+<li>_OC_callC</li>
+<li>_OC_getBlockArguments</li>
+<li>_OC_dispatch_after</li>
+<li>_OC_dispatch_async_main</li>
+<li>_OC_dispatch_sync_main</li>
+<li>_OC_dispatch_async_global_queue</li>
+<li>_OC_log</li>
+<li>_OC_catch</li>
+</ul>
+<p><code>evaluateScript</code> 方法在 JSContext 类静态实例环境下，执行 patch 文件。其中，多了一步 try/catch 替换工作，把这个 patch 执行体都放在一个 try/catch 方法里，同时，替换 patch 文件里写的 <code>.()</code> 为 <code>.__c()</code>。</p>
+<p>有两个属性 <code>cacheArguments</code> 和 <code>cacheArgumentsIdx</code>，作用是 ???</p>
+<p>另外，有 5 个全局静态变量 <code>cacheArguments</code>， <code>cacheArgumentsIdx</code>，<code>_propKeys</code>，</p>
+<p>这个 JPEngine.m 文件里剩下的基本都是 C 函数。一个个解析如下：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">const</span> <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>propKey(NSString <span style="color:#f92672">*</span>propName)
+</span></span></code></pre></div><p>Q: 为什么不直接保存 propName，而要转换到 propKey 呢？</p>
+<p>读取保存在 _propKeys 字典里 propName 对应的 propKey。在 <code>getPropIMP</code> 和 <code>setPropIMP</code> 方法里被调用，用途是通过 associatedObject 方式给类添加属性。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> NSDictionary <span style="color:#f92672">*</span>defineClass(NSString <span style="color:#f92672">*</span>classDeclaration, JSValue <span style="color:#f92672">*</span>instanceMethods, JSValue <span style="color:#f92672">*</span>classMethods)
+</span></span></code></pre></div><ol>
+<li>获取定义的类和父类名称，如果类不存在，通过注册 ClassPair 方法注册新类，方法如下：</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">Class</span> superCls <span style="color:#f92672">=</span> NSClassFromString(superClassName);
+</span></span><span style="display:flex;"><span>cls <span style="color:#f92672">=</span> objc_allocateClassPair(superCls, className.UTF8String, <span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>objc_registerClassPair(cls);
+</span></span></code></pre></div><ol start="2">
+<li>
+<p>通过两次循环，遍历实例方法和类方法，通过 <code>class_copyMethodList</code> 函数，遍历类层次结构里已定义的方法，如果存在 jsMethods 里定义的待替换的方法，则调用 <code>overrideMethod</code> 函数完成替换。
+通过字典保存已替换的方法名，不重复替换。
+不过，代码中存在循环变量重复定义，没有调用 <code>free</code> 函数等问题。</p>
+</li>
+<li>
+<p>增加 <code>getProp:</code> 和 <code>setProp:forKey:</code> 方法</p>
+</li>
+</ol>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span>class_addMethod(cls, <span style="color:#66d9ef">@selector</span>(getProp:), (<span style="color:#66d9ef">IMP</span>)getPropIMP, <span style="color:#e6db74">&#34;@24@0:8@16&#34;</span>);
+</span></span><span style="display:flex;"><span>class_addMethod(cls, <span style="color:#66d9ef">@selector</span>(setProp:forKey:), (<span style="color:#66d9ef">IMP</span>)setPropIMP, <span style="color:#e6db74">&#34;v32@0:8@16@24&#34;</span>);
+</span></span></code></pre></div><p>其中，type encoding 很有意思，待分析？（PS，后续作者去掉了 type 长度限制）</p>
+<ol start="4">
+<li>返回字典类型结果，包含类，已替换的实例方法，已替换的类方法</li>
+</ol>
+<p>通过一堆宏定义方法返回类型，例如</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span>JPMETHOD_IMPLEMENTATION_RET(<span style="color:#66d9ef">id</span>, <span style="color:#66d9ef">id</span>, <span style="color:#66d9ef">return</span> [ret toObject])
+</span></span></code></pre></div><p>经过宏展开得到</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">id</span> <span style="color:#a6e22e">JPMethodImplement_id</span>(<span style="color:#66d9ef">id</span> slf, <span style="color:#66d9ef">SEL</span> selector) {
+</span></span><span style="display:flex;"><span>  JSValue <span style="color:#f92672">*</span>fun <span style="color:#f92672">=</span> getJSFunctionInObjectHierachy(slf, selector);
+</span></span><span style="display:flex;"><span>  JSValue <span style="color:#f92672">*</span>ret <span style="color:#f92672">=</span> [fun callWithArguments:_TMPInvocationArguments];
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">id</span> obj <span style="color:#f92672">=</span> formatJSToOC(ret);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (obj <span style="color:#f92672">==</span> _nilObj <span style="color:#f92672">||</span> ([obj isKindOfClass:[NSNumber <span style="color:#66d9ef">class</span>]] <span style="color:#f92672">&amp;&amp;</span> strcmp([obj objCType], <span style="color:#e6db74">&#34;c&#34;</span>) <span style="color:#f92672">==</span> <span style="color:#ae81ff">0</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span>[obj boolValue]))
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> ((<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>)<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>  <span style="color:#66d9ef">return</span> obj;
+</span></span><span style="display:flex;"><span>  ;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>JPImplementation 作为 IMP 类型，替换需要 override 的方法。</p>
+<h4 id="overridemethod">overrideMethod</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> overrideMethod(<span style="color:#66d9ef">Class</span> cls, NSString <span style="color:#f92672">*</span>selectorName, JSValue <span style="color:#f92672">*</span>function, <span style="color:#66d9ef">BOOL</span> isClassMethod)
+</span></span></code></pre></div><p><code>__JPNONImplementSelector</code> 不存在的 IMP 实现，用于将待替换的方法走动态消息转发，最终走到 <code>JPForwardInvocation</code> 方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">IMP</span> originalImp <span style="color:#f92672">=</span> class_respondsToSelector(cls, selector) <span style="color:#f92672">?</span> class_getMethodImplementation(cls, selector) <span style="color:#f92672">:</span> NULL;
+</span></span><span style="display:flex;"><span>class_replaceMethod(cls, selector, class_getMethodImplementation(cls, <span style="color:#66d9ef">@selector</span>(__JPNONImplementSelector)), typeDescription);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SEL</span> newForwardSelector <span style="color:#f92672">=</span> <span style="color:#66d9ef">@selector</span>(ORIGforwardInvocation:);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>class_respondsToSelector(cls, newForwardSelector)) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">IMP</span> originalForwardImp <span style="color:#f92672">=</span> class_replaceMethod(cls, <span style="color:#66d9ef">@selector</span>(forwardInvocation:), (<span style="color:#66d9ef">IMP</span>)JPForwardInvocation, <span style="color:#e6db74">&#34;v@:@&#34;</span>);
+</span></span><span style="display:flex;"><span>    class_addMethod(cls, newForwardSelector, originalForwardImp, <span style="color:#e6db74">&#34;v@:@&#34;</span>);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>这里的 <code>forwardInvocation:</code> 就是动态消息转发的原方法，也被替换为 <code>JPForwardInvocation</code></p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#75715e">// 将 selector 原实现添加到 ORIGselectorName 新方法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>NSString <span style="color:#f92672">*</span>originalSelectorName <span style="color:#f92672">=</span> [NSString stringWithFormat:<span style="color:#e6db74">@&#34;ORIG%@&#34;</span>, selectorName];
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">SEL</span> originalSelector <span style="color:#f92672">=</span> NSSelectorFromString(originalSelectorName);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">if</span>(<span style="color:#f92672">!</span>class_respondsToSelector(cls, originalSelector)) {
+</span></span><span style="display:flex;"><span>    class_addMethod(cls, originalSelector, originalImp, typeDescription);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">_methodFunc</span>
+</span></span></code></pre></div><p>把相关信息传给 Objective-C，Objective-C 用 Runtime 接口调用相应方法，返回结果值。</p>
+<p>JSClass 对象包含以下属性：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#a6e22e">__obj</span> <span style="color:#75715e">// OC 实例指针
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">__isSuper</span> <span style="color:#75715e">// 是否是 OC 实例的父类
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">__clsName</span> <span style="color:#75715e">// OC 实例对应的类名
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#a6e22e">__super</span> <span style="color:#75715e">// OC 实例的父类的对应的 JSClass 对象
+</span></span></span></code></pre></div><p>阅读 JSPatch 的 JavaScript 代码应从 patch 示例代码入手，直接从 JSPatch.js 入手的话，很多代码看起来不知为何缘由，例如：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span><span style="color:#a6e22e">require</span>(<span style="color:#e6db74">&#39;UIView&#39;</span>)
+</span></span></code></pre></div><p>首先，<code>require</code> 方法是定义在 global 全局对象上的自定义方法，调用了 <code>_require</code> 内部方法，在 global 全局对象上定义了 <code>UIView</code> 这个属性，保存了对应的一个对象 <code>{__isCls: 1, __clsName: 'UIView'}</code>。这样，至此就能调用 <code>UIView</code> 这个全局属性了。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">defineClass</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">declaration</span>, <span style="color:#a6e22e">instMethods</span>, <span style="color:#a6e22e">clsMethods</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 包装传入的函数，参数类型转换
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">newInstMethods</span> <span style="color:#f92672">=</span> {}, <span style="color:#a6e22e">newClsMethods</span> <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_formatDefineMethod</span>(<span style="color:#a6e22e">instMethods</span>, <span style="color:#a6e22e">newInstMethods</span>, <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_formatDefineMethod</span>(<span style="color:#a6e22e">clsMethods</span>, <span style="color:#a6e22e">newClsMethods</span>, <span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 调用 JSContext 定义的 _OC_defineClass 方法，执行方法替换
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// 返回的 JS 对象包含类名 cls，实例方法名数组 instMethods，类方法名数组 clsMethods
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ret</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_OC_defineClass</span>(<span style="color:#a6e22e">declaration</span>, <span style="color:#a6e22e">newInstMethods</span>, <span style="color:#a6e22e">newClsMethods</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 剔除 OC 已替换的方法，剩下的是 JS 本地方法，重置这些方法执行时上下文环境和参数类型
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">_formatLocalMethods</span>(<span style="color:#a6e22e">instMethods</span>, <span style="color:#a6e22e">ret</span>[<span style="color:#e6db74">&#34;instMethods&#34;</span>], <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">_formatLocalMethods</span>(<span style="color:#a6e22e">clsMethods</span>, <span style="color:#a6e22e">ret</span>[<span style="color:#e6db74">&#34;clsMethods&#34;</span>], <span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 按类保存定义的实例方法和类方法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">localMethods</span>[<span style="color:#a6e22e">ret</span>[<span style="color:#e6db74">&#34;cls&#34;</span>]] <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">instMethods</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">instMethods</span>,
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">clsMethods</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">clsMethods</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">require</span>(<span style="color:#a6e22e">ret</span>[<span style="color:#e6db74">&#34;cls&#34;</span>])
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>defineClass 方法用于在 JS 里定义 OC 类，类方法和实例方法。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_formatDefineMethod</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">methods</span>, <span style="color:#a6e22e">newMethods</span>, <span style="color:#a6e22e">isInst</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">methodName</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">methods</span>) {
+</span></span><span style="display:flex;"><span>      (<span style="color:#66d9ef">function</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">originMethod</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">methods</span>[<span style="color:#a6e22e">methodName</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">newMethods</span>[<span style="color:#a6e22e">methodName</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_formatOCToJS</span>(Array.<span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">slice</span>.<span style="color:#a6e22e">call</span>(<span style="color:#a6e22e">arguments</span>))
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isInst</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">self</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">args</span>[<span style="color:#ae81ff">0</span>]
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">args</span>.<span style="color:#a6e22e">splice</span>(<span style="color:#ae81ff">0</span>,<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ret</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_formatJSToOC</span>(<span style="color:#a6e22e">originMethod</span>.<span style="color:#a6e22e">apply</span>(<span style="color:#a6e22e">originMethod</span>, <span style="color:#a6e22e">args</span>))
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isInst</span>) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">self</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ret</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      })()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>主要做两件事，一是将传入的 OC 参数转换成 JSClass 对象，调用定义的 JS 方法，再将 JS 返回结果转换成 OC 对象。二是如果实例方法调用，在调用前后设置 <code>global.self</code> 属性，让 JS 写的代码也能像 OC 一样有 self 属性，而 self 属性的值就是执行方法实例。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_formatOCToJS</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">obj</span>) {
+</span></span><span style="display:flex;"><span>     <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">obj</span> <span style="color:#f92672">===</span> <span style="color:#66d9ef">undefined</span> <span style="color:#f92672">||</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">===</span> <span style="color:#66d9ef">null</span>) <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 如果是 OC 返回的对象，则包含 __isObj 属性，重新封装成 JSClass 对象
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#66d9ef">if</span> (<span style="color:#66d9ef">typeof</span> <span style="color:#a6e22e">obj</span> <span style="color:#f92672">==</span> <span style="color:#e6db74">&#34;object&#34;</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">__isObj</span>) {
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">_toJSObj</span>(<span style="color:#a6e22e">obj</span>)
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 如果是数组，递归处理
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">obj</span> <span style="color:#66d9ef">instanceof</span> Array) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ret</span> <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">forEach</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">o</span>){
+</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">ret</span>.<span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">_formatOCToJS</span>(<span style="color:#a6e22e">o</span>))
+</span></span><span style="display:flex;"><span>        })
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ret</span>
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 如果是方法，则包装一个新方法，将其传入参数转换类型
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">obj</span> <span style="color:#66d9ef">instanceof</span> Function) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> Array.<span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">slice</span>.<span style="color:#a6e22e">call</span>(<span style="color:#a6e22e">arguments</span>)
+</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">apply</span>(<span style="color:#a6e22e">obj</span>, <span style="color:#a6e22e">_formatJSToOC</span>(<span style="color:#a6e22e">args</span>))
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 如果是 JS 对象，则遍历全部属性值，进行类型转换
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">obj</span> <span style="color:#66d9ef">instanceof</span> Object) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ret</span> <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">key</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">obj</span>) {
+</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">ret</span>[<span style="color:#a6e22e">key</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">_formatOCToJS</span>(<span style="color:#a6e22e">obj</span>[<span style="color:#a6e22e">key</span>])
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ret</span>
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 其他基本数据类型，则不处理
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">obj</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_formatJSToOC</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">obj</span>) {
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 如果是 JSClass 对象，则返回 OC 对象指针
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">obj</span> <span style="color:#66d9ef">instanceof</span> Object <span style="color:#f92672">&amp;&amp;</span> <span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">__obj</span>) {
+</span></span><span style="display:flex;"><span>       <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">__obj</span>
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 如果是数组，递归处理
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">obj</span> <span style="color:#66d9ef">instanceof</span> Array) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ret</span> <span style="color:#f92672">=</span> []
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">forEach</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">o</span>){
+</span></span><span style="display:flex;"><span>          <span style="color:#a6e22e">ret</span>.<span style="color:#a6e22e">push</span>(<span style="color:#a6e22e">_formatJSToOC</span>(<span style="color:#a6e22e">o</span>))
+</span></span><span style="display:flex;"><span>        })
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ret</span>
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 如果是 JS 对象，则遍历全部属性值，进行类型转换
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">obj</span> <span style="color:#66d9ef">instanceof</span> Object) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ret</span> <span style="color:#f92672">=</span> {}
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">key</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">obj</span>) {
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">obj</span>.<span style="color:#a6e22e">hasOwnProperty</span>(<span style="color:#a6e22e">key</span>)) {
+</span></span><span style="display:flex;"><span>            <span style="color:#a6e22e">ret</span>[<span style="color:#a6e22e">key</span>] <span style="color:#f92672">=</span> <span style="color:#a6e22e">_formatJSToOC</span>(<span style="color:#a6e22e">obj</span>[<span style="color:#a6e22e">key</span>])
+</span></span><span style="display:flex;"><span>          }
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ret</span>
+</span></span><span style="display:flex;"><span>     }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>     <span style="color:#75715e">// 其他类型，则不处理
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>     <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">obj</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_formatLocalMethods</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">methods</span>, <span style="color:#a6e22e">ocMethods</span>, <span style="color:#a6e22e">isInst</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">ocMethods</span>.<span style="color:#a6e22e">forEach</span>(<span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">methodName</span>){
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">delete</span> <span style="color:#a6e22e">methods</span>[<span style="color:#a6e22e">methodName</span>]
+</span></span><span style="display:flex;"><span>    })
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">var</span> <span style="color:#a6e22e">methodName</span> <span style="color:#66d9ef">in</span> <span style="color:#a6e22e">methods</span>) {
+</span></span><span style="display:flex;"><span>      (<span style="color:#66d9ef">function</span>(){
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">originMethod</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">methods</span>[<span style="color:#a6e22e">methodName</span>]
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">methods</span>[<span style="color:#a6e22e">methodName</span>] <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> Array.<span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">slice</span>.<span style="color:#a6e22e">call</span>(<span style="color:#a6e22e">arguments</span>)
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isInst</span>) <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">self</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ret</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">originMethod</span>.<span style="color:#a6e22e">apply</span>(<span style="color:#66d9ef">this</span>, <span style="color:#a6e22e">args</span>)
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">isInst</span>) <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">self</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">null</span>
+</span></span><span style="display:flex;"><span>          <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">ret</span>
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>      })()
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#75715e">// 给全部 JS 对象加上 __c 方法，调用 __c 方法之后返回的还是方法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  Object.<span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">__c</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">methodName</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 如果不是 JSClass 对象，则直接调用方法，表示调用的是 JS 原生方法，绑定作用域
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">__obj</span> <span style="color:#f92672">&amp;&amp;</span> <span style="color:#f92672">!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">__clsName</span>) <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">this</span>[<span style="color:#a6e22e">methodName</span>].<span style="color:#a6e22e">bind</span>(<span style="color:#66d9ef">this</span>);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 从定义的类的 JS 方法里查找，如果存在则是 JS 定义方法，绑定作用域
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">customMethod</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_getCustomMethod</span>(<span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">__clsName</span>, <span style="color:#a6e22e">methodName</span>, <span style="color:#f92672">!!</span><span style="color:#66d9ef">this</span>.<span style="color:#a6e22e">__obj</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">customMethod</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">customMethod</span>.<span style="color:#a6e22e">bind</span>(<span style="color:#66d9ef">this</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">self</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">this</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 返回包装方法，方法里代理到对应的 OC 类的实例方法或类方法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> Array.<span style="color:#a6e22e">prototype</span>.<span style="color:#a6e22e">slice</span>.<span style="color:#a6e22e">call</span>(<span style="color:#a6e22e">arguments</span>)
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">_methodFunc</span>(<span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">__obj</span>, <span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">__clsName</span>, <span style="color:#a6e22e">methodName</span>, <span style="color:#a6e22e">args</span>, <span style="color:#a6e22e">self</span>.<span style="color:#a6e22e">__isSuper</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#75715e">// 命名不是很直观，看了多遍之后才反应过来，method 对应的 OC 方法，func 对应的 JS 方法，只能说作者很用心，我领悟能力有限
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>  <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">_methodFunc</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>(<span style="color:#a6e22e">instance</span>, <span style="color:#a6e22e">clsName</span>, <span style="color:#a6e22e">methodName</span>, <span style="color:#a6e22e">args</span>, <span style="color:#a6e22e">isSuper</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">args</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">_formatJSToOC</span>(<span style="color:#a6e22e">args</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 方法名替换， indexPathForRow_inSection 到 indexPathForRow:inSection: 格式
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">selectorName</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">methodName</span>.<span style="color:#a6e22e">replace</span>(<span style="color:#e6db74">/_/g</span>, <span style="color:#e6db74">&#34;:&#34;</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">marchArr</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">selectorName</span>.<span style="color:#a6e22e">match</span>(<span style="color:#e6db74">/:/g</span>)
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">numOfArgs</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">marchArr</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">marchArr</span>.<span style="color:#a6e22e">length</span> <span style="color:#f92672">:</span> <span style="color:#ae81ff">0</span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 判断是否是无参方法，如果不是补全冒号
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">args</span>.<span style="color:#a6e22e">length</span> <span style="color:#f92672">&gt;</span> <span style="color:#a6e22e">numOfArgs</span>) {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">selectorName</span> <span style="color:#f92672">+=</span> <span style="color:#e6db74">&#34;:&#34;</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 代理调用 OC 方法
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">ret</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">instance</span> <span style="color:#f92672">?</span> <span style="color:#a6e22e">_OC_callI</span>(<span style="color:#a6e22e">instance</span>, <span style="color:#a6e22e">selectorName</span>, <span style="color:#a6e22e">args</span>, <span style="color:#a6e22e">isSuper</span>)<span style="color:#f92672">:</span>
+</span></span><span style="display:flex;"><span>                         <span style="color:#a6e22e">_OC_callC</span>(<span style="color:#a6e22e">clsName</span>, <span style="color:#a6e22e">selectorName</span>, <span style="color:#a6e22e">args</span>)
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> <span style="color:#a6e22e">_formatOCToJS</span>(<span style="color:#a6e22e">ret</span>)
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><h3 id="阅读感受">阅读感受：</h3>
+<p>我是先看的源码，再仔细看的 bang 的文章，文章写的很通俗易懂。在没有看详解文章之前，每个方法基本都能看懂，但是方法之间的关联和部分方法为什么要这么处理还不能很好的反向理解。另外，看的过程中觉得能写出这么多闭包和作用域绑定的 JavaScript 代码看起来很牛逼，普通的 iOS 程序员肯定是达不到这个水平的，看了博客之后才发现 bang 原来做过前端，好吧。。。跨界才是 iOS 的未来。</p>
+<p>v0.0.1 的单元测试还仅仅覆盖通过 JS 创建和传递不同类型的对象，通过 JS 调用 OC 方法等。测试用例的写法比较独特，都是通过对象 BOOL 属性标识来判断单个测试是否正确执行，需要按顺序来阅读测试用例，测试代码和断言代码分布在不同文件，需要跳跃着来阅读。</p>
+<p>另外，觉得 v0.0.1 代码整体缺乏优雅的结构，看起来很累，代码本身也没有太多注释，代码中还遗留了不少错误。不过更新很快，而且越来越多的代码贡献都来自社区。总而言之，JSPatch 的出现给社区提供了一个很不错的平台基础，给沉寂已久的 iOS 社区注入了一股清流。</p>
+<h2 id="v002">v0.0.2</h2>
+<h3 id="版本动态">版本动态</h3>
+<ul>
+<li>支持添加新的 OC 方法，https://github.com/bang590/JSPatch/commit/653074ff50639c57703265c4824b604c7bc80127</li>
+<li>方法名包含下划线 &lsquo;_&rsquo;，JS 用 &lsquo;__&rsquo; 表示</li>
+<li><a href="https://github.com/bang590/JSPatch/pull/17">https://github.com/bang590/JSPatch/pull/17</a></li>
+<li>_objc_msgForward，https://github.com/bang590/JSPatch/commit/e67740fc386dd205d254da141d4480c4396b0c7d，https://github.com/bang590/JSPatch/commit/770d4efaf7d4ab1194d756dff65b0bfc79908c7c</li>
+<li>支持 NSNull 和 nil 参数，https://github.com/bang590/JSPatch/commit/5f2f081d9b75a3719e53d9c40eae48e2252a0934</li>
+</ul>
+<p>关于 <code>_objc_msgForward</code> 用途，进一步阅读 <a href="http://www.jianshu.com/p/3c8ce231576c">http://www.jianshu.com/p/3c8ce231576c</a></p>
+<h4 id="支持添加新的-oc-方法addnewmethod">支持添加新的 OC 方法，addNewMethod</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">void</span> <span style="color:#a6e22e">addNewMethod</span>(<span style="color:#66d9ef">Class</span> cls, NSString <span style="color:#f92672">*</span>selectorName, JSValue <span style="color:#f92672">*</span>function, <span style="color:#66d9ef">int</span> argCount, <span style="color:#66d9ef">BOOL</span> isClassMethod) {
+</span></span><span style="display:flex;"><span>    NSString <span style="color:#f92672">*</span>clsName <span style="color:#f92672">=</span> NSStringFromClass(cls);
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 重构 methods 存储方式，不再区分类方法和实例方法，按类名和方法名存储为二维数组
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    _initJPOverideMethods(clsName);
+</span></span><span style="display:flex;"><span>    _JSOverideMethods[clsName][selectorName] <span style="color:#f92672">=</span> function;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">SEL</span> selector <span style="color:#f92672">=</span> NSSelectorFromString(selectorName);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 跟进参数格式指定不同的 IMP，IMP 的第一个参数是 id self， 第二个参数是  SEL selector，后续才是调用参数
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">IMP</span> JPImplementation <span style="color:#f92672">=</span> (<span style="color:#66d9ef">IMP</span>)JPMETHOD_NEW_IMPLEMENTATION_NAME(<span style="color:#ae81ff">0</span>);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">switch</span> (argCount) {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">#define JPMETHOD_NEW_CASE(_argCount) \
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">        case _argCount: \
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">            JPImplementation = (IMP)JPMETHOD_NEW_IMPLEMENTATION_NAME(_argCount);    \
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e">            break;
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>
+</span></span><span style="display:flex;"><span>        JPMETHOD_NEW_CASE(<span style="color:#ae81ff">0</span>)
+</span></span><span style="display:flex;"><span>        JPMETHOD_NEW_CASE(<span style="color:#ae81ff">1</span>)
+</span></span><span style="display:flex;"><span>        JPMETHOD_NEW_CASE(<span style="color:#ae81ff">2</span>)
+</span></span><span style="display:flex;"><span>        JPMETHOD_NEW_CASE(<span style="color:#ae81ff">3</span>)
+</span></span><span style="display:flex;"><span>        JPMETHOD_NEW_CASE(<span style="color:#ae81ff">4</span>)
+</span></span><span style="display:flex;"><span>        JPMETHOD_NEW_CASE(<span style="color:#ae81ff">5</span>)
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 根据参数个数设置 type encoding
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    NSMutableString <span style="color:#f92672">*</span>typeDescStr <span style="color:#f92672">=</span> [<span style="color:#e6db74">@&#34;@@:&#34;</span> mutableCopy];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> argCount; i <span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        [typeDescStr appendString:<span style="color:#e6db74">@&#34;@&#34;</span>];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 调用 class_addMethod 方法添加新的方法，class_addMethod 会重写父类同名实现，但是不会替换类已有实现
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    class_addMethod(cls, selector, JPImplementation, [typeDescStr cStringUsingEncoding:NSUTF8StringEncoding]);
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><p>由于统一了对象和方法的存储方式，在对象层次结构上查找定义的 JS 方法变得更简单。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> JSValue<span style="color:#f92672">*</span> <span style="color:#a6e22e">getJSFunctionInObjectHierarchy</span>(<span style="color:#66d9ef">id</span> slf, <span style="color:#66d9ef">SEL</span> selector) {
+</span></span><span style="display:flex;"><span>    NSString <span style="color:#f92672">*</span>selectorName <span style="color:#f92672">=</span> NSStringFromSelector(selector);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">Class</span> cls <span style="color:#f92672">=</span> [slf <span style="color:#66d9ef">class</span>];
+</span></span><span style="display:flex;"><span>    NSString <span style="color:#f92672">*</span>clsName <span style="color:#f92672">=</span> NSStringFromClass(cls);
+</span></span><span style="display:flex;"><span>    JSValue <span style="color:#f92672">*</span>func <span style="color:#f92672">=</span> _JSOverideMethods[clsName][selectorName];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">while</span> (<span style="color:#f92672">!</span>func) {
+</span></span><span style="display:flex;"><span>        cls <span style="color:#f92672">=</span> class_getSuperclass(cls);
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>cls) {
+</span></span><span style="display:flex;"><span>            NSCAssert(NO, <span style="color:#e6db74">@&#34;warning can not find selector %@&#34;</span>, selectorName);
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> nil;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>        clsName <span style="color:#f92672">=</span> NSStringFromClass(cls);
+</span></span><span style="display:flex;"><span>        func <span style="color:#f92672">=</span> _JSOverideMethods[clsName][selectorName];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> func;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h4 id="--_objc_msgforward-替换-__jpnonimplementselector">- _objc_msgForward 替换 __JPNONImplementSelector</h4>
+<p>在 forwardInvocation 逻辑里，把它指向了一个不存在的 IMP，之前的实现是指定一个不存在的 selector，而 class_getMethodImplementation 函数在找不到 selector 对应的 IMP 时，会返回 <code>_objc_msgForward</code> 这个 IMP，所以优化成直接指向这个 IMP。</p>
+<p>另外，一个 bugfix 还不太看得懂代码，就是处理非 64 位处理器 IMP 返回一个 struct 时的崩溃，具体原理解释参看 <a href="http://blog.cnbang.net/tech/2855/">http://blog.cnbang.net/tech/2855/</a>。另外，在 Aspects 这个项目里也找到了同样的处理，不过代码更加清晰。https://github.com/steipete/Aspects/blob/master/Aspects.m#L243</p>
+<h4 id="支持-nsnull-和-nil-参数">支持 NSNull 和 nil 参数</h4>
+<p>把 nil 参数在内部处理成 NSNull，而 NSNull 在转成 JS 对象是增加 <code>__isNull</code> 属性。</p>
+<h2 id="v003">v0.0.3</h2>
+<h3 id="版本动态-1">版本动态</h3>
+<ul>
+<li>修复多线程调用的问题，通过同步锁解决，https://github.com/bang590/JSPatch/issues/21</li>
+<li>进一步支持参数传入 null， undefined， nsnull， <a href="https://github.com/bang590/JSPatch/issues/31">https://github.com/bang590/JSPatch/issues/31</a></li>
+<li><strong>支持调用 NSArray / NSDictionary / NSString 的方法</strong>，https://github.com/bang590/JSPatch/commit/e6b121db3feacb22e7bbf81d2be67811e4558fd3，https://github.com/bang590/JSPatch/commit/73569a1041242bb1d88b7b0ee1c69d69548ad98c</li>
+<li><strong>支持 Protocol</strong></li>
+<li>这个版本开始单元测试逐步覆盖比较完整了</li>
+</ul>
+<h4 id="支持调用-nsarray--nsdictionary--nsstring-的方法"><strong>支持调用 NSArray / NSDictionary / NSString 的方法</strong></h4>
+<blockquote>
+<p>API changes:
+1.now the NSArray/NSDictionary/NSString will use as NSObject in JS instead of JS type.
+2.use .toJS() to transfer NSArray/NSDictionary/NSString to JS array/object/string.
+3.change API .super to .super()</p>
+</blockquote>
+<blockquote>
+<p>Code changes:
+1.box/unbox for NSArray/NSDictionary/NSString
+2.remove JSClass
+3.move formatJSToOC() to Objective-C</p>
+</blockquote>
+<p>目的是为了在写 Patch 的时候一直保留 OC API，将方法调用的返回值都返回包装类型，避免 JS 和 OC 的 API 混用。另一方面，优化了 JS 调用 OC 方法时参数装箱，调用返回时返回值拆箱的处理，提升了性能。
+装箱拆箱的设计很多语言里都有，这里的设计是返回 JSBoxing，移除了原有的 JSClass 设计，在 JS 层面就变得更轻巧，而且将原本在 JS 处理的 _formatJSToOC 方法实现移至了 OC 实现，而保留在 JS 的 <code>_formatOCToJS</code> 方法，仅仅是递归拆包处理。另外，JS 里也移除了 <code>localMethods</code> 的解析和保存。
+装箱支持 id，void *，Class，SEL 类型，void * 指针类型支持 _OC_free / free 方法释放。</p>
+<h4 id="支持-protocol"><strong>支持 Protocol</strong></h4>
+<p>这样做的作用是，当添加 Protocol 里定义的方法，而类里没有实现的方法时，参数和返回值类型不再全是 id，而是自动转为 Protocol 里定义的类型。
+具体实现上，差别就在于 <code>overrideMethod</code> 方法里传入匹配的 typeDescription。原本 typeDescription 获取是通过 selectorName -&gt; SEL -&gt; Method -&gt; method type encoding 方式，methodSignature 获取是通过 instanceMethodSignatureForSelector 方法。现在，有了 typeDescription 之后，直接通过 signatureWithObjCTypes 方法就能获取 methodSignature。
+我的理解是，代码里混用了 typeDescption 和 methodSignature，比较乱。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">static</span> <span style="color:#66d9ef">char</span> <span style="color:#f92672">*</span><span style="color:#a6e22e">methodTypesInProtocol</span>(NSString <span style="color:#f92672">*</span>protocolName, NSString <span style="color:#f92672">*</span>selectorName, <span style="color:#66d9ef">BOOL</span> isInstanceMethod, <span style="color:#66d9ef">BOOL</span> isRequired) {
+</span></span><span style="display:flex;"><span>    Protocol <span style="color:#f92672">*</span>protocol <span style="color:#f92672">=</span> objc_getProtocol([trim(protocolName) cStringUsingEncoding:NSUTF8StringEncoding]);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">unsigned</span> <span style="color:#66d9ef">int</span> selCount <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 获取到接口里定义的方法描述
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">struct</span> objc_method_description <span style="color:#f92672">*</span>methods <span style="color:#f92672">=</span> protocol_copyMethodDescriptionList(protocol, isRequired, isInstanceMethod, <span style="color:#f92672">&amp;</span>selCount);
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">for</span> (<span style="color:#66d9ef">int</span> i <span style="color:#f92672">=</span> <span style="color:#ae81ff">0</span>; i <span style="color:#f92672">&lt;</span> selCount; i <span style="color:#f92672">++</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">if</span> ([selectorName isEqualToString:NSStringFromSelector(methods[i].name)]) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> methods[i].types;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// FIXME: 缺少 free(methods) 调用
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#66d9ef">return</span> NULL;
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="v01">v0.1</h2>
+<h3 id="版本动态-2">版本动态</h3>
+<ul>
+<li>取消了 addNewMethod 方法，合并到 overrideMethod 方法</li>
+<li>支持链式调用，通过返回 false 实现</li>
+<li>使用 JSValue 原生方法转换 CGRect/CGSize/CGPoint/NSRange struct</li>
+<li>规范定义了 Extension 机制</li>
+<li>增加了 C 接口扩展，这一个版本 albert438 贡献不少代码，他的博客里也有不少介绍 JSPatch 原理的文章</li>
+<li>增加了 JPMemory 扩展，用于 JS 里直接操作内存和结构体分配</li>
+</ul>
+<h4 id="判断-selector-是否被替换的方法">判断 selector 是否被替换的方法</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span>class_getMethodImplementation(cls, <span style="color:#66d9ef">@selector</span>(forwardInvocation:)) <span style="color:#f92672">!=</span> (<span style="color:#66d9ef">IMP</span>)JPForwardInvocation
+</span></span></code></pre></div><h4 id="取消了-addnewmethod-方法合并到-overridemethod-方法">取消了 addNewMethod 方法，合并到 overrideMethod 方法</h4>
+<p>因为 <code>class_replaceMethod</code> 有两个表现，如 API 文档描述：</p>
+<blockquote>
+<p>This function behaves in two different ways:</p>
+</blockquote>
+<blockquote>
+<p>If the method identified by name does not yet exist, it is added as if class_addMethod were called. The type encoding specified by types is used as given.</p>
+</blockquote>
+<blockquote>
+<p>If the method identified by name does exist, its IMP is replaced as if method_setImplementation were called. The type encoding specified by types is ignored.</p>
+</blockquote>
+<p>只要传入合适的 types，即可作为 <code>class_addMethod</code> 使用。</p>
+<h4 id="支持链式调用通过返回-false-实现">支持链式调用，通过返回 false 实现</h4>
+<p><a href="https://github.com/bang590/JSPatch/commit/cb7688ee74c3bbc88f0a80c72b1864a93e918f66">https://github.com/bang590/JSPatch/commit/cb7688ee74c3bbc88f0a80c72b1864a93e918f66</a></p>
+<p>这个 bang 的文章里有详细解释，实现上来讲也很巧妙。</p>
+<p>同时，支持了 nil 类型，实现方式上同 NULL 类型。</p>
+<h4 id="使用-jsvalue-原生方法转换-cgrectcgsizecgpointnsrange-struct">使用 JSValue 原生方法转换 CGRect/CGSize/CGPoint/NSRange struct</h4>
+<p><a href="https://github.com/bang590/JSPatch/commit/3228c85b68ec675b65ace95119d6f7b3df5e2243">https://github.com/bang590/JSPatch/commit/3228c85b68ec675b65ace95119d6f7b3df5e2243</a></p>
+<p>这个 commit 也挺有意思的，bang 发现了 JSValue 原生方法就支持转换 CGRect/CGSize/CGPoint/NSRange struct，免去了额外的扩展支持。从侧面也说明对于 Apple API 越了解越能发现简单的解决方式，上述的 <code>class_replaceMethod</code> 同理。</p>
+<h4 id="规范定义了-extension-机制">规范定义了 Extension 机制</h4>
+<p>Extension 扩展机制保证了核心代码的精简和稳定。</p>
+<p>bang 的文章里解释了 Extension 接口设计的目标：</p>
+<ul>
+<li>接口清晰</li>
+<li>每个扩展独立存在，互不影响</li>
+<li>不影响JPEngine的正常使用，尽量少暴露JPEngine的接口</li>
+<li>扩展的接口可扩展，以后有其他扩展需求可以在其基础上添加</li>
+<li>动态加载，扩展可能会给JS全局变量添加很多接口，最好能在真正使用到时才加载</li>
+</ul>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">@protocol</span> <span style="color:#a6e22e">JPExtensionProtocol</span> <span style="color:#f92672">&lt;</span>NSObject<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">@optional</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">-</span> (<span style="color:#66d9ef">void</span>)main:(JSContext <span style="color:#f92672">*</span>)context;
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- (size_t)<span style="color:#a6e22e">sizeOfStructWithTypeName:</span>(NSString <span style="color:#f92672">*</span>)typeName;
+</span></span><span style="display:flex;"><span>- (NSDictionary <span style="color:#f92672">*</span>)<span style="color:#a6e22e">dictOfStruct:</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>)structData <span style="color:#a6e22e">typeName:</span>(NSString <span style="color:#f92672">*</span>)typeName;
+</span></span><span style="display:flex;"><span>- (<span style="color:#66d9ef">void</span>)<span style="color:#a6e22e">structData:</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>)structData <span style="color:#a6e22e">ofDict:</span>(NSDictionary <span style="color:#f92672">*</span>)dict <span style="color:#a6e22e">typeName:</span>(NSString <span style="color:#f92672">*</span>)typeName;
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">@end</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">@interface</span> <span style="color:#a6e22e">JPExtension</span> : <span style="color:#a6e22e">NSObject</span> <span style="color:#f92672">&lt;</span>JPExtensionProtocol<span style="color:#f92672">&gt;</span>
+</span></span><span style="display:flex;"><span><span style="color:#f92672">+</span> (<span style="color:#66d9ef">instancetype</span>)instance;
+</span></span><span style="display:flex;"><span>- (<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>)<span style="color:#a6e22e">formatPointerJSToOC:</span>(JSValue <span style="color:#f92672">*</span>)val;
+</span></span><span style="display:flex;"><span>- (<span style="color:#66d9ef">id</span>)<span style="color:#a6e22e">formatPointerOCToJS:</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>)pointer;
+</span></span><span style="display:flex;"><span>- (<span style="color:#66d9ef">id</span>)<span style="color:#a6e22e">formatJSToOC:</span>(JSValue <span style="color:#f92672">*</span>)val;
+</span></span><span style="display:flex;"><span>- (<span style="color:#66d9ef">id</span>)<span style="color:#a6e22e">formatOCToJS:</span>(<span style="color:#66d9ef">id</span>)obj;
+</span></span></code></pre></div><div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">id</span> <span style="color:#a6e22e">formatJSToOC</span>(JSValue <span style="color:#f92672">*</span>val);
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">id</span> <span style="color:#a6e22e">formatOCToJS</span>(<span style="color:#66d9ef">id</span> obj);
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">@implementation</span> <span style="color:#a6e22e">JPExtension</span>
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>+ (<span style="color:#66d9ef">instancetype</span>)<span style="color:#a6e22e">instance</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> [[self alloc] init];
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- (<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>)<span style="color:#a6e22e">formatPointerJSToOC:</span>(JSValue <span style="color:#f92672">*</span>)val {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">id</span> obj <span style="color:#f92672">=</span> [val toObject];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> ([obj isKindOfClass:[NSDictionary <span style="color:#66d9ef">class</span>]]) { <span style="color:#75715e">// 包装对象
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">if</span> (obj[<span style="color:#e6db74">@&#34;__obj&#34;</span>] <span style="color:#f92672">&amp;&amp;</span> [obj[<span style="color:#e6db74">@&#34;__obj&#34;</span>] isKindOfClass:[JPBoxing <span style="color:#66d9ef">class</span>]]) {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> [(JPBoxing <span style="color:#f92672">*</span>)(obj[<span style="color:#e6db74">@&#34;__obj&#34;</span>]) unboxPointer];
+</span></span><span style="display:flex;"><span>        } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>            <span style="color:#66d9ef">return</span> NULL;
+</span></span><span style="display:flex;"><span>        }
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>[val toBool]) { <span style="color:#75715e">// false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> NULL;
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span>{ <span style="color:#75715e">// JPBoxing
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> [((JPBoxing <span style="color:#f92672">*</span>)[val toObject]) unboxPointer];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- (<span style="color:#66d9ef">id</span>)<span style="color:#a6e22e">formatPointerOCToJS:</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>)pointer {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> formatOCToJS([JPBoxing boxPointer:pointer]);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- (<span style="color:#66d9ef">id</span>)<span style="color:#a6e22e">formatJSToOC:</span>(JSValue <span style="color:#f92672">*</span>)val {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (<span style="color:#f92672">!</span>[val toBool]) { <span style="color:#75715e">// false
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>        <span style="color:#66d9ef">return</span> nil;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> formatJSToOC(val);
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>- (<span style="color:#66d9ef">id</span>)<span style="color:#a6e22e">formatOCToJS:</span>(<span style="color:#66d9ef">id</span>)obj {
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 疑问，为什么代理给 JS 方法去执行？
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#75715e">// Unified the return value of C API
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>Extensions and Objective<span style="color:#f92672">-</span>C method.
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> [[JSContext currentContext][<span style="color:#e6db74">@&#34;_formatOCToJS&#34;</span>] callWithArguments:<span style="color:#ae81ff">@[</span>formatOCToJS(obj)<span style="color:#ae81ff">]</span>];
+</span></span><span style="display:flex;"><span>}
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span><span style="color:#66d9ef">@end</span>
+</span></span></code></pre></div><p>在实现中区分了 extensions 和 structExtensions。</p>
+<h4 id="增加了-jpmemory-扩展用于-js-里直接操作内存和结构体分配">增加了 JPMemory 扩展，用于 JS 里直接操作内存和结构体分配</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span>context[<span style="color:#e6db74">@&#34;getPointer&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#f92672">^</span><span style="color:#66d9ef">id</span>(JSValue <span style="color:#f92672">*</span>jsVal) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#f92672">**</span>p <span style="color:#f92672">=</span> malloc(<span style="color:#66d9ef">sizeof</span>(<span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>));
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>pointer <span style="color:#f92672">=</span> [self formatPointerJSToOC:jsVal];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (pointer <span style="color:#f92672">!=</span> NULL) {
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> pointer;
+</span></span><span style="display:flex;"><span>    } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">id</span> obj <span style="color:#f92672">=</span> [self formatJSToOC:jsVal];
+</span></span><span style="display:flex;"><span>        <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> (<span style="color:#66d9ef">__bridge</span> <span style="color:#66d9ef">void</span><span style="color:#f92672">*</span>)obj;
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> [self formatPointerOCToJS:p];
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>存在一个没看懂的代码，为什么不是 <code>void *p = malloc(sizeof(void));</code>，而需要定义成 <code>void **</code>？</p>
+<h2 id="v011">v0.1.1</h2>
+<h3 id="版本动态-3">版本动态</h3>
+<ul>
+<li>性能提升，调用 Patch 方法时，直接处理 invocation</li>
+<li>增加 __weak() 和 __strong() 接口</li>
+<li>增加 JPStructPointer，支持定义结构体，根据结构体指针和 key 获取 value 的方法，以及 struct 和 NSDictionry 直接的互转方法</li>
+<li>增加 performSelector() 接口，直接调用 OC 方法</li>
+</ul>
+<h4 id="性能提升调用-patch-方法时直接处理-invocation">性能提升，调用 Patch 方法时，直接处理 invocation</h4>
+<p><a href="https://github.com/bang590/JSPatch/commit/60266cb3456585b4a9a3e4b7bd83b2955b988595">https://github.com/bang590/JSPatch/commit/60266cb3456585b4a9a3e4b7bd83b2955b988595</a></p>
+<p>在 overrideMethod 阶段，将 JPSelector 方法也指向 msgForwardIMP，不再指向自定义方法。</p>
+<p>在 JPForwardInvocation 阶段，如果调用的是 JPSelector 方法，则转发到 ORIGforwardInovation。返回时，不再调用指向 JPSelector 方法的 inovation，而是直接组装好 setReturnValue。</p>
+<h4 id="增加-__weak-和-__strong-接口">增加 __weak() 和 __strong() 接口</h4>
+<p>通过 JPBoxing 里增加 weak 类型的 weakObj 引用来保存。
+至于实现细节还没有理清楚。</p>
+<h4 id="增加-jpstructpointer支持定义结构体根据结构体指针和-key-获取-value-的方法以及-struct-和-nsdictionry-直接的互转方法">增加 JPStructPointer，支持定义结构体，根据结构体指针和 key 获取 value 的方法，以及 struct 和 NSDictionry 直接的互转方法</h4>
+<h4 id="增加-performselector-接口直接调用-oc-方法">增加 performSelector() 接口，直接调用 OC 方法</h4>
+<h4 id="给-methodsignature-增加-cache">给 MethodSignature 增加 Cache</h4>
+<p>Caching the MethodSignature when calling Objective-C methods in JavaScript. Make the performance 25% faster than before.</p>
+<p><a href="https://github.com/bang590/JSPatch/commit/370b8d3b62639de21750f4b9a9668f0abd842591">https://github.com/bang590/JSPatch/commit/370b8d3b62639de21750f4b9a9668f0abd842591</a></p>
+<p>性能的瓶颈在于 <code>methodSignature = [cls instanceMethodSignatureForSelector:selector];</code> 方法调用？怎么定位的性能问题？</p>
+<h2 id="v013">v0.1.3</h2>
+<h3 id="版本动态-4">版本动态</h3>
+<ul>
+<li>完善 console.log 方法</li>
+</ul>
+<h4 id="完善-consolelog-方法">完善 console.log 方法</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">console</span>) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">var</span> <span style="color:#a6e22e">jsLogger</span> <span style="color:#f92672">=</span> <span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span>;
+</span></span><span style="display:flex;"><span>    <span style="color:#75715e">// 重新包装 console.log 方法，既执行 _OC_log 用于 NSLog 输出，又执行 log 方法用于控制台输出
+</span></span></span><span style="display:flex;"><span><span style="color:#75715e"></span>    <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">console</span>.<span style="color:#a6e22e">log</span> <span style="color:#f92672">=</span> <span style="color:#66d9ef">function</span>() {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">_OC_log</span>.<span style="color:#a6e22e">apply</span>(<span style="color:#a6e22e">global</span>, <span style="color:#a6e22e">arguments</span>);
+</span></span><span style="display:flex;"><span>      <span style="color:#66d9ef">if</span> (<span style="color:#a6e22e">jsLogger</span>) {
+</span></span><span style="display:flex;"><span>        <span style="color:#a6e22e">jsLogger</span>.<span style="color:#a6e22e">apply</span>(<span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">console</span>, <span style="color:#a6e22e">arguments</span>);
+</span></span><span style="display:flex;"><span>      }
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  } <span style="color:#66d9ef">else</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">console</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>      <span style="color:#a6e22e">log</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">_OC_log</span>
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><p>对比最初的版本：</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-javascript" data-lang="javascript"><span style="display:flex;"><span>  <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">console</span> <span style="color:#f92672">=</span> {
+</span></span><span style="display:flex;"><span>    <span style="color:#a6e22e">log</span><span style="color:#f92672">:</span> <span style="color:#a6e22e">global</span>.<span style="color:#a6e22e">_OC_log</span>
+</span></span><span style="display:flex;"><span>  }
+</span></span></code></pre></div><h2 id="v014">v0.1.4</h2>
+<h3 id="版本动态-5">版本动态</h3>
+<ul>
+<li>增加性能测试 Case，采用 measureBlock: 方法，测试各种替换，执行，包括 JS 方法和 OC 方法</li>
+<li>性能提升，通过 NSRecursiveLock 和 NSLock 替换 @synchronized</li>
+<li>增加了 __bridge_id() 和 CFRelease() 接口</li>
+<li>修复内存泄漏</li>
+<li>支持 JS 自定义结构体作为参数和返回值使用</li>
+</ul>
+<h4 id="增加性能测试-case">增加性能测试 Case</h4>
+<p>性能 Case 在执行 10000 次的基准下，基本在 0.2s 以内</p>
+<h4 id="性能提升通过-nsrecursivelock-和-nslock-替换-synchronized">性能提升，通过 NSRecursiveLock 和 NSLock 替换 @synchronized</h4>
+<p><a href="https://github.com/bang590/JSPatch/commit/72717d81b556df80bc4c84ddb303da063b584bc2">https://github.com/bang590/JSPatch/commit/72717d81b556df80bc4c84ddb303da063b584bc2</a></p>
+<p>NSRecursiveLock 和 NSLock 在使用选择上有什么差别？</p>
+<h4 id="增加了-__bridge_id-和-cfrelease-接口">增加了 __bridge_id() 和 CFRelease() 接口</h4>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span>context[<span style="color:#e6db74">@&#34;__bridge_id&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#f92672">^</span><span style="color:#66d9ef">id</span>(JSValue <span style="color:#f92672">*</span>jsVal) {
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>p <span style="color:#f92672">=</span> [self formatPointerJSToOC:jsVal];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">id</span> obj <span style="color:#f92672">=</span> (<span style="color:#66d9ef">__bridge</span> <span style="color:#66d9ef">id</span>)p;
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">return</span> [self formatOCToJS:obj];
+</span></span><span style="display:flex;"><span>};
+</span></span><span style="display:flex;"><span>
+</span></span><span style="display:flex;"><span>context[<span style="color:#e6db74">@&#34;CFRelease&#34;</span>] <span style="color:#f92672">=</span> <span style="color:#f92672">^</span><span style="color:#66d9ef">void</span>(JSValue <span style="color:#f92672">*</span>jsVal) {
+</span></span><span style="display:flex;"><span>    CFRelease([self formatPointerJSToOC:jsVal]);
+</span></span><span style="display:flex;"><span>};
+</span></span></code></pre></div><p>为什么 __weak 不像 __bridge_id 一样实现？</p>
+<h4 id="修复内存泄漏">修复内存泄漏</h4>
+<p>终于修复了在 0.0.1 就引入的内存泄漏问题，也取消了 typeDescription 和 methodSignature 混用。</p>
+<p><a href="https://github.com/bang590/JSPatch/commit/799d70c5a973265790fecf623a6639be39a59459">https://github.com/bang590/JSPatch/commit/799d70c5a973265790fecf623a6639be39a59459</a></p>
+<p><a href="https://github.com/bang590/JSPatch/commit/5d5208668b9d287df971966034680426572aae96">https://github.com/bang590/JSPatch/commit/5d5208668b9d287df971966034680426572aae96</a></p>
+<h4 id="支持自定义结构体作为参数和返回值使用">支持自定义结构体作为参数和返回值使用</h4>
+<p>将传入的自定义结构体包装成 JSValue</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span>[argList addObject:[JSValue valueWithObject:dict inContext:_context]];
+</span></span></code></pre></div><p>设置返回值时，解析类型，创建 <code>void *</code> 指针，指向结构体。</p>
+<div class="highlight"><pre tabindex="0" style="color:#f8f8f2;background-color:#272822;-moz-tab-size:4;-o-tab-size:4;tab-size:4;"><code class="language-objectivec" data-lang="objectivec"><span style="display:flex;"><span><span style="color:#66d9ef">@synchronized</span> (_context) {
+</span></span><span style="display:flex;"><span>    NSDictionary <span style="color:#f92672">*</span>structDefine <span style="color:#f92672">=</span> registeredStruct[typeString];
+</span></span><span style="display:flex;"><span>    <span style="color:#66d9ef">if</span> (structDefine) {
+</span></span><span style="display:flex;"><span>        size_t size <span style="color:#f92672">=</span> sizeOfStructTypes(structDefine[<span style="color:#e6db74">@&#34;types&#34;</span>]);
+</span></span><span style="display:flex;"><span>        JP_FWD_RET_CALL_JS
+</span></span><span style="display:flex;"><span>        <span style="color:#66d9ef">void</span> <span style="color:#f92672">*</span>ret <span style="color:#f92672">=</span> malloc(size);
+</span></span><span style="display:flex;"><span>        NSDictionary <span style="color:#f92672">*</span>dict <span style="color:#f92672">=</span> formatJSToOC(jsval);
+</span></span><span style="display:flex;"><span>        getStructDataWithDict(ret, dict, structDefine);
+</span></span><span style="display:flex;"><span>        [invocation setReturnValue:ret];
+</span></span><span style="display:flex;"><span>    }
+</span></span><span style="display:flex;"><span>}
+</span></span></code></pre></div><h2 id="v015">v0.1.5</h2>
+<h3 id="版本动态-6">版本动态</h3>
+<ul>
+<li>增加 performSelectorInOC(sel, args, cb) 接口，在 JSContext 之外执行 OC 方法，避免 JavaScriptCore context lock，能够并发执行 OC 方法</li>
+<li>增加 JPLoader</li>
+<li>代码优化和问题修复</li>
+</ul>
+<h4 id="增加-performselectorinocsel-args-cb-接口在-jscontext-之外执行-oc-方法避免-javascriptcore-context-lock能够并发执行-oc-方法">增加 performSelectorInOC(sel, args, cb) 接口，在 JSContext 之外执行 OC 方法，避免 JavaScriptCore context lock，能够并发执行 OC 方法</h4>
+<p><a href="https://github.com/bang590/JSPatch/commit/6e2ab4f5eb750d364134f2eaac5483373d289972">https://github.com/bang590/JSPatch/commit/6e2ab4f5eb750d364134f2eaac5483373d289972</a></p>
+<p>实现还是比较简单的，就是在 __c 方法里区分 performSelectorInOC，返回一个配置参数对象，然后真正调用时，传递到 JPforwardInvocation 里识别特殊配置参数，单独执行 callSelector。</p>
+<p>另外，想吐槽的是代码提交还是不够规范，没有说明地改动一些东西，单元测试里找不到对应的修改。</p>
+<h2 id="v02">v0.2</h2>
+<h3 id="版本动态-7">版本动态</h3>
+<ul>
+<li>增加 addProtocol() 接口</li>
+<li>增加对可变参数的支持</li>
+<li>修复在父类forwardInvocation被重写时可能引发的bug</li>
+<li>增加 JPCleaner() 接口</li>
+</ul>
+<h2 id="v10">v1.0</h2>
+<h3 id="版本动态-8">版本动态</h3>
+<ul>
+<li>增加在 defineClass 增加属性</li>
+<li>增加 JPLocker 和 JPSpecialInit</li>
+<li>增加 defineJSClass 方法，支持以 OC 方式定义 JS 方法</li>
+</ul>
+<h2 id="v11">v1.1</h2>
+<h3 id="版本动态-9">版本动态</h3>
+<ul>
+<li>引入 libffi，支持动态调用 C 函数</li>
+</ul>
+<h2 id="v111">v1.1.1</h2>
+<h3 id="版本动态-10">版本动态</h3>
+<ul>
+<li>增加 po() 和 bt() 方法，用于 Safari 调试</li>
+</ul>
+<h2 id="总结">总结</h2>
+<h3 id="从架构上理解">从架构上理解</h3>
+<h3 id="从流程上理解">从流程上理解</h3>
+<h3 id="从-testcase-上理解">从 TestCase 上理解</h3>
+  
+  </div>
+</article>
+
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  Jiyee&#39;s I/O 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+</html>

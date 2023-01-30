@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-brands-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-regular-400.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/font-awesome/webfonts/fa-solid-900.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <link rel="preload" href="/lib/JetBrainsMono/web/woff2/JetBrainsMono-Regular.woff2" as="font" type="font/woff2" crossorigin="anonymous">
+  <script type="text/javascript" src="/cactus.js"></script>
+  <link rel="stylesheet" href="/style.css" type="text/css">
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title> 《OS X 进阶使用》－ 第七篇 翻越长城 | Jiyee&#39;s I/O</title>
+  <link rel = 'canonical' href = 'https://jiyee.io/2016/01/os-x-%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8-%E7%AC%AC%E4%B8%83%E7%AF%87-%E7%BF%BB%E8%B6%8A%E9%95%BF%E5%9F%8E/'>
+  <meta name="description" content="A blog for sharing articles and insights about software development.">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="robots" content="all,follow">
+  <meta name="googlebot" content="index,follow,snippet,archive">
+  <meta property="og:title" content="《OS X 进阶使用》－ 第七篇 翻越长城" />
+<meta property="og:description" content="GFW 对于程序员来说是一个不可忽视的障碍，翻越长城是程序员必备技能之一。
+代理服务 目前，翻墙的主要方式基本都是通过代理服务器来中转请求。所以，一条优质的线路保证着访问墙外世界的速度和稳定性。通常情况下，北方联通网络连接香港、日本和新加坡的线路都优化得很不错，ping 值能达到 100ms 的水平，美国线路 ping 值一般能达到 300ms 以内还算可以。但是香港和新加坡的线路一般带宽都比较小，不像美国的线路带宽那么充足。还有，日本和新加坡的线路可能存在不同机房丢包率差异巨大的情况。所以，这里存在一个选择的问题，访问网站推荐使用亚洲线路，下载文件推荐使用美国线路。
+另外，目前提供的代理服务基本都是通过付费购买的方式获得，购买之前要了解下代理服务的基本情况，比如 ping 值、丢包率、带宽、稳定性、是否超卖等。
+我建议手头不要仅有一个代理服务，一定要有备用的服务，不然在遇到情况时无法切换就比较麻烦。
+推荐服务：
+VPNSO EurekaVPT 云梯 Linost shadowsocks DNS 服务器列表：
+http://dns.ip.cn http://dns.v2ex.com 如果觉得直接配置 DNS 还不够，可以看看通过 dnsmasq 配置自定义 DNS，这里不再展开。
+OS X 除了代理服务之外，还有一个问题就是如何选择代理软件。这里，介绍一些 OS X 和 iOS 常用的代理软件。
+GoAgentX 可能是 OS X 里最好用的代理软件，支持很多种代理方式，包括 SSH，shadowsocks，SSLedge 等，支持 PAC 代理控制。可惜作者被请喝茶，GitHub 项目被删除。但是，好在不影响使用，仍手动升级代理模块，参考 「GoAgentX 的后续维护及使用」。
+shadowsocksX 如果只是使用 shadowsocks 代理方式，那推荐使用此软件，同样支持 PAC 代理控制。
+SSHMole 如果是古早的 SSH 代理方式，那推荐使用此软件。
+Proxy SwitchyOmega 这个是 Chrome 插件，能够支持 HTTP 和 SOCKS 代理方式和 PAC 控制。" />
+<meta property="og:type" content="article" />
+<meta property="og:url" content="https://jiyee.io/2016/01/os-x-%E8%BF%9B%E9%98%B6%E4%BD%BF%E7%94%A8-%E7%AC%AC%E4%B8%83%E7%AF%87-%E7%BF%BB%E8%B6%8A%E9%95%BF%E5%9F%8E/" /><meta property="article:section" content="post" />
+<meta property="article:published_time" content="2016-01-10T00:00:00+00:00" />
+<meta property="article:modified_time" content="2016-01-10T00:00:00+00:00" />
+
+  <meta name="twitter:card" content="summary"/>
+<meta name="twitter:title" content="《OS X 进阶使用》－ 第七篇 翻越长城"/>
+<meta name="twitter:description" content="GFW 对于程序员来说是一个不可忽视的障碍，翻越长城是程序员必备技能之一。
+代理服务 目前，翻墙的主要方式基本都是通过代理服务器来中转请求。所以，一条优质的线路保证着访问墙外世界的速度和稳定性。通常情况下，北方联通网络连接香港、日本和新加坡的线路都优化得很不错，ping 值能达到 100ms 的水平，美国线路 ping 值一般能达到 300ms 以内还算可以。但是香港和新加坡的线路一般带宽都比较小，不像美国的线路带宽那么充足。还有，日本和新加坡的线路可能存在不同机房丢包率差异巨大的情况。所以，这里存在一个选择的问题，访问网站推荐使用亚洲线路，下载文件推荐使用美国线路。
+另外，目前提供的代理服务基本都是通过付费购买的方式获得，购买之前要了解下代理服务的基本情况，比如 ping 值、丢包率、带宽、稳定性、是否超卖等。
+我建议手头不要仅有一个代理服务，一定要有备用的服务，不然在遇到情况时无法切换就比较麻烦。
+推荐服务：
+VPNSO EurekaVPT 云梯 Linost shadowsocks DNS 服务器列表：
+http://dns.ip.cn http://dns.v2ex.com 如果觉得直接配置 DNS 还不够，可以看看通过 dnsmasq 配置自定义 DNS，这里不再展开。
+OS X 除了代理服务之外，还有一个问题就是如何选择代理软件。这里，介绍一些 OS X 和 iOS 常用的代理软件。
+GoAgentX 可能是 OS X 里最好用的代理软件，支持很多种代理方式，包括 SSH，shadowsocks，SSLedge 等，支持 PAC 代理控制。可惜作者被请喝茶，GitHub 项目被删除。但是，好在不影响使用，仍手动升级代理模块，参考 「GoAgentX 的后续维护及使用」。
+shadowsocksX 如果只是使用 shadowsocks 代理方式，那推荐使用此软件，同样支持 PAC 代理控制。
+SSHMole 如果是古早的 SSH 代理方式，那推荐使用此软件。
+Proxy SwitchyOmega 这个是 Chrome 插件，能够支持 HTTP 和 SOCKS 代理方式和 PAC 控制。"/>
+
+  
+  
+    
+  
+  
+  <link rel="stylesheet" href="https://jiyee.io/css/styles.94f653e9e151e28067a7c5dbbc4600cbd5a3c721e79faaf971e523c40f3b249b8e4f20bb57810dfffa8d559ca5c140fd56eb4cd9c0853113ad08e66afdb08bdd.css" integrity="sha512-lPZT6eFR4oBnp8XbvEYAy9WjxyHnn6r5ceUjxA87JJuOTyC7V4EN//qNVZylwUD9VutM2cCFMROtCOZq/bCL3Q==">
+
+  
+  
+  
+    <!--[if lt IE 9]>
+      <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+      <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+    <![endif]-->
+  
+
+  
+<link rel="icon" type="image/png" href="https://jiyee.io/images/favicon.ico" />
+
+  
+  
+  
+  
+</head>
+
+<body class="max-width mx-auto px3 ltr">
+  <div class="content index py4">
+
+    <header id="header">
+  <a href="https://jiyee.io/">
+  
+    <div id="logo" style="background-image: url(https://jiyee.io/images/logo.png)"></div>
+  
+  <div id="title">
+    <h1>Jiyee&#39;s I/O</h1>
+  </div>
+  </a>
+  <div id="nav">
+    <ul>
+      <li class="icon">
+        <a href="#" aria-label="Menu"><i class="fas fa-bars fa-2x" aria-hidden="true"></i></a>
+      </li>
+      
+        <li><a href="/">Home</a></li>
+      
+        <li><a href="/about">About</a></li>
+      
+    </ul>
+  </div>
+</header>
+
+
+
+    
+<article class="post" itemscope itemtype="http://schema.org/BlogPosting">
+
+  <div class="content" itemprop="articleBody">
+  
+    <p>GFW 对于程序员来说是一个不可忽视的障碍，翻越长城是程序员必备技能之一。</p>
+<h2 id="代理服务">代理服务</h2>
+<p>目前，翻墙的主要方式基本都是通过代理服务器来中转请求。所以，一条优质的线路保证着访问墙外世界的速度和稳定性。通常情况下，北方联通网络连接香港、日本和新加坡的线路都优化得很不错，ping 值能达到 100ms 的水平，美国线路 ping 值一般能达到 300ms 以内还算可以。但是香港和新加坡的线路一般带宽都比较小，不像美国的线路带宽那么充足。还有，日本和新加坡的线路可能存在不同机房丢包率差异巨大的情况。所以，这里存在一个选择的问题，访问网站推荐使用亚洲线路，下载文件推荐使用美国线路。</p>
+<p>另外，目前提供的代理服务基本都是通过付费购买的方式获得，购买之前要了解下代理服务的基本情况，比如 ping 值、丢包率、带宽、稳定性、是否超卖等。</p>
+<p>我建议手头不要仅有一个代理服务，一定要有备用的服务，不然在遇到情况时无法切换就比较麻烦。</p>
+<p>推荐服务：</p>
+<ul>
+<li><a href="https://vpnso.com">VPNSO</a></li>
+<li><a href="https://eurekavpt.com">EurekaVPT</a></li>
+<li><a href="https://www.ytpub.com">云梯</a></li>
+<li><a href="https://www.linost.com">Linost</a></li>
+<li><a href="https://shadowsocks.org">shadowsocks</a></li>
+</ul>
+<p>DNS 服务器列表：</p>
+<ul>
+<li><a href="http://dns.ip.cn">http://dns.ip.cn</a></li>
+<li><a href="http://dns.v2ex.com">http://dns.v2ex.com</a></li>
+</ul>
+<p>如果觉得直接配置 DNS 还不够，可以看看通过 dnsmasq 配置自定义 DNS，这里不再展开。</p>
+<h2 id="os-x">OS X</h2>
+<p>除了代理服务之外，还有一个问题就是如何选择代理软件。这里，介绍一些 OS X 和 iOS 常用的代理软件。</p>
+<ul>
+<li>
+<p>GoAgentX
+可能是 OS X 里最好用的代理软件，支持很多种代理方式，包括 SSH，shadowsocks，SSLedge 等，支持 PAC 代理控制。可惜作者被请喝茶，GitHub 项目被删除。但是，好在不影响使用，仍手动升级代理模块，参考 <a href="https://www.logcg.com/archives/1296.html">「GoAgentX 的后续维护及使用」</a>。</p>
+</li>
+<li>
+<p><a href="http://sourceforge.net/projects/shadowsocksgui/files/dist/">shadowsocksX</a>
+如果只是使用 shadowsocks 代理方式，那推荐使用此软件，同样支持 PAC 代理控制。</p>
+</li>
+<li>
+<p><a href="https://github.com/OpenFibers/SSHMole">SSHMole</a>
+如果是古早的 SSH 代理方式，那推荐使用此软件。</p>
+</li>
+<li>
+<p><a href="https://chrome.google.com/webstore/detail/proxy-switchyomega/padekgcemlokbadohgkifijomclgjgif?hl=en">Proxy SwitchyOmega</a>
+这个是 Chrome 插件，能够支持 HTTP 和 SOCKS 代理方式和 PAC 控制。</p>
+</li>
+<li>
+<p><a href="https://chrome.google.com/webstore/detail/falcon-proxy/gchhimlnjdafdlkojbffdkogjhhkdepf?hl=en">SSLedge</a>，SSLspeedy
+这些也是 Chrome 插件，是我最常用的方式，只是需要购买对应服务，支持灵活切换不同的代理服务器。</p>
+</li>
+<li>
+<p><a href="https://github.com/rofl0r/proxychains-ng">proxychains-ng</a>
+支持在 Terminal 里对待执行的命令行设置代理，对于使用 npm、gem 安装个啥不能的情况比较有用。</p>
+</li>
+<li>
+<p><a href="https://github.com/cyfdecyf/cow">COW</a>
+定位于智能代理，支持多种代理方式、智能检测等特性，挺不错的。</p>
+</li>
+</ul>
+<h2 id="ios">iOS</h2>
+<ul>
+<li>
+<p>Surge
+之前，iOS 平台上的相关应用较少，很多都是 VPN 相关服务商提供的 VPN 接入应用，一般只能通过配置 VPN 的方式翻墙。直到前一阵子 <a href="https://surge.run">Surge</a> 横空出世，一举解决了 iOS 平台上多种代理方式接入和 PAC 代理控制的问题。可惜，过于璀璨就像流星陨落，前一阵子已在 App Store 下架。只能说买到就是赚到，错过了这村就不知道下一家店在哪里了。</p>
+</li>
+<li>
+<p><a href="https://appsto.re/us/xYfT4.i">VPN On</a>
+如果使用 VPN 代理方式，这个应用可以很方便地在 Today Extension 里切换代理，非常推荐购买。</p>
+</li>
+<li>
+<p>APNp
+就是智能代理，通过 PAC 文件来配置代理条件，一般随服务商提供。</p>
+</li>
+</ul>
+
+  
+  </div>
+</article>
+
+
+    <footer id="footer">
+  <div class="footer-left">
+    Copyright  &copy; 2023  Jiyee&#39;s I/O 
+  </div>
+  <div class="footer-right">
+    <nav>
+      <ul>
+         
+        <li><a href="/">Home</a></li>
+         
+        <li><a href="/about">About</a></li>
+        
+      </ul>
+    </nav>
+  </div>
+</footer>
+
+
+  </div>
+</body>
+
+<link rel="stylesheet" href=/lib/font-awesome/css/all.min.css>
+<script src=/lib/jquery/jquery.min.js></script>
+<script src=/js/main.js></script>
+</html>
