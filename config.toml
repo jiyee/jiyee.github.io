@@ -1,0 +1,40 @@
+baseURL = 'https://jiyee.io/'
+languageCode = 'zh-cn'
+title = "Jiyee's I/O"
+theme = "cactus"
+
+[params]
+  colortheme = "white" # dark, light, white, or classic
+  description = ""
+  mainSection = "posts"
+  showAllPostsOnHomePage = true
+  postsOnHomePage = 5
+  showProjectsList = true
+  projectsUrl = "https://github.com/jiyee"
+  rss = true
+  showAllPostsArchive = true # or false (default)
+
+  [params.comments]
+    enabled = true
+
+# Main menu which appears below site header.
+[[menu.main]]
+name = "Home"
+url = "/"
+weight = 1
+
+[[menu.main]]
+name = "About"
+url = "/about"
+weight = 4
+
+[[params.social]]
+  name = "github"
+  link = "https://github.com/jiyee"
+
+[[params.social]]
+  name = "email"
+  link = "jiyee.sheng@gmail.com" # no need for "mailto:" at the start
+
+googleAnalytics = "G-SKWM71T1K6" # or G-XXXXXXXX if you are using Google Analytics v4 (gtag.js)
+copyright = "Jiyee Sheng" # cactus theme will use site title if copyright is not set
