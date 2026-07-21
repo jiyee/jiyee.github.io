@@ -1,7 +1,7 @@
 {
 	"version": 3,
 	"file": "styles.css",
-	"sourceRoot": "/Users/jiyee/blog/inkive.cn",
+	"sourceRoot": "/Users/jiyee/Developer/jiyee.github.io",
 	"sources": [
 		"themes/cactus/assets/scss/style.scss",
 		"themes/cactus/assets/scss/_variables.scss",

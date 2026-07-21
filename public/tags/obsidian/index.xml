@@ -1,22 +1,27 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?>
-<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
-  <channel>
-    <title>Obsidian on Jiyee&#39;s I/O</title>
-    <link>https://inkive.cn/tags/obsidian/</link>
-    <description>Recent content in Obsidian on Jiyee&#39;s I/O</description>
-    <generator>Hugo -- gohugo.io</generator>
-    <language>zh-CN</language>
-    <lastBuildDate>Mon, 30 Jan 2023 00:00:00 +0000</lastBuildDate><atom:link href="https://inkive.cn/tags/obsidian/index.xml" rel="self" type="application/rss+xml" />
-    <item>
-      <title>Quality of Obsidian Vim Mode Improvements</title>
-      <link>https://inkive.cn/2023/01/quality-of-obsidian-vim-mode-improvements/</link>
-      <pubDate>Mon, 30 Jan 2023 00:00:00 +0000</pubDate>
-
-      <guid>https://inkive.cn/2023/01/quality-of-obsidian-vim-mode-improvements/</guid>
-      <description>过去一段时间我开始认真地体验 Obsidian（黑曜石）这款软件，深度使用了一段时间之后便退订了 Ulysses 订阅，将全部的文档都迁移到了 Obsidian。由于其平台的开放性，Obsidian 的定位不仅仅是笔记软件，更适合作为 PKM 工具使用。
-关于 Obsidian 介绍的文章和视频已经不计其数，通过阅读这些优秀的经验分享，让我快速掌握 Obsidian 的使用技巧。之前在论坛里看到一篇文章 「VIM Mode - Quality of Life Improvements - Share &amp;amp; showcase - Obsidian Forum」，介绍了 Obsidian 里如何高效地使用 Vim Mode，而 Obsidian 吸引我的其中最重要的一点就是支持 Vim Mode。过去我一直在各种 IDE 里使用 Vim Mode，已经熟悉了 Vim Mode 操作习惯，在最早支持 Vim Mode 的 Markdown 笔记软件里，我还使用过一段时间的 Haroopad，可惜软件很久没有更新了。Obsidian 经过 2 年多迭代和各类 Vim Mode 周边插件支持，目前 Obsidian 支持的 Vim Mode 功能已经能够我满足日常写作使用，这篇文章就总结一下目前我是如何在 Obsidian 使用 Vim Mode 以及对其周边插件进行完善。
-Vim Mode 周边插件 1. Vimrc Support 使用 Vim Mode 一定会使用到 Vimrc Support 这个插件，配合自定义 .</description>
-    </item>
-
-  </channel>
-</rss>
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Obsidian on Jiyee's I/O</title><link>https://inkive.cn/tags/obsidian/</link><description>Recent content in Obsidian on Jiyee's I/O</description><generator>Hugo</generator><language>zh-CN</language><copyright>Jiyee's I/O</copyright><lastBuildDate>Tue, 21 Jul 2026 16:59:00 +0800</lastBuildDate><atom:link href="https://inkive.cn/tags/obsidian/index.xml" rel="self" type="application/rss+xml"/><item><title>Inkive：纸书划线识别与书摘管理</title><link>https://inkive.cn/2026/07/inkive%E7%BA%B8%E4%B9%A6%E5%88%92%E7%BA%BF%E8%AF%86%E5%88%AB%E4%B8%8E%E4%B9%A6%E6%91%98%E7%AE%A1%E7%90%86/</link><pubDate>Tue, 21 Jul 2026 16:59:00 +0800</pubDate><guid>https://inkive.cn/2026/07/inkive%E7%BA%B8%E4%B9%A6%E5%88%92%E7%BA%BF%E8%AF%86%E5%88%AB%E4%B8%8E%E4%B9%A6%E6%91%98%E7%AE%A1%E7%90%86/</guid><description>&lt;p&gt;&lt;img src="https://inkive.cn/images/file-20260721165535011.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;我一直喜欢读纸书，也习惯在书上划线、圈重点、写批注。但一本书读完之后，这些认真留下的痕迹往往也就停在了纸页里。微信读书、Apple Books、Reeden 这类阅读软件可以很轻松地把划线笔记导入 Obsidian 或 Notion，而纸上的笔墨，却难以无缝连接数字笔记。&lt;/p&gt;
+&lt;p&gt;作为一个 Obsidian 爱好者，我一直在找一款能补上这一环的应用：拍下书页，它就能识别我划过线、高亮过或圈画过的文字。iOS 自带的 Live Text 识别印刷文本已经很准，但它不知道我具体划了哪里，一两页还能手动整理，真要认真处理一本书就不现实了。我也试过 Highlighted、白描、vFlat Scan、ShelfMe 等应用，它们各有特点，却都没有解决我最在意的问题。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://inkive.cn/images/file-20260721165557852.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;大模型开始普及之后，我又尝试把书页照片丢给豆包、DeepSeek、ChatGPT、Gemini，试了一轮，发现结果时好时坏：有时漏掉划线，有时又把没划的内容一起摘出来。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://inkive.cn/images/file-20260721165625442.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;试了一圈之后，我还是有点不甘心。这个需求并不难解释，我只想拍下书页，然后拿到自己划过的那几句话。既然找不到合适的工具，我决定自己做一个试试。&lt;/p&gt;
+&lt;p&gt;我给它起名叫 &lt;strong&gt;Inkive&lt;/strong&gt;，读作 /ˈɪŋkɪv/。&lt;/p&gt;
+&lt;h2 id="一张书页照片怎样变成划线笔记"&gt;一张书页照片，怎样变成划线笔记&lt;/h2&gt;
+&lt;p&gt;Inkive 要回答的问题是：&lt;strong&gt;读者划线时，真正想留下来的内容是什么？&lt;/strong&gt; Inkive 要完成三步：先找到书页上的划线，再读出划线附近的文字，最后根据划线和文字判断读者想留下哪句话。&lt;/p&gt;
+&lt;h3 id="第一步是找到书页上的划线"&gt;&lt;strong&gt;第一步，是找到书页上的划线。&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;一张书页照片里，可能同时有下划线、马克笔高亮、圈画，也可能有纸张纹理、阴影、背面透过来的字迹。要让应用先看见这些标记，通常需要训练一个图像分割模型。简单说，就是让模型从整张照片里把「读者留下的痕迹」单独分出来。&lt;/p&gt;
+&lt;p&gt;我没有算法背景，但之前体验「寻隐」时，发现 Core ML 已经可以在手机本地运行相当复杂的模型。于是我决定试试：能不能用它识别书页上的划线。&lt;/p&gt;
+&lt;p&gt;模型训练对我来说完全是陌生领域，我借助 AI 把整个过程一步步跑通：准备数据、完成标注和训练，再判断结果有没有变好。我的标注数据大多来自读书博主分享的照片——纸张材质、光线、拍摄角度、划线习惯各不相同，一度塞满了我的手机相册。&lt;/p&gt;
+&lt;p&gt;&lt;img src="https://inkive.cn/images/file-20260721165649160.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;在完成标注之后，我开始一轮轮训练模型。每一轮结束后，我都会让 AI 帮我看准确率、召回率和损失值这些指标和趋势，也会逐个检查失败样本：是浅色高亮漏掉了，还是把背面透出来的划线误识别成了正面标记。我会根据这些失败样本判断下一批该补什么数据、训练参数又该怎么调。&lt;/p&gt;
+&lt;p&gt;最终，这个本地模型在测试集上的准确率达到 0.94，召回率达到 0.88。它还不完美，但已经足以证明：在手机上识别书页划线，这条路可以走通。&lt;/p&gt;
+&lt;h3 id="第二步是读取划线附近的文字"&gt;&lt;strong&gt;第二步，是读取划线附近的文字。&lt;/strong&gt;&lt;/h3&gt;
+&lt;p&gt;找到划线之后，Inkive 还要读出它附近的文字。OCR，也就是图片文字识别，已经相当成熟。iOS 系统 Vision 框架在识别印刷文本时表现不错，但纸书照片比截图和扫描件更复杂：书页会弯，照片会歪，光线会不均匀，单双页一起拍时版面也更复杂。中文纸书的密集文字和复杂版面又增加了识别难度。&lt;/p&gt;
+&lt;p&gt;我一开始把很多精力花在透视校正上。照片歪了、书页弯了，直觉上当然会想先把页面拉平。我尝试过传统文档处理方法，也接入过不同的 dewarp 算法，但效果始终不够理想，不如 vFlat Scan。为此纠结了很久。&lt;/p&gt;
+&lt;p&gt;后来我发现，自己其实搞错了目标。Inkive 不是文档扫描应用，不需要生成一张完美的书页照片。重要的是处理之后，划线附近的文字能不能被准确读出来。 我还走过不少弯路，比如识别文字行的中线、拟合下划线的像素轨迹。这些传统 CV 尝试花了不少时间，也帮我排除了几条不适合 Inkive 的技术路线。&lt;/p&gt;
+&lt;p&gt;直到 6 月看到 PPOCR v6 发布，我发现它对中文纸书照片的识别比系统 Vision 框架更稳定。原本我已经准备了云端 OCR 预案：如果本地识别效果不够好，就把图片上传到服务器，用云端模型识别。PPOCR 让我可以继续坚持本地处理，把书页照片、划线结果和识别过程都留在设备上。&lt;/p&gt;</description></item><item><title>Quality of Obsidian Vim Mode Improvements</title><link>https://inkive.cn/2023/01/quality-of-obsidian-vim-mode-improvements/</link><pubDate>Mon, 30 Jan 2023 19:48:37 +0800</pubDate><guid>https://inkive.cn/2023/01/quality-of-obsidian-vim-mode-improvements/</guid><description>&lt;p&gt;&lt;img src="https://inkive.cn/images/daae3091ed96e41bfb8a5f4e91784efb.png" alt=""&gt;&lt;/p&gt;
+&lt;p&gt;过去一段时间我开始认真地体验 Obsidian（黑曜石）这款软件，深度使用了一段时间之后便退订了 Ulysses 订阅，将全部的文档都迁移到了 Obsidian。由于其平台的开放性，Obsidian 的定位不仅仅是笔记软件，更适合作为 PKM 工具使用。&lt;/p&gt;
+&lt;p&gt;关于 Obsidian 介绍的文章和视频已经不计其数，通过阅读这些优秀的经验分享，让我快速掌握 Obsidian 的使用技巧。之前在论坛里看到一篇文章 「&lt;a href="https://forum.obsidian.md/t/vim-mode-quality-of-life-improvements/429"&gt;VIM Mode - Quality of Life Improvements - Share &amp;amp; showcase - Obsidian Forum&lt;/a&gt;」，介绍了 Obsidian 里如何高效地使用 Vim Mode，而 Obsidian 吸引我的其中最重要的一点就是支持 Vim Mode。过去我一直在各种 IDE 里使用 Vim Mode，已经熟悉了 Vim Mode 操作习惯，在最早支持 Vim Mode 的 Markdown 笔记软件里，我还使用过一段时间的 &lt;a href="http://pad.haroopress.com/"&gt;Haroopad&lt;/a&gt;，可惜软件很久没有更新了。Obsidian 经过 2 年多迭代和各类 Vim Mode 周边插件支持，目前 Obsidian 支持的 Vim Mode 功能已经能够我满足日常写作使用，这篇文章就总结一下目前我是如何在 Obsidian 使用 Vim Mode 以及对其周边插件进行完善。&lt;/p&gt;
+&lt;h2 id="vim-mode-周边插件"&gt;Vim Mode 周边插件&lt;/h2&gt;
+&lt;h3 id="1-vimrc-support"&gt;1. Vimrc Support&lt;/h3&gt;
+&lt;p&gt;使用 Vim Mode 一定会使用到 Vimrc Support 这个插件，配合自定义 .obsidian.vimrc 文件，可以实现 Vim Mode 指令管理。经过各种摸索，我自己的配置文件目前如下：&lt;a href="https://gist.github.com/jiyee/cfa8dc2f37359004b34820543f691db3"&gt;.obsidian.vimrc&lt;/a&gt;。&lt;/p&gt;</description></item></channel></rss>
