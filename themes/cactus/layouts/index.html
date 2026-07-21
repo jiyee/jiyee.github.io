@@ -99,13 +99,20 @@
     {{ end }}
   <section id="projects">
     <span class="h1"><a href="{{ $projectsUrl }}">Projects</a></span>
-    <ul class="project-list">
-        {{ range hugo.Data.projects.list }}
-        <li class="project-item">
-          <a href="{{ .url }}">{{ .name }}</a>: {{ .desc | markdownify }}
-        </li>
-        {{ end }}
-    </ul>
+	<ul class="project-list">
+	    {{ range hugo.Data.projects.list }}
+	    {{ $projectName := .name }}
+	    <li class="project-item">
+	      <a class="project-link" href="{{ .url }}">
+	        {{ with .image }}<img class="project-image" src="{{ . }}" alt="{{ $projectName }}">{{ end }}
+	        <span class="project-content">
+	          <span class="project-title">{{ .name }}</span>
+	          <span class="project-desc">{{ .desc | markdownify }}</span>
+	        </span>
+	      </a>
+	    </li>
+	    {{ end }}
+	</ul>
   </section>
   {{ end }}
 {{ end }}

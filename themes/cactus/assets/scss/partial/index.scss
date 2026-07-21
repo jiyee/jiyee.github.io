@@ -32,9 +32,47 @@
   list-style: none;
 
   .project-item {
-    margin-bottom: 5px;
+    margin-bottom: 12px;
+
+    .project-link {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: inherit;
+      text-decoration: none;
+
+      &:hover {
+        .project-title {
+          text-decoration: underline;
+        }
+      }
+    }
+
+    .project-image {
+      width: 44px;
+      height: 44px;
+      flex: 0 0 44px;
+      border-radius: 10px;
+    }
+
+    .project-content {
+      display: flex;
+      min-width: 0;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .project-title {
+      font-weight: 600;
+    }
+
+    .project-desc {
+      color: $color-meta;
+    }
+
     p {
       display: inline;
+      margin: 0;
     }
   }
 }
